@@ -1,29 +1,26 @@
 {
-  "total": 22,
-  "avgPrice": 682764,
-  "totalValue": 15020800,
+  "total": 14,
+  "avgPrice": 1477900,
+  "totalValue": 20690600,
   "byCity": {
     "Rosemère": 1,
-    "Sainte-Thérèse": 3,
-    "Rive-Nord": 3,
-    "Saint-Eustache": 4,
-    "Laval": 7,
-    "Saint-Jérôme": 2,
-    "Mirabel": 1,
-    "Sainte-Anne-des-Plaines": 1
+    "Sainte-Anne-des-Plaines": 1,
+    "Rive-Nord": 4,
+    "Sainte-Thérèse": 2,
+    "Saint-Eustache": 3,
+    "Laval": 3
   },
   "byType": {
     "Condo": 3,
-    "Terrain": 2,
-    "Unifamiliale": 11,
+    "Unifamiliale": 5,
     "Commercial": 5,
     "Multilogements": 1
   },
   "priceRanges": {
-    "<300k": 0,
-    "300-500k": 12,
-    "500-800k": 6,
+    "<300k": 2,
+    "300-500k": 2,
+    "500-800k": 5,
     "800k-1.5M": 1,
-    ">1.5M": 3
+    ">1.5M": 4
   }
 }
