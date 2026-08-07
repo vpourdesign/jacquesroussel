@@ -414,6 +414,39 @@
       }
     }
 
+    // Bios de l'équipe en accordéon. Une seule ouverte à la fois : la carte
+    // active s'élargit (flex-grow en CSS) et les autres se resserrent, sinon
+    // la rangée s'étirerait sans que rien ne gagne en lisibilité.
+    const teamCards = Array.from(document.querySelectorAll('[data-team-card]'));
+    if (teamCards.length) {
+      const close = (card) => {
+        card.classList.remove('is-open');
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.setAttribute('aria-expanded', 'false');
+        const label = btn.querySelector('[data-team-toggle-label]');
+        if (label) label.textContent = 'Lire la bio';
+      };
+      const open = (card) => {
+        card.classList.add('is-open');
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.setAttribute('aria-expanded', 'true');
+        const label = btn.querySelector('[data-team-toggle-label]');
+        if (label) label.textContent = 'Réduire';
+      };
+
+      teamCards.forEach((card) => {
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          const wasOpen = card.classList.contains('is-open');
+          teamCards.forEach(close);
+          if (!wasOpen) open(card);
+        });
+      });
+    }
+
     // Menu principal — soulignement qui se déploie depuis la gauche au survol
     document.querySelectorAll('.site-nav .nav-item, .site-nav .has-mega > a, .site-nav .has-sub > a').forEach((a) => {
       if (a.querySelector('.nav-underline')) return;

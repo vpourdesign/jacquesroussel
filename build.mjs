@@ -2662,25 +2662,68 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
 .team-band__inner p{ color:oklch(96% 0.012 80 / 0.86); max-inline-size:56ch; }
 .team-band__inner .eyebrow{ color:var(--sand); }
 
+/* Rangée de cartes qui se redistribuent : la carte ouverte prend la place,
+   les autres se resserrent. On anime flex-grow, jamais width — pas de reflow.
+   Sans JS, toutes les bios restent lisibles (html.js pilote le repli). */
 .team-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
-  gap:clamp(1.25rem,3vw,2rem);
+  display:flex;
+  flex-wrap:wrap;
+  /* flex-start, sinon les cartes fermées s'étirent à la hauteur de l'ouverte
+     et laissent de longues colonnes vides */
+  align-items:flex-start;
+  gap:clamp(1rem,2vw,1.4rem);
   margin-block-end:clamp(2.5rem,5vw,4rem);
 }
-@media(min-width:1180px){ .team-grid{ grid-template-columns:repeat(2, 1fr); } }
 .team-card{
+  flex:1 1 240px;
+  min-inline-size:0;
   display:flex; flex-direction:column;
   background:var(--vellum);
   border:1px solid var(--hairline);
   border-radius:var(--radius-lg);
   overflow:hidden;
-  transition:transform 420ms var(--ease-out), box-shadow 420ms var(--ease-out), border-color 420ms var(--ease-out);
+  transition:flex-grow 520ms var(--ease-out), box-shadow 420ms var(--ease-out), border-color 420ms var(--ease-out);
 }
-.team-card:hover{ transform:translateY(-5px); box-shadow:var(--shadow-card); border-color:var(--teal); }
-.team-card__photo{ position:relative; margin:0; aspect-ratio:4/5; overflow:hidden; background:var(--navy); }
-.team-card__photo img{ inline-size:100%; block-size:100%; object-fit:cover; object-position:center 18%; transition:transform 900ms var(--ease-out); }
-.team-card:hover .team-card__photo img{ transform:scale(1.04); }
+@media(min-width:900px){
+  .team-grid{ flex-wrap:nowrap; }
+  /* flex-basis:0 — sans ça, la base de 240px absorbe la largeur et flex-grow
+     ne redistribue que les miettes : l'écart ouvert/fermé reste invisible. */
+  .team-card{ flex:1 1 0; }
+  .team-card.is-open{ flex-grow:2.2; }
+  .team-grid:has(.is-open) .team-card:not(.is-open){ flex-grow:1; }
+
+  /* Ouverte, la photo devient un bandeau court : à hauteur égale, un portrait
+     étiré sur toute la largeur se transforme en gros plan du visage. */
+  .team-card.is-open .team-card__photo{
+    aspect-ratio:auto;
+    block-size:clamp(150px,13vw,190px);
+    max-block-size:none;
+  }
+  .team-card.is-open .team-card__photo img{ object-position:center 22%; }
+
+  /* La largeur gagnée sert à raccourcir la bio, pas à allonger les lignes. */
+  .team-card.is-open .team-card__bio > div{ columns:2; column-gap:1.8rem; }
+  .team-card.is-open .team-card__bio p{ break-inside:avoid; max-inline-size:none; }
+  .team-card.is-open .team-card__bio p:first-child{ margin-block-start:0; }
+}
+}
+.team-card.is-open{ border-color:var(--teal); box-shadow:var(--shadow-card); }
+@media (prefers-reduced-motion: reduce){ .team-card{ transition:none; } }
+
+/* Photo — moitié de la hauteur précédente, le visage reste cadré */
+.team-card__photo{
+  position:relative; margin:0;
+  aspect-ratio:1/1;
+  max-block-size:clamp(180px,22vw,260px);
+  overflow:hidden; background:var(--navy);
+}
+.team-card__photo img{
+  inline-size:100%; block-size:100%;
+  object-fit:cover; object-position:center 15%;
+  transition:transform 900ms var(--ease-out);
+}
+.team-card:hover .team-card__photo img,
+.team-card.is-open .team-card__photo img{ transform:scale(1.04); }
 /* Le même dégradé bleu que les fiches de propriété : la famille visuelle tient */
 .team-card__photo::after{
   content:""; position:absolute; inset:0; pointer-events:none;
@@ -2693,29 +2736,67 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
     var(--cream);
 }
 .team-card__photo--empty::after{ content:none; }
-.team-card__photo--empty span{ font-size:clamp(3rem,6vw,4.5rem); font-weight:300; color:var(--mist); line-height:1; }
-.team-card__body{ display:flex; flex-direction:column; gap:.5rem; padding:clamp(1.5rem,3vw,2.1rem); flex:1; }
-.team-card__role{ font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:var(--sand); }
-.team-card__name{ font-size:clamp(1.5rem,2.6vw,2rem); font-weight:700; letter-spacing:-0.025em; line-height:1.05; margin:0; color:var(--ink); }
-.team-card__bio{ margin-block-start:.6rem; }
-.team-card__bio p{ color:var(--stone); font-size:var(--text-sm); line-height:1.75; max-inline-size:56ch; }
+.team-card__photo--empty span{ font-size:clamp(2.2rem,4vw,3rem); font-weight:300; color:var(--mist); line-height:1; }
+
+.team-card__body{ display:flex; flex-direction:column; gap:.4rem; padding:clamp(1.1rem,2vw,1.5rem); flex:1; }
+.team-card__role{ font-size:var(--text-xs); font-weight:600; text-transform:uppercase; letter-spacing:.14em; color:var(--sand); line-height:1.4; }
+.team-card__name{ font-size:clamp(1.15rem,1.6vw,1.45rem); font-weight:700; letter-spacing:-0.025em; line-height:1.1; margin:0; color:var(--ink); }
+
+/* Le déclencheur d'accordéon */
+.team-card__toggle{
+  display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+  inline-size:100%; margin-block-start:.7rem; padding-block:.6rem;
+  border-block-start:1px solid var(--hairline);
+  font-size:.85rem; font-weight:600; color:var(--teal);
+  text-align:start;
+  transition:color 240ms var(--ease-out);
+}
+.team-card__toggle:hover{ color:var(--ink); }
+.team-card__toggle-icon{
+  flex:none; inline-size:18px; block-size:18px;
+  position:relative;
+}
+.team-card__toggle-icon::before,
+.team-card__toggle-icon::after{
+  content:""; position:absolute; inset-inline:0; inset-block-start:50%;
+  block-size:1.5px; background:currentColor; border-radius:2px;
+  transition:transform 320ms var(--ease-out);
+}
+.team-card__toggle-icon::after{ transform:rotate(90deg); }
+.team-card.is-open .team-card__toggle-icon::after{ transform:rotate(0deg); }
+
+/* Repli animé : grid-template-rows 0fr → 1fr anime une hauteur automatique */
+.team-card__bio{
+  display:grid; grid-template-rows:1fr;
+  transition:grid-template-rows 480ms var(--ease-out);
+}
+html.js .team-card__bio{ grid-template-rows:0fr; }
+html.js .team-card.is-open .team-card__bio{ grid-template-rows:1fr; }
+.team-card__bio > div{ overflow:hidden; min-block-size:0; }
+.team-card__bio p{ color:var(--stone); font-size:var(--text-sm); line-height:1.75; max-inline-size:60ch; }
+.team-card__bio p:first-child{ margin-block-start:.5rem; }
 .team-card__bio p + p{ margin-block-start:.8rem; }
+@media (prefers-reduced-motion: reduce){ .team-card__bio{ transition:none; } }
+
 .team-card__contact{
-  display:flex; flex-direction:column; gap:.2rem;
-  margin-block-start:1.2rem; padding-block-start:1.1rem;
+  display:flex; flex-direction:column; gap:.15rem;
+  margin-block-start:auto; padding-block-start:.9rem;
   border-block-start:1px solid var(--hairline);
   font-size:var(--text-sm); font-weight:500;
 }
-.team-card__contact a{ color:var(--teal); }
+.team-card__contact a{ color:var(--teal); overflow-wrap:anywhere; }
 .team-card__contact a:hover{ color:var(--ink); }
 .team-card__cta{
   display:inline-flex; align-items:center; gap:.4rem;
-  margin-block-start:auto; padding-block-start:1.2rem;
-  font-size:.92rem; font-weight:600; color:var(--ink);
+  padding-block-start:.8rem;
+  font-size:.88rem; font-weight:600; color:var(--ink);
   transition:gap .25s var(--ease-out);
 }
 .team-card__cta:hover{ gap:.75rem; color:var(--teal); }
 .team-card--soon{ border-style:dashed; }
+.team-card--soon:hover{ box-shadow:none; border-color:var(--hairline); }
+/* Pas de bouton sur la carte « prochainement » : son texte reste déplié */
+html.js .team-card--soon .team-card__bio{ grid-template-rows:1fr; }
 .team-card--soon:hover{ transform:none; box-shadow:none; border-color:var(--hairline); }
 
 /* CTA band sur les pages de contenu */
@@ -3158,6 +3239,39 @@ const JS = `
         const btn = filterBar.querySelector('button[data-filter="' + initial + '"]');
         if (btn) btn.click();
       }
+    }
+
+    // Bios de l'équipe en accordéon. Une seule ouverte à la fois : la carte
+    // active s'élargit (flex-grow en CSS) et les autres se resserrent, sinon
+    // la rangée s'étirerait sans que rien ne gagne en lisibilité.
+    const teamCards = Array.from(document.querySelectorAll('[data-team-card]'));
+    if (teamCards.length) {
+      const close = (card) => {
+        card.classList.remove('is-open');
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.setAttribute('aria-expanded', 'false');
+        const label = btn.querySelector('[data-team-toggle-label]');
+        if (label) label.textContent = 'Lire la bio';
+      };
+      const open = (card) => {
+        card.classList.add('is-open');
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.setAttribute('aria-expanded', 'true');
+        const label = btn.querySelector('[data-team-toggle-label]');
+        if (label) label.textContent = 'Réduire';
+      };
+
+      teamCards.forEach((card) => {
+        const btn = card.querySelector('[data-team-toggle]');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          const wasOpen = card.classList.contains('is-open');
+          teamCards.forEach(close);
+          if (!wasOpen) open(card);
+        });
+      });
     }
 
     // Menu principal — soulignement qui se déploie depuis la gauche au survol
@@ -5442,29 +5556,38 @@ writePage('a-propos/index.html', layout({
 
 <section class="container">
   <div class="team-grid">
-    ${TEAM.map(m => `
-    <article class="team-card reveal">
+    ${TEAM.map((m, i) => {
+      const id = `bio-${slug(m.first + '-' + m.last)}`;
+      return `
+    <article class="team-card reveal" data-team-card>
       <figure class="team-card__photo">
         <img src="${m.photo}" alt="${m.first} ${m.last}, ${m.role.toLowerCase()} chez RE/MAX CRYSTAL" width="800" height="1000" loading="lazy">
       </figure>
       <div class="team-card__body">
         <span class="team-card__role">${m.role}</span>
         <h2 class="team-card__name">${m.first} ${m.last}</h2>
-        <div class="team-card__bio">${m.bio.map(p => `<p>${p}</p>`).join('')}</div>
+        <button class="team-card__toggle" type="button" aria-expanded="false" aria-controls="${id}" data-team-toggle>
+          <span data-team-toggle-label>Lire la bio</span>
+          <span class="team-card__toggle-icon" aria-hidden="true"></span>
+        </button>
+        <div class="team-card__bio" id="${id}">
+          <div>${m.bio.map(p => `<p>${p}</p>`).join('')}</div>
+        </div>
         <div class="team-card__contact">
           <a href="tel:${m.tel}">${m.phone}</a>
           <a href="mailto:${m.email}">${m.email}</a>
         </div>
         <a class="team-card__cta" href="/contact/">Contacter ${m.first} &rarr;</a>
       </div>
-    </article>`).join('')}
+    </article>`;
+    }).join('')}
     ${TEAM_HAS_OPENING ? `
     <article class="team-card team-card--soon reveal">
       <div class="team-card__photo team-card__photo--empty" aria-hidden="true"><span>+</span></div>
       <div class="team-card__body">
         <span class="team-card__role">Prochainement</span>
         <h2 class="team-card__name">Un quatrième membre</h2>
-        <div class="team-card__bio"><p>L'équipe s'agrandit. Un quatrième courtier se joint à nous sous peu, avec le même mandat : connaître le territoire par cœur et répondre quand ça compte.</p></div>
+        <div class="team-card__bio"><div><p>L'équipe s'agrandit. Un quatrième courtier se joint à nous sous peu, avec le même mandat : connaître le territoire par cœur et répondre quand ça compte.</p></div></div>
         <a class="team-card__cta" href="/contact/">Nous écrire &rarr;</a>
       </div>
     </article>` : ''}
