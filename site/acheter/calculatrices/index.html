@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<script>document.documentElement.classList.add('js')</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculatrices hypothécaires · paiement, capacité, rendement plex | Équipe Jacques-Roussel</title>
+<meta name="description" content="Trois calculatrices gratuites : paiement hypothécaire mensuel, capacité d'emprunt (ABD/ATD) et rendement d'un plex. Résultats instantanés.">
+<link rel="canonical" href="https://jacquesroussel.com/acheter/calculatrices/">
+<meta property="og:title" content="Calculatrices hypothécaires · paiement, capacité, rendement plex | Équipe Jacques-Roussel">
+<meta property="og:description" content="Trois calculatrices gratuites : paiement hypothécaire mensuel, capacité d'emprunt (ABD/ATD) et rendement d'un plex. Résultats instantanés.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jacquesroussel.com/acheter/calculatrices/">
+<meta property="og:locale" content="fr_CA">
+<meta property="og:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
+<meta property="og:image:width" content="1500">
+<meta property="og:image:height" content="650">
+<meta property="og:image:alt" content="L'équipe Jacques-Roussel, courtiers immobiliers RE/MAX CRYSTAL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculatrices hypothécaires · paiement, capacité, rendement plex | Équipe Jacques-Roussel">
+<meta name="twitter:description" content="Trois calculatrices gratuites : paiement hypothécaire mensuel, capacité d'emprunt (ABD/ATD) et rendement d'un plex. Résultats instantanés.">
+<meta name="twitter:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
+<meta name="theme-color" content="#F7F2EA">
+<link rel="icon" type="image/png" href="/brand_assets/favicon.png">
+<link rel="apple-touch-icon" href="/brand_assets/favicon.png">
+<link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+<link href="https://fonts.bunny.net/css?family=montserrat:300,400,400i,500,600,700,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.calc-grid{display:grid;gap:var(--space-8);grid-template-columns:1fr}
+.calc{padding:clamp(1.8rem,3.5vw,2.8rem)}
+.calc h2{color:inherit;font-size:clamp(1.3rem,2.2vw,1.8rem);letter-spacing:-.02em}
+.calc-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem 2rem;margin-bottom:2rem}
+.calc-form label{display:flex;flex-direction:column;gap:.5rem;font-size:.9rem;font-weight:500;color:var(--ink-2)}
+.calc-form.dark label{color:rgba(255,255,255,.9)}
+.calc-form label span{font-weight:400;font-variant-numeric:tabular-nums;color:var(--blue)}
+.calc-form.dark label span{color:#fff}
+.calc-form input[type=range]{width:100%;accent-color:var(--blue)}
+.calc-form.dark input[type=range]{accent-color:#fff}
+.calc-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;padding-top:1.5rem;border-top:1px solid rgba(15,40,85,.12)}
+.calc.blue-block:not(.soft) .calc-out{border-top-color:rgba(255,255,255,.14)}
+.calc-out .k{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;letter-spacing:-.025em;color:var(--blue);font-variant-numeric:tabular-nums}
+.calc.blue-block:not(.soft) .calc-out .k{color:#fff}
+.calc-out .kl{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;opacity:.7;margin-top:.3rem}
+.calc-disclaimer{border:1px solid var(--line);border-left:3px solid var(--sand);border-radius:var(--radius);padding:clamp(1.5rem,3vw,2.2rem);background:var(--vellum)}
+.calc-disclaimer h2{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--stone);margin-bottom:1rem}
+.calc-disclaimer p{font-size:.9rem;line-height:1.65;color:var(--stone);max-width:78ch}
+.calc-disclaimer p + p{margin-top:.9rem}
+.calc-disclaimer strong{color:var(--ink);font-weight:600}
+.calc-disclaimer__cta{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--line);color:var(--ink)}
+.calc-disclaimer a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+</style>
+
+</head>
+<body class="">
+<a class="skip-link" href="#main">Aller au contenu</a>
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="wordmark" href="/" aria-label="Équipe Jacques-Roussel, accueil">
+      <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-blanc.png" alt="Équipe Jacques-Roussel" width="700" height="680" decoding="async">
+      <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/equipejrnoir.png" alt="" aria-hidden="true" width="700" height="680" decoding="async">
+    </a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <div class="nav-item has-mega"><a href="/nos-proprietes/" aria-haspopup="true">Propriétés<span class="caret" aria-hidden="true">⌄</span></a><div class="mega" role="menu"><div class="mega__inner mega__inner--feature"><div class="mega__cols"><div class="mega__col"><span class="mega__title">Explorer</span><a href="/nos-proprietes/" role="menuitem">Toutes les propriétés</a><a href="/types-de-propriete/unifamiliale-a-vendre/" role="menuitem">Unifamiliale</a><a href="/types-de-propriete/condo-a-vendre/" role="menuitem">Condo</a><a href="/types-de-propriete/terrain-a-vendre/" role="menuitem">Terrain</a><a href="/types-de-propriete/multilogements-a-vendre/" role="menuitem">Multilogements</a><a href="/types-de-propriete/commercial-a-vendre/" role="menuitem">Commercial</a></div><div class="mega__col"><span class="mega__title">Par ville</span><a href="/courtier-immobilier/saint-eustache/" role="menuitem">Saint-Eustache</a><a href="/courtier-immobilier/deux-montagnes/" role="menuitem">Deux-Montagnes</a><a href="/courtier-immobilier/sainte-marthe-sur-le-lac/" role="menuitem">Sainte-Marthe-sur-le-Lac</a><a href="/courtier-immobilier/boisbriand/" role="menuitem">Boisbriand</a><a href="/courtier-immobilier/mirabel/" role="menuitem">Mirabel</a></div></div><a class="mega__feature" href="/nos-proprietes/"><span class="mega__feature-eyebrow">Centris · quotidien</span><span class="mega__feature-title">Inscriptions actives</span><span class="mega__feature-text">Nos propriétés sur la Rive-Nord, mises à jour chaque jour.</span><span class="mega__feature-cta">Voir les inscriptions &rarr;</span></a></div></div></div><div class="nav-item has-mega is-active"><a href="/acheter/premier-acheteur/" aria-haspopup="true" aria-current="page">Acheter<span class="caret" aria-hidden="true">⌄</span></a><div class="mega" role="menu"><div class="mega__inner"><div class="mega__cols"><div class="mega__col"><span class="mega__title">Guide d'achat</span><a href="/acheter/premier-acheteur/" role="menuitem">Premier acheteur</a><a href="/acheter/etapes-pour-acheter/" role="menuitem">Étapes pour acheter</a><a href="/acheter/financement-hypothecaire/" role="menuitem">Financement hypothécaire</a><a href="/acheter/inspection/" role="menuitem">Inspection</a><a href="/acheter/calculatrices/" role="menuitem">Calculatrices</a></div></div></div></div></div><div class="nav-item has-mega"><a href="/vendre/evaluation-gratuite/" aria-haspopup="true">Vendre<span class="caret" aria-hidden="true">⌄</span></a><div class="mega" role="menu"><div class="mega__inner mega__inner--feature"><div class="mega__cols"><div class="mega__col"><span class="mega__title">Vendre avec nous</span><a href="/vendre/evaluation-gratuite/" role="menuitem">Évaluation gratuite</a><a href="/vendre/etapes-pour-vendre/" role="menuitem">Étapes pour vendre</a><a href="/vendre/preparer-sa-maison/" role="menuitem">Préparer sa maison</a><a href="/vendre/vendre-sans-stress/" role="menuitem">Vendre sans stress</a><a href="/vendre/commission-courtier/" role="menuitem">Commission du courtier</a></div></div><a class="mega__feature" href="/vendre/evaluation-gratuite/"><span class="mega__feature-eyebrow">Sans engagement</span><span class="mega__feature-title">Combien vaut votre propriété ?</span><span class="mega__feature-text">Évaluation gratuite et personnalisée par notre équipe.</span><span class="mega__feature-cta">Obtenir mon évaluation &rarr;</span></a></div></div></div><div class="nav-item has-mega"><a href="/marche-immobilier/" aria-haspopup="true">Marché<span class="caret" aria-hidden="true">⌄</span></a><div class="mega" role="menu"><div class="mega__inner"><div class="mega__cols"><div class="mega__col"><span class="mega__title">Statistiques Centris</span><a href="/marche-immobilier/" role="menuitem">Toutes les villes</a><a href="/marche-immobilier/saint-eustache/" role="menuitem">Saint-Eustache</a><a href="/marche-immobilier/deux-montagnes/" role="menuitem">Deux-Montagnes</a><a href="/marche-immobilier/sainte-marthe-sur-le-lac/" role="menuitem">Sainte-Marthe-sur-le-Lac</a><a href="/marche-immobilier/boisbriand/" role="menuitem">Boisbriand</a></div><div class="mega__col"><span class="mega__title">Guides & analyses</span><a href="/guides/" role="menuitem">Tous les guides</a><a href="/blog/" role="menuitem">Blog</a></div></div></div></div></div><a class="nav-item" href="/a-propos/">L'équipe</a>
+    </nav>
+    <a class="btn-primary site-header__cta" href="/vendre/evaluation-gratuite/">Évaluation gratuite</a>
+    <button class="site-header__burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-drawer-toggle>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<aside class="drawer" data-drawer aria-hidden="true">
+  <div class="drawer__panel">
+    <button class="drawer__close" type="button" aria-label="Fermer le menu" data-drawer-close>&times;</button>
+    <nav class="drawer__nav" aria-label="Menu mobile">
+      <details class="drawer-group"><summary>Propriétés</summary><a href="/nos-proprietes/">Toutes les propriétés</a><a href="/types-de-propriete/unifamiliale-a-vendre/">Unifamiliale</a><a href="/types-de-propriete/condo-a-vendre/">Condo</a><a href="/types-de-propriete/terrain-a-vendre/">Terrain</a><a href="/types-de-propriete/multilogements-a-vendre/">Multilogements</a><a href="/types-de-propriete/commercial-a-vendre/">Commercial</a><a href="/courtier-immobilier/saint-eustache/">Saint-Eustache</a><a href="/courtier-immobilier/deux-montagnes/">Deux-Montagnes</a><a href="/courtier-immobilier/sainte-marthe-sur-le-lac/">Sainte-Marthe-sur-le-Lac</a><a href="/courtier-immobilier/boisbriand/">Boisbriand</a><a href="/courtier-immobilier/mirabel/">Mirabel</a></details><details class="drawer-group"><summary>Acheter</summary><a href="/acheter/premier-acheteur/">Premier acheteur</a><a href="/acheter/etapes-pour-acheter/">Étapes pour acheter</a><a href="/acheter/financement-hypothecaire/">Financement hypothécaire</a><a href="/acheter/inspection/">Inspection</a><a href="/acheter/calculatrices/">Calculatrices</a></details><details class="drawer-group"><summary>Vendre</summary><a href="/vendre/evaluation-gratuite/">Évaluation gratuite</a><a href="/vendre/etapes-pour-vendre/">Étapes pour vendre</a><a href="/vendre/preparer-sa-maison/">Préparer sa maison</a><a href="/vendre/vendre-sans-stress/">Vendre sans stress</a><a href="/vendre/commission-courtier/">Commission du courtier</a></details><details class="drawer-group"><summary>Marché</summary><a href="/marche-immobilier/">Toutes les villes</a><a href="/marche-immobilier/saint-eustache/">Saint-Eustache</a><a href="/marche-immobilier/deux-montagnes/">Deux-Montagnes</a><a href="/marche-immobilier/sainte-marthe-sur-le-lac/">Sainte-Marthe-sur-le-Lac</a><a href="/marche-immobilier/boisbriand/">Boisbriand</a><a href="/guides/">Tous les guides</a><a href="/blog/">Blog</a></details><a class="drawer-link" href="/a-propos/">L'équipe</a>
+      <a class="btn-primary drawer__cta" href="/vendre/evaluation-gratuite/">Évaluation gratuite</a>
+    </nav>
+  </div>
+</aside>
+<main id="main">
+
+<section class="page-head container">
+  <div class="eyebrow">Outils gratuits</div>
+  <h1>Calculatrices immobilières.</h1>
+  <p class="lead">Paiement hypothécaire, capacité d'emprunt et rendement d'un plex : calcul instantané, sans courriel demandé.</p>
+</section>
+
+<section class="container">
+  <div class="calc-grid">
+    <!-- 1. Paiement hypothécaire -->
+    <div class="calc blue-block soft">
+      <div class="eye" style="color:var(--blue-2)">Calculatrice 1</div>
+      <h2 style="margin:.6rem 0 1.5rem">Paiement hypothécaire mensuel.</h2>
+      <div class="calc-form">
+        <label>Prix d'achat <span data-out="m-price">500 000 $</span>
+          <input type="range" id="m-price-i" min="100000" max="2500000" step="10000" value="500000">
+        </label>
+        <label>Mise de fonds <span data-out="m-down">20 %</span>
+          <input type="range" id="m-down-i" min="5" max="50" step="1" value="20">
+        </label>
+        <label>Taux (%) <span data-out="m-rate">5,25 %</span>
+          <input type="range" id="m-rate-i" min="2" max="10" step="0.05" value="5.25">
+        </label>
+        <label>Amortissement <span data-out="m-years">25 ans</span>
+          <input type="range" id="m-years-i" min="5" max="30" step="1" value="25">
+        </label>
+      </div>
+      <div class="calc-out">
+        <div><div class="k" id="m-payment">—</div><div class="kl">Paiement / mois</div></div>
+        <div><div class="k" id="m-loan">—</div><div class="kl">Montant emprunté</div></div>
+        <div><div class="k" id="m-interest">—</div><div class="kl">Intérêts totaux</div></div>
+      </div>
+    </div>
+
+    <!-- 2. Capacité d'emprunt -->
+    <div class="calc blue-block">
+      <div class="eye" style="color:rgba(255,255,255,.6)">Calculatrice 2</div>
+      <h2 style="color:#fff;margin:.6rem 0 1.5rem">Capacité d'emprunt (ABD / ATD).</h2>
+      <div class="calc-form dark">
+        <label>Revenu annuel brut ménage <span data-out="c-income">100 000 $</span>
+          <input type="range" id="c-income-i" min="30000" max="400000" step="5000" value="100000">
+        </label>
+        <label>Mise de fonds disponible <span data-out="c-down">50 000 $</span>
+          <input type="range" id="c-down-i" min="0" max="500000" step="5000" value="50000">
+        </label>
+        <label>Dettes mensuelles (auto, cartes…) <span data-out="c-debt">500 $</span>
+          <input type="range" id="c-debt-i" min="0" max="5000" step="50" value="500">
+        </label>
+        <label>Taux (%) <span data-out="c-rate">5,25 %</span>
+          <input type="range" id="c-rate-i" min="2" max="10" step="0.05" value="5.25">
+        </label>
+      </div>
+      <div class="calc-out">
+        <div><div class="k" id="c-max">—</div><div class="kl">Prix maximum</div></div>
+        <div><div class="k" id="c-abd">—</div><div class="kl">Ratio ABD</div></div>
+        <div><div class="k" id="c-atd">—</div><div class="kl">Ratio ATD</div></div>
+      </div>
+    </div>
+
+    <!-- 3. Rendement plex -->
+    <div class="calc blue-block soft">
+      <div class="eye" style="color:var(--blue-2)">Calculatrice 3</div>
+      <h2 style="margin:.6rem 0 1.5rem">Rendement d'un plex.</h2>
+      <div class="calc-form">
+        <label>Prix d'achat <span data-out="p-price">650 000 $</span>
+          <input type="range" id="p-price-i" min="200000" max="3000000" step="10000" value="650000">
+        </label>
+        <label>Revenus locatifs bruts / mois <span data-out="p-rent">4 200 $</span>
+          <input type="range" id="p-rent-i" min="500" max="20000" step="100" value="4200">
+        </label>
+        <label>Dépenses annuelles (taxes, assurance, entretien) <span data-out="p-exp">12 000 $</span>
+          <input type="range" id="p-exp-i" min="0" max="50000" step="500" value="12000">
+        </label>
+        <label>Mise de fonds (%) <span data-out="p-dp">20 %</span>
+          <input type="range" id="p-dp-i" min="15" max="50" step="1" value="20">
+        </label>
+      </div>
+      <div class="calc-out">
+        <div><div class="k" id="p-caprate">—</div><div class="kl">Taux de capitalisation</div></div>
+        <div><div class="k" id="p-cashflow">—</div><div class="kl">Cashflow annuel</div></div>
+        <div><div class="k" id="p-coc">—</div><div class="kl">Rendement sur mise de fonds</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <aside class="calc-disclaimer" role="note">
+    <h2>Avis important</h2>
+    <p>Ces calculatrices donnent une <strong>estimation à titre informatif seulement</strong>. Elles ne constituent ni une offre de financement, ni une préapprobation, ni un conseil financier, fiscal ou juridique.</p>
+    <p>Les résultats reposent sur des hypothèses simplifiées : capitalisation semestrielle canadienne, taux constant pour toute la durée de l'amortissement, et estimations forfaitaires pour les taxes municipales et le chauffage dans le calcul de capacité d'emprunt. Ils excluent notamment la prime d'assurance prêt hypothécaire de la SCHL et la taxe applicable, la taxe de mutation, les frais de notaire, les frais d'évaluation et d'inspection, les assurances et les frais de copropriété.</p>
+    <p>Le montant réel que vous pouvez emprunter dépend de votre dossier de crédit, de la vérification de vos revenus, des politiques du prêteur et du test de résistance en vigueur. Seule votre institution financière ou votre courtier hypothécaire peut confirmer votre capacité d'emprunt et vos conditions réelles.</p>
+    <p>Pour le calcul de rendement, les revenus et dépenses saisis sont les vôtres : la calculatrice ne valide ni les baux, ni les dépenses réelles, ni le taux d'inoccupation. Un rendement affiché ne constitue pas une garantie de performance.</p>
+    <p class="calc-disclaimer__cta">Avant de vous engager, validez vos chiffres avec un professionnel. <a href="/acheter/financement-hypothecaire/">Voir nos courtiers hypothécaires partenaires</a> ou <a href="/rendez-vous/">prenez rendez-vous avec nous</a>.</p>
+  </aside>
+</section>
+
+<section class="container">
+  <div class="cta-band">
+    <h2>Besoin d'un avis pro sur votre capacité réelle ?</h2>
+    <a class="btn" href="/rendez-vous/">Prendre rendez-vous &rarr;</a>
+  </div>
+</section>
+
+<script>
+(function(){
+  const fmt = n => new Intl.NumberFormat('fr-CA',{maximumFractionDigits:0}).format(Math.round(n))+' $';
+  const fmtPct = n => (n).toFixed(1).replace('.',',')+' %';
+  const bind = (id,fn)=>{const el=document.getElementById(id); if(el)el.addEventListener('input',fn); return el;};
+  const val = id => parseFloat(document.getElementById(id).value);
+  const set = (sel,txt)=>{const e=document.querySelector('[data-out="'+sel+'"]'); if(e)e.textContent=txt;};
+  const put = (id,txt)=>{const e=document.getElementById(id); if(e)e.textContent=txt;};
+
+  // 1. Mortgage payment (formule standard, capitalisation semestrielle canadienne)
+  function calcMortgage(){
+    const price=val('m-price-i'), down=val('m-down-i')/100, rate=val('m-rate-i')/100, years=val('m-years-i');
+    set('m-price', fmt(price)); set('m-down', down*100+' %'); set('m-rate', rate*100+' %'.replace('.',','));
+    set('m-years', years+' ans');
+    const loan=price*(1-down);
+    // Canadian semi-annual compounding: effective monthly rate
+    const r=Math.pow(1+rate/2,2/12)-1;
+    const n=years*12;
+    const pmt=loan*r/(1-Math.pow(1+r,-n));
+    put('m-loan', fmt(loan));
+    put('m-payment', fmt(pmt));
+    put('m-interest', fmt(pmt*n - loan));
+  }
+  ['m-price-i','m-down-i','m-rate-i','m-years-i'].forEach(id=>bind(id,calcMortgage));
+  calcMortgage();
+
+  // 2. Borrowing capacity (ABD 32 %, ATD 40 %, stress-test +2 %)
+  function calcCapacity(){
+    const income=val('c-income-i'), down=val('c-down-i'), debt=val('c-debt-i'), rate=val('c-rate-i')/100;
+    set('c-income', fmt(income)); set('c-down', fmt(down)); set('c-debt', fmt(debt));
+    set('c-rate', (rate*100).toFixed(2).replace('.',',')+' %');
+    const stressRate=Math.max(rate+0.02, 0.0525);
+    const monthlyIncome=income/12;
+    const taxes=250, heating=150; // estimation mensuelle Rive-Nord
+    // ABD cap: housing <= 32 % of gross income
+    const maxHousingABD=monthlyIncome*0.32 - taxes - heating;
+    // ATD cap: housing + debts <= 40 %
+    const maxHousingATD=monthlyIncome*0.40 - taxes - heating - debt;
+    const maxPayment=Math.max(0, Math.min(maxHousingABD, maxHousingATD));
+    const r=Math.pow(1+stressRate/2,2/12)-1;
+    const n=25*12;
+    const maxLoan=maxPayment*(1-Math.pow(1+r,-n))/r;
+    const maxPrice=maxLoan+down;
+    put('c-max', fmt(Math.max(0,maxPrice)));
+    put('c-abd', '32 %');
+    put('c-atd', '40 %');
+  }
+  ['c-income-i','c-down-i','c-debt-i','c-rate-i'].forEach(id=>bind(id,calcCapacity));
+  calcCapacity();
+
+  // 3. Plex yield
+  function calcPlex(){
+    const price=val('p-price-i'), rent=val('p-rent-i'), exp=val('p-exp-i'), dp=val('p-dp-i')/100;
+    set('p-price', fmt(price)); set('p-rent', fmt(rent)); set('p-exp', fmt(exp));
+    set('p-dp', (dp*100)+' %');
+    const gross=rent*12;
+    const noi=gross-exp;
+    const capRate=noi/price*100;
+    // Mortgage payment on (1-dp) portion at 5.25 %, 25 yrs
+    const loan=price*(1-dp);
+    const r=Math.pow(1+0.0525/2,2/12)-1, n=25*12;
+    const pmt=loan*r/(1-Math.pow(1+r,-n));
+    const cashflow=noi-pmt*12;
+    const coc=(cashflow/(price*dp))*100;
+    put('p-caprate', fmtPct(capRate));
+    put('p-cashflow', fmt(cashflow));
+    put('p-coc', fmtPct(coc));
+  }
+  ['p-price-i','p-rent-i','p-exp-i','p-dp-i'].forEach(id=>bind(id,calcPlex));
+  calcPlex();
+})();
+</script>
+
+</main>
+<footer class="site-footer">
+  <div class="site-footer__grid">
+    <div class="site-footer__col site-footer__col--brand">
+      <div class="wordmark wordmark--footer">
+        <span class="wordmark__name">JACQUES &middot; ROUSSEL</span>
+        <span class="wordmark__sub">RE/MAX CRYSTAL</span>
+      </div>
+      <p class="site-footer__tag">Vos courtiers d'expérience sur la Rive-Nord</p>
+      <address class="site-footer__addr">RE/MAX CRYSTAL<br>Rive-Nord ouest, Québec</address>
+    </div>
+    <div class="site-footer__col">
+      <h4 class="eyebrow">Plan du site</h4>
+      <ul>
+        <li><a href="/nos-proprietes/">Propriétés</a></li><li><a href="/acheter/premier-acheteur/">Acheter</a></li><li><a href="/vendre/evaluation-gratuite/">Vendre</a></li><li><a href="/marche-immobilier/">Marché</a></li><li><a href="/a-propos/">L'équipe</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col">
+      <h4 class="eyebrow">Villes desservies</h4>
+      <ul>
+        <li><a href="/courtier-immobilier/saint-eustache/">Saint-Eustache</a></li>
+        <li><a href="/courtier-immobilier/deux-montagnes/">Deux-Montagnes</a></li>
+        <li><a href="/courtier-immobilier/sainte-marthe-sur-le-lac/">Sainte-Marthe-sur-le-Lac</a></li>
+        <li><a href="/courtier-immobilier/boisbriand/">Boisbriand</a></li>
+        <li><a href="/courtier-immobilier/mirabel/">Mirabel</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__col">
+      <h4 class="eyebrow">L'équipe</h4>
+      <ul class="site-footer__contact">
+        <li>
+          <span class="site-footer__name">Marilyn Jacques</span>
+          <a href="mailto:marilyn.jacques@remax-quebec.com">marilyn.jacques@remax-quebec.com</a>
+          <a href="tel:+14387779893">438 777-9893</a>
+        </li><li>
+          <span class="site-footer__name">Alexandre Roussel</span>
+          <a href="mailto:alexandre.roussel@remax-quebec.com">alexandre.roussel@remax-quebec.com</a>
+          <a href="tel:+15148056953">514 805-6953</a>
+        </li><li>
+          <span class="site-footer__name">Vincent Lanni</span>
+          <a href="mailto:vincent.lanni@remax-quebec.com">vincent.lanni@remax-quebec.com</a>
+          <a href="tel:+15142629446">514 262-9446</a>
+        </li>
+      </ul>
+      <div class="site-footer__social">
+        <a href="https://www.instagram.com/equipejacquesroussel/" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.facebook.com/profile.php?id=61566770076579" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <span>&copy; 2026 Équipe Jacques-Roussel &middot; Permis OACIQ</span>
+    <span class="site-footer__legal"><a href="/a-propos/">À propos</a> &middot; <a href="/contact/">Contact</a></span>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis/bundled/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js" defer></script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

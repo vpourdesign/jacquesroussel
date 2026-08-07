@@ -1,0 +1,53 @@
+name: Daily Centris ingest
+
+on:
+  schedule:
+    # 12:00 UTC = 8 h HAE / 7 h HNE. Même créneau que brunelle et juliegauthier.
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-centris
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch Centris zip
+        env:
+          DRIVEHQ_USER: ${{ secrets.DRIVEHQ_USER }}
+          DRIVEHQ_PASS: ${{ secrets.DRIVEHQ_PASS }}
+          DRIVEHQ_WEBDAV_URL: ${{ secrets.DRIVEHQ_WEBDAV_URL }}
+        run: node scripts/fetch-centris.mjs
+
+      - name: Build site
+        run: |
+          # On ne supprime que les fiches de propriétés et les données Centris.
+          # site/data/market.json vient de Centris statistiques (rafraîchi par un
+          # autre job, trimestriel) : l'effacer viderait toutes les sections de
+          # statistiques du site jusqu'au prochain fetch-market-stats.
+          rm -rf site/nos-proprietes
+          rm -f site/data/properties.json site/data/stats.json
+          node build.mjs
+
+      - name: Commit updated site
+        run: |
+          git config user.name "centris-bot"
+          git config user.email "bot@jacquesroussel.com"
+          git add site/
+          if git diff --cached --quiet; then
+            echo "Aucun changement d'inscriptions aujourd'hui"
+          else
+            git commit -m "data: rafraîchissement Centris quotidien $(date -u +%Y-%m-%d)"
+            git push
+          fi

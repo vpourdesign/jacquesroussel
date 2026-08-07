@@ -1,0 +1,79 @@
+{
+  "buildCommand": "node build.mjs",
+  "framework": null,
+  "outputDirectory": "site",
+  "installCommand": "echo skip",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/photos/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/videos/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/contact",
+      "destination": "/rendez-vous/",
+      "permanent": false
+    },
+    {
+      "source": "/types-de-propriete/maison-unifamiliale-a-vendre",
+      "destination": "/types-de-propriete/unifamiliale-a-vendre/",
+      "permanent": true
+    },
+    {
+      "source": "/types-de-propriete/maison-de-ville-a-vendre",
+      "destination": "/types-de-propriete/unifamiliale-a-vendre/",
+      "permanent": true
+    },
+    {
+      "source": "/types-de-propriete/maison-neuve-a-vendre",
+      "destination": "/types-de-propriete/unifamiliale-a-vendre/",
+      "permanent": true
+    },
+    {
+      "source": "/marche-immobilier/statistiques-sainte-therese",
+      "destination": "/marche-immobilier/sainte-therese/",
+      "permanent": true
+    },
+    {
+      "source": "/marche-immobilier/statistiques-blainville",
+      "destination": "/marche-immobilier/blainville/",
+      "permanent": true
+    },
+    {
+      "source": "/marche-immobilier/rapport-mensuel",
+      "destination": "/marche-immobilier/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/radioscopie-sainte-therese-marche-2026",
+      "destination": "/blog/marche-immobilier-saint-eustache/",
+      "permanent": true
+    }
+  ]
+}

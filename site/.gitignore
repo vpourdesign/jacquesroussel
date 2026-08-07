@@ -1,0 +1,6 @@
+# OS
+.DS_Store
+
+# Le contenu de site/ est entièrement généré par build.mjs, qui purge lui-même
+# les fiches, photos et vidéos devenues inutiles. Pas de liste d'exclusion à
+# maintenir ici : ce qui est sur le disque est ce que le site utilise.

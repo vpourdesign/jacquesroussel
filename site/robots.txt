@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /performance/
+Sitemap: https://jacquesroussel.com/sitemap.xml

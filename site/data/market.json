@@ -1,0 +1,2426 @@
+{
+  "source": "Centris.ca — Statistiques immobilières",
+  "fetchedAt": "2026-08-07",
+  "cities": {
+    "saint-eustache": {
+      "name": "Saint-Eustache",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/saint-eustache",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "180",
+                "variation": "9 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "572",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "223",
+                "variation": "12 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "781",
+                "variation": "9 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "144",
+                "variation": "14 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "129",
+                "variation": "6 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "103 395",
+                "variation": "16 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "320 793",
+                "variation": "11 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "138",
+                "variation": "20 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "412",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "82",
+                "variation": "-5 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "85",
+                "variation": "11 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "597 000 $",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "580 875 $",
+                "variation": "6 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "24",
+                "variation": "2",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "30",
+                "variation": "-4",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "38",
+                "variation": "-9 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "147",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "51",
+                "variation": "96 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "35",
+                "variation": "25 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "378 000 $",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "370 000 $",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "28",
+                "variation": "-3",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "36",
+                "variation": "-5",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "4",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "12",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "8",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "7",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "deux-montagnes": {
+      "name": "Deux-Montagnes",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/deux-montagnes",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "78",
+                "variation": "36 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "230",
+                "variation": "21 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "97",
+                "variation": "40 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "306",
+                "variation": "24 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "59",
+                "variation": "25 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "50",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "46 091",
+                "variation": "45 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "127 566",
+                "variation": "30 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "65",
+                "variation": "51 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "172",
+                "variation": "17 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "41",
+                "variation": "46 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "31",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "570 000 $",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "540 000 $",
+                "variation": "8 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "27",
+                "variation": "5",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "26",
+                "variation": "-11",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "7",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "39",
+                "variation": "62 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "7",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "9",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": {
+                "value": "368 475 $",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": {
+                "value": "64",
+                "variation": "20",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "19",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "10",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "8",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "sainte-marthe-sur-le-lac": {
+      "name": "Sainte-Marthe-sur-le-Lac",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-marthe-sur-le-lac",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "106",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "344",
+                "variation": "-4 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "156",
+                "variation": "40 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "501",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "101",
+                "variation": "27 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "81",
+                "variation": "-4 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "57 234",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "183 761",
+                "variation": "-2 %",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "70",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "221",
+                "variation": "-12 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "74",
+                "variation": "29 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "59",
+                "variation": "-13 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "644 000 $",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "620 500 $",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "27",
+                "variation": "-7",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "32",
+                "variation": "-10",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "34",
+                "variation": "30 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "117",
+                "variation": "18 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "25",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "20",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "373 450 $",
+                "variation": "-3 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "379 362 $",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "25",
+                "variation": "7",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "21",
+                "variation": "-7",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "2",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "1",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "1",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "mirabel": {
+      "name": "Mirabel",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/mirabel",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "294",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "953",
+                "variation": "-1 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "413",
+                "variation": "7 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "1 430",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "313",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "283",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "189 849",
+                "variation": "14 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "600 641",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "200",
+                "variation": "21 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "579",
+                "variation": "-4 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "187",
+                "variation": "22 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "163",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "657 000 $",
+                "variation": "7 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "631 750 $",
+                "variation": "6 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "26",
+                "variation": "-8",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "28",
+                "variation": "-14",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "75",
+                "variation": "-11 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "282",
+                "variation": "2 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "93",
+                "variation": "17 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "82",
+                "variation": "13 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "459 900 $",
+                "variation": "9 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "439 712 $",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "42",
+                "variation": "4",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "41",
+                "variation": "-12",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "19",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "85",
+                "variation": "8 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "25",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "28",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": {
+                "value": "832 500 $",
+                "variation": "15 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": {
+                "value": "57",
+                "variation": "-1",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "boisbriand": {
+      "name": "Boisbriand",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/boisbriand",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "62",
+                "variation": "-51 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "244",
+                "variation": "-23 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "124",
+                "variation": "-7 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "389",
+                "variation": "-8 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "108",
+                "variation": "16 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "75",
+                "variation": "-14 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "40 350",
+                "variation": "-42 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "152 096",
+                "variation": "-17 %",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "43",
+                "variation": "-43 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "162",
+                "variation": "-16 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "61",
+                "variation": "24 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "42",
+                "variation": "-2 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "635 000 $",
+                "variation": "2 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "621 525 $",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "25",
+                "variation": "-5",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "26",
+                "variation": "-11",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "13",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "67",
+                "variation": "-40 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "40",
+                "variation": "2 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "30",
+                "variation": "-26 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": {
+                "value": "478 487 $",
+                "variation": "-4 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": {
+                "value": "47",
+                "variation": "-19",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "14",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "3",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "sainte-therese": {
+      "name": "Sainte-Thérèse",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-therese",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "95",
+                "variation": "-18 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "348",
+                "variation": "-3 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "123",
+                "variation": "-8 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "455",
+                "variation": "-3 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "77",
+                "variation": "2 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "72",
+                "variation": "-16 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "55 629",
+                "variation": "-8 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "191 628",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "38",
+                "variation": "-22 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "135",
+                "variation": "-8 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "34",
+                "variation": "70 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "25",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "662 500 $",
+                "variation": "9 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "591 012 $",
+                "variation": "6 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "33",
+                "variation": "7",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "25",
+                "variation": "-15",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "33",
+                "variation": "-40 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "142",
+                "variation": "-9 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "27",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "28",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "340 000 $",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "367 125 $",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "36",
+                "variation": "3",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "36",
+                "variation": "-4",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "24",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "71",
+                "variation": "24 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "15",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "17",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": {
+                "value": "748 125 $",
+                "variation": "11 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": {
+                "value": "35",
+                "variation": "-11",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "blainville": {
+      "name": "Blainville",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/blainville",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "262",
+                "variation": "7 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "858",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "350",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "1 255",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "267",
+                "variation": "21 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "238",
+                "variation": "15 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "207 498",
+                "variation": "18 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "664 159",
+                "variation": "7 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "197",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "635",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "196",
+                "variation": "19 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "173",
+                "variation": "16 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "803 000 $",
+                "variation": "14 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "740 375 $",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "27",
+                "variation": "3",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "29",
+                "variation": "-12",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "51",
+                "variation": "13 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "175",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "66",
+                "variation": "46 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "59",
+                "variation": "40 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "425 000 $",
+                "variation": "1 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "436 487 $",
+                "variation": "5 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "52",
+                "variation": "13",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "46",
+                "variation": "-3",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "14",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "48",
+                "variation": "-4 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "5",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "4",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": {
+                "value": "802 812 $",
+                "variation": "11 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": {
+                "value": "16",
+                "variation": "-32",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "rosemere": {
+      "name": "Rosemère",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/rosemere",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "59",
+                "variation": "15 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "194",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "86",
+                "variation": "7 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "304",
+                "variation": "9 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "82",
+                "variation": "30 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "68",
+                "variation": "4 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "47 217",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "169 689",
+                "variation": "16 %",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "47",
+                "variation": "2 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "165",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "49",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "45",
+                "variation": "-15 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "817 000 $",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "856 659 $",
+                "variation": "15 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "30",
+                "variation": "-40",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "44",
+                "variation": "-19",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "9",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "24",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "28",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "19",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "3",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "5",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "4",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "2",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "lorraine": {
+      "name": "Lorraine",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/lorraine",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "36",
+                "variation": "-7 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "120",
+                "variation": "-5 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "47",
+                "variation": "-2 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "161",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "29",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "31",
+                "variation": "-18 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "29 064",
+                "variation": "-15 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "104 300",
+                "variation": "-3 %",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "34",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "114",
+                "variation": "-6 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "25",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "28",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "780 000 $",
+                "variation": "-5 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "781 437 $",
+                "variation": "3 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "18",
+                "variation": "-18",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "44",
+                "variation": "2",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "2",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "3",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "2",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "0",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "0",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "0",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "0",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    },
+    "sainte-anne-des-plaines": {
+      "name": "Sainte-Anne-des-Plaines",
+      "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-anne-des-plaines",
+      "period": "2e trimestre 2026",
+      "sections": {
+        "total": {
+          "label": "Total résidentiel",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "44",
+                "variation": "-13 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "166",
+                "variation": "-20 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "nouvellesInscriptions": {
+              "label": "Nouvelles inscriptions",
+              "trimestre": {
+                "value": "59",
+                "variation": "-10 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "230",
+                "variation": "-7 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "55",
+                "variation": "30 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "49",
+                "variation": "0 %",
+                "direction": null,
+                "unit": null
+              }
+            },
+            "volume": {
+              "label": "Volume (en millier $)",
+              "trimestre": {
+                "value": "23 340",
+                "variation": "-11 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "86 345",
+                "variation": "-17 %",
+                "direction": "down",
+                "unit": null
+              }
+            }
+          }
+        },
+        "unifamiliale": {
+          "label": "Unifamiliale",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "35",
+                "variation": "-2 %",
+                "direction": "down",
+                "unit": null
+              },
+              "cumul": {
+                "value": "130",
+                "variation": "-18 %",
+                "direction": "down",
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "40",
+                "variation": "53 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "36",
+                "variation": "16 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": {
+                "value": "530 000 $",
+                "variation": "6 %",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "521 375 $",
+                "variation": "10 %",
+                "direction": "up",
+                "unit": null
+              }
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": {
+                "value": "32",
+                "variation": "14",
+                "direction": "up",
+                "unit": null
+              },
+              "cumul": {
+                "value": "45",
+                "variation": "7",
+                "direction": "up",
+                "unit": null
+              }
+            }
+          }
+        },
+        "copropriete": {
+          "label": "Copropriété",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "25",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "8",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "7",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        },
+        "plex": {
+          "label": "Plex (2 à 5 logements)",
+          "rows": {
+            "ventes": {
+              "label": "Ventes",
+              "trimestre": {
+                "value": "3",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "10",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "inscriptionsActives": {
+              "label": "Inscriptions en vigueur",
+              "trimestre": {
+                "value": "6",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              },
+              "cumul": {
+                "value": "5",
+                "variation": null,
+                "direction": null,
+                "unit": null
+              }
+            },
+            "prixMedian": {
+              "label": "Prix médian",
+              "trimestre": null,
+              "cumul": null
+            },
+            "joursSurLeMarche": {
+              "label": "Moyenne de jours sur le marché",
+              "trimestre": null,
+              "cumul": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

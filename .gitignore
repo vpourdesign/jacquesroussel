@@ -1,0 +1,26 @@
+node_modules
+
+# Données Centris : téléchargées à chaque run par scripts/fetch-centris.mjs
+_centris
+_tmp.zip
+*.zip
+
+# Masters vidéo 4K (224 Mo). Seule REMAX_JR_SEP25_EDIT1.mp4 est utilisée par le
+# site, et sa version web optimisée est committée dans site/videos/.
+/videos/
+
+# Travail local
+temporary screenshots/
+.DS_Store
+Icon?
+
+# Clés et secrets : jamais committés
+.env
+.env.local
+.secrets/
+.vercel
+
+# Documents internes de l'agence — le dépôt est public
+gmail-prospect.md
+next-prompt.md
+VPOURDESIGN*.zip
