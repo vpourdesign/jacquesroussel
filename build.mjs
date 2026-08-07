@@ -11,9 +11,14 @@ const SITE = path.join(ROOT, 'site');
 // Équipe Jacques-Roussel : Marilyn Jacques + Alexandre Roussel
 // (RE/MAX, bureau CYL003). Les deux courtiers apparaissent déjà dans
 // MEMBRES.TXT — on agrège leurs inscriptions (primaire OU co-courtier).
+// Nombre minimal de photos pour publier une fiche. À 3, on écartait des
+// terrains qui n'ont légitimement qu'une seule vue.
+const MIN_PHOTOS = 1;
+
 const TARGET_BROKERS = [
   { firstName: 'Marilyn',   lastName: 'Jacques' },
-  { firstName: 'Alexandre', lastName: 'Roussel' }
+  { firstName: 'Alexandre', lastName: 'Roussel' },
+  { firstName: 'Vincent',   lastName: 'Lanni'   }
 ];
 
 // ── L'ÉQUIPE ───────────────────────────────────────────────────────────
@@ -307,7 +312,35 @@ function ingestFromCentris(membres) {
   const linksByMls = {};
   for (const l of liens) { const m=l[0]; if(!m) continue; (linksByMls[m] ??= []).push({type:l[2], url:l[3]}); }
 
+  // Entonnoir de sélection — on veut savoir où passent les inscriptions, parce
+  // que l'écart avec la page RE/MAX de l'équipe se joue à trois endroits :
+  // ce que Centris exporte, à qui l'inscription appartient, et nos filtres.
+  const brokerOf = r => r[2] || r[4] || '?';
+  const parCourtier = {};
+  for (const r of inscr) parCourtier[brokerOf(r)] = (parCourtier[brokerOf(r)] || 0) + 1;
+  console.log(`\n── Entonnoir Centris ──`);
+  console.log(`  inscriptions dans l'export        : ${inscr.length}  (export partagé entre tous les courtiers clients)`);
+
   const myListings = inscr.filter(r => isOurs(r[2]) || isOurs(r[4]));
+  console.log(`  appartenant à l'équipe            : ${myListings.length}`);
+
+  // Ce que les filtres écartent, avec le motif
+  const ecartees = { location: [], peuDePhotos: [] };
+  for (const r of myListings) {
+    const nbPhotos = (photosByMls[r[0]] || []).length;
+    const adresse = [(r[25] || '').trim(), (r[27] || '').trim()].filter(Boolean).join(' ');
+    if (!(parseFloat(r[6]) > 0)) ecartees.location.push(`${r[0]} ${adresse}${r[9] ? ` (loyer ${r[9]} $)` : ''}`);
+    else if (nbPhotos < MIN_PHOTOS) ecartees.peuDePhotos.push(`${r[0]} ${adresse} (${nbPhotos} photo${nbPhotos > 1 ? 's' : ''})`);
+  }
+  if (ecartees.location.length) {
+    console.log(`  ↳ écartées, sans prix de vente    : ${ecartees.location.length}  (locations : le loyer est en col. 9)`);
+    ecartees.location.forEach(x => console.log(`       ${x}`));
+  }
+  if (ecartees.peuDePhotos.length) {
+    console.log(`  ↳ écartées, moins de ${MIN_PHOTOS} photo(s)   : ${ecartees.peuDePhotos.length}`);
+    ecartees.peuDePhotos.forEach(x => console.log(`       ${x}`));
+  }
+
   const properties = myListings.map(r => {
     const mls = r[0], price = parseFloat(r[6])||0;
     // r[25] = NO_CIVIQUE (vérifié contre ADDENDA), r[26] = parfois suffixe ou unité
@@ -351,9 +384,10 @@ function ingestFromCentris(membres) {
       isCoBroker: !isOurs(r[2]),
       slug: `${mls}-${slug(street)}-${slug(city)}`
     };
-  }).filter(p => p.price > 0 && p.photos.length >= 3);
+  }).filter(p => p.price > 0 && p.photos.length >= MIN_PHOTOS);
 
-  console.log(`Loaded ${properties.length} active properties`);
+  console.log(`  → publiées sur le site            : ${properties.length}`);
+  console.log(`──────────────────────────\n`);
 
   const stats = {
     total: properties.length,
