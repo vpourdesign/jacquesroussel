@@ -9,6 +9,11 @@
 
 ## ✅ À faire
 
+- **L'export Centris ne contient qu'une fraction des inscriptions de l'équipe.** Mesuré le 7 août : RE/MAX affiche **48 propriétés à vendre**, l'export DriveHQ n'en contient que **24** pour l'équipe (16 à vendre + 8 locations). **32 inscriptions à vendre n'arrivent jamais**, sous aucun des trois numéros de courtier. Aucune correction de code ne les fera apparaître. Deux pistes à valider auprès de RE/MAX Crystal ou du soutien Centris : (1) l'export ne couvre peut-être que les inscriptions où l'équipe est courtier *inscripteur*, alors que RE/MAX affiche aussi les collaborations ; (2) Vincent Lanni est dans MEMBRES.TXT (no 135334) mais aucune de ses inscriptions ne sort de l'export — l'abonnement d'export est un réglage distinct de son statut de courtier. (2026-08-07)
+- **Les 8 locations sont reçues mais pas affichées.** Leur prix de vente est vide (le loyer est en colonne 9 de INSCRIPTIONS.TXT), donc le filtre `price > 0` les écarte. Décision en attente : les afficher mêlées aux propriétés à vendre, ou dans une section distincte, avec un format « 1 300 $/mois » et un badge « À louer ». (2026-08-07)
+- **Brancher le DNS.** `www.jacquesroussel.com` pointe encore sur Wix (`cdn1.wixdns.net`). Le nouveau site n'est visible que sur `jacquesroussel.vercel.app`. (2026-08-07)
+- **Révoquer la clé Google exposée** en session : compte de service `rapportsvpd@site-vpd.iam.gserviceaccount.com`, clé `5150d4e1…`. Console Google Cloud › IAM › Comptes de service › Clés. (2026-08-07)
+
 - **Courtiers hypothécaires** : remplir `MORTGAGE_BROKERS` dans `build.mjs` (deux entrées « À REMPLIR » y sont en attente : nom, cabinet, téléphone, courriel, site, spécialité). La section est déjà en place sur `/acheter/financement-hypothecaire/`. (2026-08-07)
 - **Bio de Vincent Lanni** : adaptée de vincentlanni.com et remise au « je » pour s'agencer aux deux autres bios. **À faire valider par Vincent Lanni** avant mise en ligne. (2026-08-07)
 - **4e membre de l'équipe** : la carte « Prochainement » est en place. Quand le profil est confirmé, ajouter une entrée dans `TEAM` (build.mjs) et passer `TEAM_HAS_OPENING` à `false`. Tout le reste (pied de page, fiches, accueil) se met à jour tout seul. (2026-08-07)
