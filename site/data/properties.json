@@ -4957,47 +4957,52 @@
       {
         "seq": 1,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483438D1B72D93D11&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343BD1B72D93D14&t=pi&f=I"
       },
       {
         "seq": 2,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343BD1B72D93D42&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA486F78D1B72D93D4D&t=pi&f=I"
       },
       {
         "seq": 3,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343ED1B72D93D21&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483438D1B72D93D22&t=pi&f=I"
       },
       {
         "seq": 4,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343CD1B72D93DC1&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343ED1B72D93DC4&t=pi&f=I"
       },
       {
         "seq": 5,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343AD1B72D93DEC&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343CD1B72D93DE4&t=pi&f=I"
       },
       {
         "seq": 6,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483431D1B72D93DAD&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343AD1B72D93DAE&t=pi&f=I"
       },
       {
         "seq": 7,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483432D1B72D93D02&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483431D1B72D93D01&t=pi&f=I"
       },
       {
         "seq": 8,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343DD1B72D93DB1&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483432D1B72D93DBC&t=pi&f=I"
       },
       {
         "seq": 9,
         "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483476D1B72D93DF2&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA48343DD1B72D93DF4&t=pi&f=I"
+      },
+      {
+        "seq": 10,
+        "type": "VDE",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA483476D1B72D93D81&t=pi&f=I"
       }
     ],
     "features": [
