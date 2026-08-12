@@ -2607,7 +2607,7 @@
         "code": "S-E",
         "level": "RC",
         "dim": "8.8x6.2 P",
-        "rev": "CERAM"
+        "rev": "PFLO"
       },
       {
         "seq": 14,
@@ -2627,7 +2627,7 @@
         "seq": 16,
         "code": "RAN",
         "level": "0",
-        "dim": "15.7x88.2 P",
+        "dim": "15.7x8.2 P",
         "rev": "AU"
       },
       {
