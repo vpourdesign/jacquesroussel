@@ -1892,6 +1892,26 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
 .prose ul li::marker{ color:var(--bronze); }
 .prose li{ margin-block-end:0.5rem; }
 .prose strong{ color:var(--ink); font-weight:600; }
+.prose ol{ padding-inline-start:1.3rem; list-style:decimal; margin-block-end:1.1rem; }
+.prose ol li::marker{ color:var(--bronze); font-weight:600; }
+/* Tableaux d'article : les chiffres s'alignent, la ligne déborde en scroll
+   sur mobile plutôt que d'élargir la page. */
+.prose .tbl{ overflow-x:auto; margin-block:1.4rem 1.6rem; }
+.prose table{ inline-size:100%; border-collapse:collapse; font-size:.94rem; }
+.prose caption{ caption-side:bottom; padding-block-start:.7rem; font-size:.82rem; color:var(--mist); text-align:start; }
+.prose th, .prose td{ padding:.65rem .8rem; border-block-end:1px solid var(--hairline); text-align:start; }
+.prose thead th{
+  font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--stone); border-block-end:1px solid var(--sand); white-space:nowrap;
+}
+.prose td.num, .prose th.num{ text-align:end; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.prose tbody tr:last-child td{ border-block-end:0; }
+.prose .note{
+  margin-block:1.6rem; padding:1.1rem 1.3rem;
+  background:var(--vellum); border:1px solid var(--hairline);
+  border-radius:var(--radius); font-size:.95rem;
+}
+.prose .note p:last-child{ margin-block-end:0; }
 .prose a{ color:var(--bronze); text-decoration:underline; text-underline-offset:3px; }
 .blue-block{ background:var(--teal); color:var(--cream); border-radius:var(--radius-lg); padding:clamp(1.75rem,3vw,2.5rem); }
 .blue-block.soft{ background:var(--blue-soft); color:var(--ink); }

@@ -2652,6 +2652,26 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
 .prose ul li::marker{ color:var(--bronze); }
 .prose li{ margin-block-end:0.5rem; }
 .prose strong{ color:var(--ink); font-weight:600; }
+.prose ol{ padding-inline-start:1.3rem; list-style:decimal; margin-block-end:1.1rem; }
+.prose ol li::marker{ color:var(--bronze); font-weight:600; }
+/* Tableaux d'article : les chiffres s'alignent, la ligne déborde en scroll
+   sur mobile plutôt que d'élargir la page. */
+.prose .tbl{ overflow-x:auto; margin-block:1.4rem 1.6rem; }
+.prose table{ inline-size:100%; border-collapse:collapse; font-size:.94rem; }
+.prose caption{ caption-side:bottom; padding-block-start:.7rem; font-size:.82rem; color:var(--mist); text-align:start; }
+.prose th, .prose td{ padding:.65rem .8rem; border-block-end:1px solid var(--hairline); text-align:start; }
+.prose thead th{
+  font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--stone); border-block-end:1px solid var(--sand); white-space:nowrap;
+}
+.prose td.num, .prose th.num{ text-align:end; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.prose tbody tr:last-child td{ border-block-end:0; }
+.prose .note{
+  margin-block:1.6rem; padding:1.1rem 1.3rem;
+  background:var(--vellum); border:1px solid var(--hairline);
+  border-radius:var(--radius); font-size:.95rem;
+}
+.prose .note p:last-child{ margin-block-end:0; }
 .prose a{ color:var(--bronze); text-decoration:underline; text-underline-offset:3px; }
 .blue-block{ background:var(--teal); color:var(--cream); border-radius:var(--radius-lg); padding:clamp(1.75rem,3vw,2.5rem); }
 .blue-block.soft{ background:var(--blue-soft); color:var(--ink); }
@@ -4000,7 +4020,7 @@ for (const p of properties) writePage(`nos-proprietes/${p.slug}/index.html`, det
 })();
 
 // --- GENERIC CONTENT PAGE BUILDER ---
-function contentPage({ eyebrow, h1, lead, body, title, desc, canonical, image, afterProse = '' }) {
+function contentPage({ eyebrow, h1, lead, body, title, desc, canonical, image, afterProse = '', jsonld = '' }) {
   const banner = image ? `
 <section class="container">
   <figure class="content-hero" data-parallax>
@@ -4044,7 +4064,7 @@ ${afterProse}
     </div>
   </div>
 </section>`;
-  return layout({ title, description: desc, canonical, body: html });
+  return layout({ title, description: desc, canonical, body: html, jsonld });
 }
 
 // --- CITY PAGES ---
@@ -5767,19 +5787,341 @@ writePage(`blog/${featuredArticle.slug}/index.html`, layout({
 
 // Articles à venir — territoire Saint-Eustache et Rive-Nord ouest.
 // Chaque entrée : slug, titre, ville (pour rattacher les vraies stats Centris), résumé.
+// Chiffres Centris réutilisables dans les articles : la prose reste juste
+// quand le trimestre change, au lieu de figer un nombre dans le texte.
+const mkt = (citySlug, section, row, champ = 'value') =>
+  marketFor(citySlug)?.sections?.[section]?.rows?.[row]?.trimestre?.[champ] || null;
+const prixUni  = c => mkt(c, 'unifamiliale', 'prixMedian');
+const varUni   = c => mkt(c, 'unifamiliale', 'prixMedian', 'variation');
+const joursUni = c => mkt(c, 'unifamiliale', 'joursSurLeMarche');
+const prixCopro = c => mkt(c, 'copropriete', 'prixMedian');
+const ventes   = c => mkt(c, 'total', 'ventes');
+const inscrits = c => mkt(c, 'total', 'inscriptionsActives');
+const trim = marketPeriod ? marketPeriod.toLowerCase() : 'dernier trimestre publié';
+// Valeurs calculées à partir des mêmes chiffres que les tableaux : elles ne
+// peuvent pas se contredire quand Centris publie un nouveau trimestre.
+const nb = v => { const n = numFrom(v); return n === null ? null : n; };
+const ratioOffre = c => {
+  const i = nb(inscrits(c)), v = nb(ventes(c));
+  return (i && v) ? (i / v).toFixed(2).replace('.', ',') : '--';
+};
+const ecartPrix = (a, b) => {
+  const x = nb(prixUni(a)), y = nb(prixUni(b));
+  return (x && y) ? Math.round(Math.abs(x - y) / 1000) * 1000 : null;
+};
+const ecartPct = (a, b) => {
+  const x = nb(prixUni(a)), y = nb(prixUni(b));
+  return (x && y) ? Math.round(Math.abs(x - y) / Math.min(x, y) * 100) : null;
+};
+const fmt$ = n => n === null ? null : n.toLocaleString('fr-CA').replace(/\u202f|\u00a0/g, ' ') + ' $';
+const srcCentris = c => `<p class="note"><strong>Source des chiffres.</strong> Centris, statistiques de ${c} pour le ${trim}${market.fetchedAt ? `, relevées le ${market.fetchedAt}` : ''}. Les variations sont calculées sur un an, contre le même trimestre l'an dernier. On republie ces pages à chaque parution de Centris. <a href="/marche-immobilier/">Voir toutes les villes</a>.</p>`;
+
 const BLOG_POSTS = [
-  ['combien-vaut-ma-maison-saint-eustache','Combien vaut ma maison à Saint-Eustache ?','saint-eustache',
-   'La médiane municipale, ce qu\'elle vaut et ce qu\'elle ne dit pas de votre rue.'],
-  ['acheter-deux-montagnes-ou-saint-eustache','Acheter à Deux-Montagnes ou à Saint-Eustache ?','deux-montagnes',
-   'Prix, transport, écoles et accès au lac : le comparatif honnête entre les deux.'],
-  ['7-etapes-vendre-saint-eustache','Les 7 étapes pour vendre sa maison à Saint-Eustache sans stress','saint-eustache',
-   'Du positionnement de prix à l\'acte notarié, ce qui se passe et quand.'],
-  ['premier-acheteur-saint-eustache-revenu','Premier acheteur à Saint-Eustache : quel revenu faut-il ?','saint-eustache',
-   'Mise de fonds, test de résistance et frais oubliés : le calcul complet.'],
-  ['sainte-marthe-sur-le-lac-marche','Sainte-Marthe-sur-le-Lac : un marché à part sur la Rive-Nord','sainte-marthe-sur-le-lac',
-   'Pourquoi les chiffres de Sainte-Marthe ne se lisent pas comme ceux des villes voisines.'],
-  ['boisbriand-quartiers-ou-acheter','Boisbriand : dans quel secteur acheter ?','boisbriand',
-   'Faubourg, Domaine Vert Nord, Sainte-Marie : ce qui distingue chaque secteur.']
+  {
+    slug: 'combien-vaut-ma-maison-saint-eustache',
+    title: 'Combien vaut ma maison à Saint-Eustache ?',
+    city: 'saint-eustache',
+    teaser: 'La médiane municipale, ce qu\'elle vaut et ce qu\'elle ne dit pas de votre rue.',
+    image: '/photos/stock/maison-blanche-arbres.jpg',
+    date: '2026-08-13',
+    body: `
+<p>C'est la question qu'on nous pose le plus souvent, et la réponse honnête tient en une phrase : le prix médian de Saint-Eustache ne vous apprend à peu près rien sur votre propriété. Il sert à mesurer le marché, pas une maison.</p>
+<p>Ça vaut quand même la peine de savoir le lire. Au ${trim}, une unifamiliale se vend ${prixUni('saint-eustache') || '597 000 $'} à Saint-Eustache selon Centris${varUni('saint-eustache') ? `, ${varUni('saint-eustache')} sur un an` : ''}. Le délai moyen avant la vente est de ${joursUni('saint-eustache') || '24'} jours. Voilà pour la photo d'ensemble.</p>
+
+<h2>Ce qu'est une médiane, et ce qu'elle n'est pas</h2>
+<p>La médiane, c'est le point milieu : la moitié des maisons se sont vendues plus cher, l'autre moitié moins cher. Ce n'est pas une moyenne, et c'est voulu. Trois ventes à deux millions ne tirent pas la médiane vers le haut comme elles tireraient une moyenne.</p>
+<p>Sa faiblesse est ailleurs. Elle mélange dans un même chiffre un bungalow de 1965 à rénover et un cottage de 2018 avec garage double. Elle ignore la rue, l'orientation du terrain, la toiture refaite l'an dernier et le voisin qui a construit un garage sur la ligne de lot. Deux maisons séparées par trois coins de rue peuvent avoir 80 000 $ d'écart sans que la médiane bronche.</p>
+<p>Utilisez-la pour une chose : savoir si le marché monte, descend ou stagne. Pour le reste, elle ne répond pas à votre question.</p>
+
+<h2>L'évaluation municipale n'est pas la valeur marchande</h2>
+<p>Le montant sur votre compte de taxes sert à répartir l'impôt foncier entre les propriétaires de la ville. Il vient d'un rôle déposé aux trois ans, calculé à partir d'une date de référence antérieure de dix-huit mois au dépôt. Quand vous le lisez, il décrit déjà un marché d'il y a deux ans ou plus.</p>
+<p>Dans un marché qui monte, il sous-évalue. Dans un marché qui corrige, il surévalue. Et il est produit en masse, souvent sans que personne soit entré chez vous. Une cuisine refaite au complet et une cuisine d'origine peuvent porter la même évaluation municipale.</p>
+<p>On voit régulièrement des propriétaires fixer leur prix en ajoutant un pourcentage à l'évaluation municipale. C'est la méthode la plus rapide pour se tromper dans les deux sens.</p>
+
+<h2>Les estimateurs en ligne, et pourquoi ils se trompent</h2>
+<p>Un estimateur automatisé fait une chose : il croise votre adresse avec des ventes récentes et applique un modèle. Le modèle ne sait pas que votre sous-sol a été fini sans permis, que la fenestration donne au nord, que le terrain est en pente ou que la maison d'à côté est en location depuis six ans.</p>
+<p>Ces outils sont raisonnables sur un stock très homogène, un développement de 200 maisons construites la même année sur le même modèle. Saint-Eustache n'est pas ça. Le parc immobilier va du village au bord de la rivière jusqu'aux développements récents près de la 640, avec tout ce qu'il y a entre les deux.</p>
+
+<h2>Ce qui détermine vraiment le prix</h2>
+<p>Quand on prépare une analyse comparative, on regarde d'abord les propriétés vendues, pas celles qui sont affichées. Un prix demandé est une opinion. Un prix de vente est un fait.</p>
+<p>On cherche des ventes des six à douze derniers mois, dans votre secteur, sur un type de propriété comparable. Ensuite on ajuste, une variable à la fois :</p>
+<ul>
+  <li>La superficie habitable et le nombre de chambres au même étage.</li>
+  <li>L'année de construction, et surtout l'année des vraies rénovations. Une toiture, des fenêtres et une entrée électrique refaites valent plus qu'un dosseret neuf.</li>
+  <li>Le terrain : dimensions, forme, exposition, ce qui est constructible.</li>
+  <li>Le garage, le stationnement, la piscine. La piscine ajoute moins que la plupart des gens le croient, et elle rétrécit le bassin d'acheteurs.</li>
+  <li>L'état général, qui est la variable la plus difficile à chiffrer et celle qui fait le plus de différence.</li>
+</ul>
+<p>Ce qui n'entre pas dans le calcul : ce que vous avez payé, ce que vous devez à la banque, ce dont vous avez besoin pour votre prochaine propriété. Le marché ne s'ajuste pas à votre situation.</p>
+
+<h2>Le prix demandé décide de la vitesse de vente</h2>
+<p>Avec un délai moyen de ${joursUni('saint-eustache') || '24'} jours au ${trim}, une propriété correctement positionnée trouve preneur vite. Une propriété trop chère, elle, accumule les jours sur le marché, et c'est le pire endroit où être.</p>
+<p>Les acheteurs voient la date d'inscription. Passé un certain seuil, ils arrêtent de se demander si le prix est trop haut et commencent à se demander ce qui cloche avec la maison. La baisse de prix qui suit arrive alors trop tard : elle se négocie sous ce qu'on aurait obtenu en partant au bon prix.</p>
+
+<h2>Comment obtenir un vrai chiffre</h2>
+<p>Une analyse comparative sérieuse demande une visite. On regarde la propriété, on note ce qui la distingue des comparables, on sort les ventes du secteur et on vous remet un rapport écrit avec la fourchette et le raisonnement derrière. Vous voyez les propriétés qu'on a retenues et pourquoi.</p>
+<p>C'est gratuit et ça n'engage à rien. Beaucoup de gens le demandent deux ou trois ans avant de vendre, simplement pour savoir où ils en sont. C'est une très bonne façon de l'utiliser.</p>
+<p><a href="/vendre/evaluation-gratuite/">Demander une évaluation gratuite</a> ou <a href="/marche-immobilier/saint-eustache/">consulter les statistiques détaillées de Saint-Eustache</a>.</p>
+${srcCentris('Saint-Eustache')}`
+  },
+
+  {
+    slug: 'acheter-deux-montagnes-ou-saint-eustache',
+    title: 'Acheter à Deux-Montagnes ou à Saint-Eustache ?',
+    city: 'deux-montagnes',
+    teaser: 'Prix, transport, inventaire et accès au lac : le comparatif honnête entre les deux.',
+    image: '/photos/stock/maison-deux-etages.jpg',
+    date: '2026-08-13',
+    body: `
+<p>Les deux villes se touchent. Beaucoup d'acheteurs arrivent en visite avec les deux sur leur liste et repartent sans savoir laquelle choisir. Les chiffres tranchent une partie de la question, votre trajet quotidien tranche le reste.</p>
+
+<h2>Les chiffres, côte à côte</h2>
+<div class="tbl">
+<table>
+  <caption>Centris, ${trim}. Le prix médian porte sur les unifamiliales.</caption>
+  <thead><tr><th>&nbsp;</th><th class="num">Deux-Montagnes</th><th class="num">Saint-Eustache</th></tr></thead>
+  <tbody>
+    <tr><td>Prix médian</td><td class="num">${prixUni('deux-montagnes') || '570 000 $'}</td><td class="num">${prixUni('saint-eustache') || '597 000 $'}</td></tr>
+    <tr><td>Variation sur un an</td><td class="num">${varUni('deux-montagnes') || '5 %'}</td><td class="num">${varUni('saint-eustache') || '10 %'}</td></tr>
+    <tr><td>Jours sur le marché</td><td class="num">${joursUni('deux-montagnes') || '27'}</td><td class="num">${joursUni('saint-eustache') || '24'}</td></tr>
+    <tr><td>Ventes au trimestre</td><td class="num">${ventes('deux-montagnes') || '78'}</td><td class="num">${ventes('saint-eustache') || '180'}</td></tr>
+    <tr><td>Inscriptions actives</td><td class="num">${inscrits('deux-montagnes') || '59'}</td><td class="num">${inscrits('saint-eustache') || '144'}</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Deux-Montagnes est la moins chère des deux, d'environ ${fmt$(ecartPrix('deux-montagnes','saint-eustache')) || '27 000 $'} sur la médiane. C'est réel, mais c'est moins que ce que la réputation des deux villes laisse croire : on parle d'un écart d'à peu près ${ecartPct('deux-montagnes','saint-eustache') || 5} %, pas d'un changement de catégorie.</p>
+
+<h2>La vraie différence est dans l'inventaire</h2>
+<p>Saint-Eustache affiche ${inscrits('saint-eustache') || '144'} propriétés actives contre ${inscrits('deux-montagnes') || '59'} à Deux-Montagnes. Pour un acheteur, c'est la donnée la plus importante du tableau.</p>
+<p>À Deux-Montagnes, vous verrez moins de maisons, vous devrez décider plus vite et vous aurez moins de marge pour négocier. Quand une propriété correspond vraiment à vos critères, il faut être prêt le jour même. À Saint-Eustache, le choix est plus large et le rythme un peu moins tendu, mais la concurrence sur les belles propriétés reste forte : le marché s'y règle en ${joursUni('saint-eustache') || '24'} jours.</p>
+<p>Traduction pratique : si votre liste de critères est longue et rigide, Saint-Eustache vous donne plus de chances de la remplir. Si vous cherchez précisément le cachet de Deux-Montagnes, il faut accepter d'attendre la bonne inscription.</p>
+
+<h2>Le transport, qui décide souvent pour vous</h2>
+<p>Deux-Montagnes est desservie par le REM. Si vous travaillez au centre-ville de Montréal et que vous ne voulez pas conduire, c'est un argument qui pèse plus lourd que ${fmt$(ecartPrix('deux-montagnes','saint-eustache')) || '27 000 $'} sur le prix d'achat. Le stationnement incitatif, l'horaire et la fréquence de passage valent la peine d'être vérifiés selon vos heures réelles, pas selon l'horaire théorique.</p>
+<p>Saint-Eustache joue une autre carte : la 640, la 13 et la 15 à portée immédiate. Si vous travaillez à Laval, dans le West Island ou ailleurs sur la Rive-Nord, l'auto vous servira de toute façon et la position de Saint-Eustache est difficile à battre.</p>
+<p>Le test qu'on suggère toujours : faites le trajet à l'heure où vous le ferez vraiment, un mardi matin, depuis les deux villes. Trente minutes de différence par jour, ça fait cinq heures par semaine.</p>
+
+<h2>Le lac, les rues, l'ambiance</h2>
+<p>Deux-Montagnes est plus petite et plus compacte. Le secteur près du lac des Deux Montagnes a son caractère propre, avec des rues matures et un stock de maisons plus ancien en bonne partie. On y trouve moins de construction récente.</p>
+<p>Saint-Eustache est plus étendue et plus contrastée. Le vieux Saint-Eustache et les abords de la rivière du Chêne n'ont pas grand-chose à voir avec les développements des quinze dernières années au nord de la 640. Ça veut dire deux choses : plus de possibilités, et une médiane municipale encore moins représentative d'un secteur donné.</p>
+
+<h2>Les deux erreurs qu'on voit le plus</h2>
+<p>La première : choisir la ville avant d'avoir vu des propriétés. Les deux marchés se chevauchent largement. Une maison de Saint-Eustache et une maison de Deux-Montagnes à 600 000 $ se ressemblent souvent plus qu'on ne le pense.</p>
+<p>La deuxième : se fier à la médiane pour bâtir son budget. Elle ne dit rien du type de propriété que vous cherchez. Si vous visez un cottage à quatre chambres avec garage, les deux villes vous demanderont nettement plus que leur médiane.</p>
+
+<h2>Notre réponse courte</h2>
+<p>Si le transport en commun vers Montréal fait partie de votre quotidien, Deux-Montagnes. Si vous avez besoin de choix, d'un accès rapide aux autoroutes ou d'un type de propriété précis, Saint-Eustache. Dans tous les autres cas, laissez les propriétés décider et gardez les deux villes ouvertes.</p>
+<p>On couvre les deux territoires. <a href="/rendez-vous/">Prenez rendez-vous</a> et on établit votre liste à partir de vos vrais critères, pas de la carte administrative. Les statistiques complètes sont sur <a href="/marche-immobilier/deux-montagnes/">Deux-Montagnes</a> et <a href="/marche-immobilier/saint-eustache/">Saint-Eustache</a>.</p>
+${srcCentris('Deux-Montagnes et de Saint-Eustache')}`
+  },
+
+  {
+    slug: '7-etapes-vendre-saint-eustache',
+    title: 'Les 7 étapes pour vendre sa maison à Saint-Eustache sans stress',
+    city: 'saint-eustache',
+    teaser: 'Du positionnement de prix à l\'acte notarié, ce qui se passe et quand.',
+    image: '/photos/stock/maison-contemporaine.jpg',
+    date: '2026-08-13',
+    body: `
+<p>La plupart du stress d'une vente vient du fait qu'on ne sait pas ce qui s'en vient. Voici la séquence complète, dans l'ordre, avec les délais réalistes pour Saint-Eustache.</p>
+
+<h2>1. Le positionnement de prix</h2>
+<p>Tout part de là, et c'est l'étape où une erreur coûte le plus cher. On sort les ventes comparables des six à douze derniers mois dans votre secteur, on ajuste pour ce qui distingue votre propriété et on établit une fourchette.</p>
+<p>La décision vous revient. Notre travail est de vous montrer sur quoi elle repose, y compris quand notre recommandation ne fait pas votre affaire. Un prix trop ambitieux ne vous fait pas perdre de l'argent tout de suite, il vous en fait perdre à la douzième semaine.</p>
+<p>Comptez une visite d'environ une heure, et le rapport écrit dans les 48 heures.</p>
+
+<h2>2. La préparation de la propriété</h2>
+<p>Désencombrer, dépersonnaliser, réparer les petites choses. On passe la maison avec vous, pièce par pièce, et on vous dit ce qui vaut la peine et ce qui n'en vaut pas.</p>
+<p>Ce qui rapporte presque toujours : la peinture, le ménage en profondeur, l'éclairage, le terrain. Ce qui rarement se récupère : une rénovation majeure entreprise juste avant de vendre. Si la cuisine est à refaire, l'acheteur préfère généralement l'escompte et la refaire à son goût.</p>
+<p>Prévoyez une à trois semaines selon l'état de départ.</p>
+
+<h2>3. Les photos et la mise en marché</h2>
+<p>Les acheteurs voient vos photos avant de voir votre maison, et ils décident en quelques secondes s'ils cliquent. On fait faire des photos professionnelles, avec un plan et les mesures des pièces.</p>
+<p>Ensuite vient la fiche : le texte descriptif, les caractéristiques, la diffusion sur Centris et les portails, la signalisation, la visibilité RE/MAX. Une propriété bien montée part avec une longueur d'avance qui ne se rattrape pas plus tard.</p>
+<p>Comptez trois à sept jours entre la séance photo et la mise en ligne.</p>
+
+<h2>4. Les visites</h2>
+<p>Les premières deux semaines comptent double. C'est le moment où votre propriété est vue par tous les acheteurs déjà en recherche active, ceux qui ont leur préapprobation en main.</p>
+<p>Quelques règles simples : maison propre en tout temps, températures autour de 21 degrés, rideaux ouverts, lumières allumées. Et sortez pendant les visites. Les gens n'osent pas ouvrir les portes d'armoires ni dire ce qu'ils pensent devant les propriétaires, et ce sont précisément ces gens-là qui font des offres.</p>
+<p>Après chaque visite, on vous transmet les commentaires reçus. Au bout de dix à quinze visites sans offre, on s'assoit et on révise la stratégie.</p>
+
+<h2>5. La promesse d'achat et la négociation</h2>
+<p>Une promesse d'achat n'est pas seulement un prix. Elle contient la date d'occupation, les inclusions et exclusions, le délai de réponse et les conditions. Une offre à 10 000 $ de moins avec un financement déjà approuvé et une date qui vous convient vaut souvent mieux qu'une offre plus élevée assortie de trois conditions.</p>
+<p>On vous présente chaque offre avec son analyse : la solidité de l'acheteur, les risques, ce qui se négocie et ce qui ne se négocie pas. Vous pouvez accepter, refuser ou faire une contre-proposition, généralement dans un délai de 24 à 72 heures.</p>
+
+<h2>6. Les conditions</h2>
+<p>Une fois la promesse acceptée, l'acheteur exécute ses conditions. Il y en a presque toujours deux.</p>
+<p>L'inspection préachat, d'abord. L'inspecteur passe deux à trois heures sur place et remet un rapport. Il trouvera des choses : c'est son métier, et aucune maison ne passe une inspection sans remarques. Ce qui compte, c'est la différence entre l'entretien normal et un vice réel. Une négociation de second tour est fréquente à cette étape.</p>
+<p>Le financement, ensuite. Même préapprouvé, l'acheteur doit faire approuver la propriété elle-même par son prêteur, ce qui implique souvent une évaluation. Comptez dix à vingt jours pour l'ensemble des conditions.</p>
+
+<h2>7. Le notaire et la signature</h2>
+<p>Le dossier part chez le notaire choisi par l'acheteur. Il vérifie les titres, l'état des taxes, les hypothèques à radier, et prépare l'acte de vente. De votre côté, on rassemble les documents : certificat de localisation, déclarations du vendeur, factures des travaux, garanties.</p>
+<p>Le certificat de localisation est le document qui retarde le plus de transactions. S'il date de plus de dix ans ou si la propriété a changé depuis, il en faut un nouveau, et un arpenteur-géomètre demande plusieurs semaines. Vérifiez-le dès l'étape 1, pas à l'étape 7.</p>
+<p>À la signature, vous apportez deux pièces d'identité. Le solde hypothécaire est remboursé à même le produit de la vente, et vous recevez la différence.</p>
+
+<h2>Combien de temps en tout</h2>
+<p>Au ${trim}, une unifamiliale se vend en ${joursUni('saint-eustache') || '24'} jours en moyenne à Saint-Eustache. Ajoutez la préparation en amont et le délai jusqu'à l'acte notarié, et une vente complète prend habituellement de deux à quatre mois entre la première rencontre et les clés remises.</p>
+<p>Un dernier point, qui n'est pas une étape mais qui décide de tout : commencez avant d'être pressé. Les ventes difficiles sont presque toujours des ventes entreprises trop tard, avec une date fixée par autre chose que le marché.</p>
+<p><a href="/vendre/evaluation-gratuite/">Demander l'évaluation gratuite</a> pour démarrer à l'étape 1, ou lire le détail de <a href="/vendre/etapes-pour-vendre/">chaque étape de la vente</a>.</p>
+${srcCentris('Saint-Eustache')}`
+  },
+
+  {
+    slug: 'premier-acheteur-saint-eustache-revenu',
+    title: 'Premier acheteur à Saint-Eustache : quel revenu faut-il ?',
+    city: 'saint-eustache',
+    teaser: 'Mise de fonds, test de résistance et frais oubliés : le calcul complet, sans arrondir vers le bas.',
+    image: '/photos/stock/maison-bois.jpg',
+    date: '2026-08-13',
+    body: `
+<p>On va faire le calcul au complet sur une propriété au prix médian de Saint-Eustache, soit ${prixUni('saint-eustache') || '597 000 $'} au ${trim}. Les chiffres sont moins encourageants que ce que la plupart des gens espèrent, et c'est justement pour ça qu'il vaut mieux les voir maintenant.</p>
+
+<h2>La mise de fonds minimale</h2>
+<p>Au Canada, la mise de fonds minimale se calcule par tranches : 5 % sur les premiers 500 000 $, puis 10 % sur la portion au-dessus. Sur une propriété à ${prixUni('saint-eustache') || '597 000 $'}, ça donne environ <strong>34 700 $</strong>.</p>
+<p>Sous 20 % de mise de fonds, l'assurance prêt hypothécaire de la SCHL devient obligatoire. À ce niveau de mise de fonds, la prime tourne autour de 4 % du montant emprunté, soit près de 22 500 $. Elle s'ajoute au prêt plutôt que d'être payée comptant. Attention par contre : au Québec, la taxe de 9 % sur cette prime, environ 2 000 $, se paie chez le notaire et ne peut pas être financée.</p>
+
+<h2>Le test de résistance</h2>
+<p>C'est l'étape qui surprend le plus. Votre prêteur ne vous qualifie pas au taux qu'il vous offre. Il vous qualifie au plus élevé entre 5,25 % et votre taux plus deux points de pourcentage.</p>
+<p>Autrement dit, si on vous offre 4,5 %, la banque vérifie que vous pourriez payer à 6,5 %. Vous paierez le taux réel, mais vous devez démontrer votre capacité au taux fictif. C'est ce mécanisme qui fait la différence entre le montant que vous croyez pouvoir emprunter et celui que la banque vous accorde.</p>
+
+<h2>Le revenu requis, trois scénarios</h2>
+<p>Le ratio d'amortissement brut de la dette plafonne généralement à 32 % : le total des frais de logement ne doit pas dépasser 32 % du revenu familial brut. Ces frais comprennent le paiement hypothécaire, les taxes municipales et scolaires et le chauffage.</p>
+<div class="tbl">
+<table>
+  <caption>Calcul sur une propriété à ${prixUni('saint-eustache') || '597 000 $'}, qualifiée à 6,5 %, avec environ 300 $ de taxes et 175 $ de chauffage par mois. Chiffres arrondis.</caption>
+  <thead><tr><th>Scénario</th><th class="num">Mise de fonds</th><th class="num">Paiement qualifié</th><th class="num">Revenu familial requis</th></tr></thead>
+  <tbody>
+    <tr><td>Minimum, 25 ans</td><td class="num">34 700 $</td><td class="num">3 920 $</td><td class="num">165 000 $</td></tr>
+    <tr><td>Minimum, 30 ans</td><td class="num">34 700 $</td><td class="num">3 660 $</td><td class="num">155 000 $</td></tr>
+    <tr><td>20 %, 25 ans</td><td class="num">119 400 $</td><td class="num">3 200 $</td><td class="num">138 000 $</td></tr>
+  </tbody>
+</table>
+</div>
+<p>L'amortissement sur 30 ans est accessible aux premiers acheteurs sur un prêt assuré. Il réduit le paiement mensuel et le revenu requis, au prix d'intérêts totaux plus élevés sur la durée. Ce n'est ni bon ni mauvais en soi : c'est un arbitrage entre votre budget d'aujourd'hui et le coût total.</p>
+<p>Ces montants supposent qu'aucune autre dette ne pèse sur votre dossier. Un paiement d'auto de 500 $ par mois retranche environ 100 000 $ à votre capacité d'emprunt. C'est souvent le levier le plus efficace avant d'acheter.</p>
+
+<h2>Les frais qu'on oublie</h2>
+<p>La mise de fonds n'est pas la seule somme à avoir en banque le jour de la signature.</p>
+<ul>
+  <li><strong>Droits de mutation</strong>, la taxe de bienvenue. Sur une propriété à ce prix, comptez autour de 7 000 $. Elle arrive par la poste quelques semaines après l'achat, pas chez le notaire.</li>
+  <li><strong>Taxe sur la prime SCHL</strong> : environ 2 000 $, payable comptant.</li>
+  <li><strong>Frais de notaire</strong> : de 1 300 $ à 2 000 $ selon le dossier.</li>
+  <li><strong>Inspection préachat</strong> : de 500 $ à 900 $, et ce n'est pas là qu'il faut économiser.</li>
+  <li><strong>Ajustements de taxes</strong> : vous remboursez au vendeur la portion des taxes déjà payées pour la période après la vente.</li>
+  <li><strong>Déménagement, assurances, premiers travaux.</strong> Prévoyez un coussin.</li>
+</ul>
+<p>Ensemble, ces frais représentent facilement de 12 000 $ à 15 000 $ à sortir en plus de la mise de fonds.</p>
+
+<h2>Ce qui joue en votre faveur</h2>
+<p>Plusieurs programmes s'adressent précisément aux premiers acheteurs, et ils se cumulent.</p>
+<ul>
+  <li>Le <strong>CELIAPP</strong> permet de cotiser 8 000 $ par année, jusqu'à 40 000 $ à vie. La cotisation est déductible et le retrait pour l'achat est non imposable. Pour un couple, c'est 80 000 $.</li>
+  <li>Le <strong>RAP</strong> permet de retirer jusqu'à 60 000 $ de votre REER, à rembourser sur quinze ans.</li>
+  <li>Le <strong>crédit d'impôt fédéral pour l'achat d'une première habitation</strong> vaut jusqu'à 1 500 $.</li>
+  <li>Certaines municipalités offrent un remboursement partiel des droits de mutation ou une aide à la mise de fonds. Vérifiez auprès de la ville visée, les programmes changent d'une année à l'autre.</li>
+</ul>
+<p class="note">Les règles hypothécaires, les seuils et les plafonds de ces programmes sont révisés régulièrement, et les taux bougent constamment. Les chiffres de cet article valent pour ${trim} et servent à donner l'ordre de grandeur. Validez votre situation précise avec un courtier hypothécaire avant de faire une offre.</p>
+
+<h2>Si le compte n'y est pas</h2>
+<p>C'est le cas de beaucoup de premiers acheteurs, et il reste des options réelles. Le condo, d'abord : la médiane s'établit à ${prixCopro('saint-eustache') || '378 000 $'} à Saint-Eustache, un écart considérable avec l'unifamiliale. Le plex ensuite, où les revenus de location sont partiellement reconnus par le prêteur. Et les municipalités voisines, où le prix médian varie de plus de 100 000 $ d'une ville à l'autre sur notre territoire.</p>
+<p>Faites vos scénarios avec nos <a href="/acheter/calculatrices/">calculatrices hypothécaires</a>, puis parlez à un courtier hypothécaire avant de visiter quoi que ce soit. Connaître votre montant réel change complètement la recherche. On peut vous <a href="/acheter/financement-hypothecaire/">diriger vers nos partenaires</a>.</p>
+${srcCentris('Saint-Eustache')}`
+  },
+
+  {
+    slug: 'sainte-marthe-sur-le-lac-marche',
+    title: 'Sainte-Marthe-sur-le-Lac : un marché à part sur la Rive-Nord',
+    city: 'sainte-marthe-sur-le-lac',
+    teaser: 'Pourquoi les chiffres de Sainte-Marthe ne se lisent pas comme ceux des villes voisines.',
+    image: '/photos/stock/quartier-rues.jpg',
+    date: '2026-08-13',
+    body: `
+<p>Sainte-Marthe-sur-le-Lac est plus petite que Saint-Eustache et que Deux-Montagnes. Elle se vend pourtant plus cher que les deux. Au ${trim}, la médiane d'une unifamiliale y atteint ${prixUni('sainte-marthe-sur-le-lac') || '644 000 $'}${varUni('sainte-marthe-sur-le-lac') ? `, ${varUni('sainte-marthe-sur-le-lac')} sur un an` : ''}, contre ${prixUni('saint-eustache') || '597 000 $'} à Saint-Eustache et ${prixUni('deux-montagnes') || '570 000 $'} à Deux-Montagnes.</p>
+<p>Ça mérite une explication, parce que ce n'est pas une anomalie statistique.</p>
+
+<h2>Un parc immobilier jeune</h2>
+<p>La première raison est la plus simple, et on l'oublie souvent. Sainte-Marthe a connu l'essentiel de son développement résidentiel récemment. Une part importante de son stock est constituée de maisons construites dans les vingt-cinq dernières années, sur des terrains lotis d'un coup, avec des standards de construction modernes.</p>
+<p>Une médiane calculée sur un parc jeune monte mécaniquement. Ce n'est pas que Sainte-Marthe soit intrinsèquement plus chère que sa voisine : c'est qu'on n'y compare pas les mêmes maisons. Un bungalow de 1962 pèse dans la médiane de Saint-Eustache. À Sainte-Marthe, il y en a moins.</p>
+
+<h2>Un inventaire structurellement serré</h2>
+<p>Voici le chiffre qui distingue vraiment Sainte-Marthe de ses voisines.</p>
+<div class="tbl">
+<table>
+  <caption>Centris, ${trim}. Le rapport entre l'offre disponible et les ventes réalisées indique la tension du marché.</caption>
+  <thead><tr><th>Municipalité</th><th class="num">Inscriptions actives</th><th class="num">Ventes au trimestre</th><th class="num">Rapport</th></tr></thead>
+  <tbody>
+    <tr><td>Sainte-Marthe-sur-le-Lac</td><td class="num">${inscrits('sainte-marthe-sur-le-lac') || '101'}</td><td class="num">${ventes('sainte-marthe-sur-le-lac') || '106'}</td><td class="num">${ratioOffre('sainte-marthe-sur-le-lac')}</td></tr>
+    <tr><td>Saint-Eustache</td><td class="num">${inscrits('saint-eustache') || '144'}</td><td class="num">${ventes('saint-eustache') || '180'}</td><td class="num">${ratioOffre('saint-eustache')}</td></tr>
+    <tr><td>Boisbriand</td><td class="num">${inscrits('boisbriand') || '108'}</td><td class="num">${ventes('boisbriand') || '62'}</td><td class="num">${ratioOffre('boisbriand')}</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Le territoire de Sainte-Marthe est restreint et largement bâti. Il n'y a pas de grandes réserves de terrains à développer pour absorber la demande. Quand une propriété se libère, elle rencontre un bassin d'acheteurs qui, lui, ne rétrécit pas.</p>
+<p>Pour un vendeur, c'est une position favorable. Pour un acheteur, ça veut dire visiter vite, avoir son financement réglé d'avance et accepter que les meilleures propriétés partent en quelques jours.</p>
+
+<h2>La digue, et ce qu'il faut en savoir</h2>
+<p>On ne peut pas parler du marché de Sainte-Marthe sans parler d'avril 2019. La rupture de la digue avait inondé environ 2 500 résidences et forcé l'évacuation de milliers de personnes. C'est l'événement le plus marquant de l'histoire récente de la municipalité.</p>
+<p>La digue a été reconstruite et rehaussée dans les années qui ont suivi, selon des normes nettement supérieures à celles de l'ouvrage d'origine. Le marché, lui, a récupéré : les chiffres du dernier trimestre ne montrent aucune décote par rapport aux villes voisines, au contraire.</p>
+<p>Cela dit, l'histoire a laissé une trace utile chez les acheteurs. Ils posent maintenant des questions précises, et ils ont raison de le faire. Si vous achetez à Sainte-Marthe, trois vérifications s'imposent :</p>
+<ul>
+  <li><strong>La zone.</strong> Demandez à la municipalité dans quelle zone se situe l'adresse exacte et ce que ça implique pour les permis, les travaux et la reconstruction.</li>
+  <li><strong>L'assurance.</strong> Obtenez une soumission avant de faire une offre, pas après. La couverture des dommages par refoulement et par inondation varie beaucoup d'un assureur à l'autre.</li>
+  <li><strong>La déclaration du vendeur.</strong> Elle doit mentionner les sinistres passés et les travaux effectués. Lisez-la au complet et demandez les factures.</li>
+</ul>
+<p>Un vendeur bien préparé a ces documents en main dès la mise en marché. C'est un avantage concurrentiel réel dans cette ville-là.</p>
+
+<h2>Le lac</h2>
+<p>L'accès au lac des Deux Montagnes reste l'argument central de Sainte-Marthe, et il explique une bonne part de la prime sur le prix. La proximité de l'eau, le parc riverain et le caractère résidentiel de la municipalité attirent des acheteurs qui ne magasinent pas ailleurs sur la Rive-Nord.</p>
+<p>Il faut savoir que cette prime n'est pas uniforme. Une rue à cinq minutes à pied de la berge et une rue au nord de la 640 ne se vendent pas au même prix, et l'écart est plus grand ici qu'ailleurs sur le territoire. C'est encore un cas où la médiane municipale ne vous sert à rien pour une propriété précise.</p>
+
+<h2>Ce qu'on en retient</h2>
+<p>Sainte-Marthe se vend cher parce que le stock y est jeune, le territoire limité et la demande constante. C'est un marché de vendeur plus prononcé que ses voisines immédiates.</p>
+<p>Si vous vendez, la préparation du dossier compte autant que le prix. Si vous achetez, arrivez prêt et vérifiez la zone avant de tomber amoureux d'une adresse.</p>
+<p><a href="/marche-immobilier/sainte-marthe-sur-le-lac/">Voir les statistiques détaillées de Sainte-Marthe-sur-le-Lac</a> ou <a href="/rendez-vous/">nous parler de votre projet</a>.</p>
+${srcCentris('Sainte-Marthe-sur-le-Lac')}`
+  },
+
+  {
+    slug: 'boisbriand-quartiers-ou-acheter',
+    title: 'Boisbriand : dans quel secteur acheter ?',
+    city: 'boisbriand',
+    teaser: 'Faubourg, Domaine Vert Nord, vieux Boisbriand : ce qui distingue chaque secteur, et pourquoi c\'est la ville où les acheteurs ont le plus de marge.',
+    image: '/photos/stock/quartier-crepuscule.jpg',
+    date: '2026-08-13',
+    body: `
+<p>Commençons par la donnée que personne ne regarde et qui change tout si vous achetez : Boisbriand affiche ${inscrits('boisbriand') || '108'} propriétés actives pour ${ventes('boisbriand') || '62'} ventes au ${trim}. C'est nettement plus d'offre que de demande, et c'est le seul endroit de notre territoire où c'est le cas à ce point.</p>
+
+<h2>La ville où les acheteurs respirent</h2>
+<p>La médiane d'une unifamiliale s'établit à ${prixUni('boisbriand') || '635 000 $'}${varUni('boisbriand') ? `, en hausse de ${varUni('boisbriand')} sur un an` : ''}. Cette progression est la plus faible du territoire : Saint-Eustache et Sainte-Marthe-sur-le-Lac ont grimpé de ${varUni('saint-eustache') || '10 %'} sur la même période, Blainville davantage encore.</p>
+<p>Un marché plus lent n'est pas un marché en difficulté. Les propriétés se vendent en ${joursUni('boisbriand') || '25'} jours, ce qui reste rapide. Mais avec cet inventaire, un acheteur peut prendre le temps de comparer, faire une offre conditionnelle sans se faire évincer et négocier autre chose que le prix. Sur la Rive-Nord actuelle, c'est rare.</p>
+<p>Si vous vendez à Boisbriand, la lecture est inverse : votre propriété est en concurrence avec beaucoup d'autres. Le positionnement de prix et la qualité de la mise en marché comptent plus ici qu'ailleurs.</p>
+
+<h2>Pourquoi on ne publie pas de médiane par secteur</h2>
+<p>On nous demande souvent le prix médian du Faubourg ou du Domaine Vert Nord. On ne le donne pas, et l'explication mérite d'être dite clairement.</p>
+<p>Centris publie ses statistiques à l'échelle municipale parce qu'en dessous, le volume de transactions devient trop faible pour être fiable. Un secteur qui enregistre huit ventes dans un trimestre peut afficher une médiane qui bouge de 15 % au trimestre suivant sans que le marché ait bougé du tout. Trois maisons plus grosses que la moyenne suffisent.</p>
+<p>Publier ces chiffres donnerait une fausse impression de précision. On préfère vous décrire ce que chaque secteur contient réellement, puis sortir les vraies ventes comparables quand vous ciblez une propriété.</p>
+
+<h2>Le Faubourg Boisbriand</h2>
+<p>Développé sur l'ancien site de l'usine General Motors, le Faubourg est un quartier planifié qui mélange résidentiel, commerces et espaces publics. Le stock y est récent, avec une forte proportion de maisons de ville, de jumelés et de condos.</p>
+<p>À qui ça convient : ceux qui veulent marcher jusqu'aux commerces et à une construction sans travaux à prévoir. Les jeunes familles et les acheteurs qui réduisent la taille de leur propriété y sont bien représentés.</p>
+<p>Ce qu'il faut vérifier : les frais de copropriété et les règlements pour les unités concernées, et l'état du fonds de prévoyance. Sur du bâti récent, ces montants sont parfois établis trop bas au départ et se rattrapent ensuite.</p>
+
+<h2>Le Domaine Vert Nord</h2>
+<p>Secteur résidentiel du nord de la ville, à proximité du parc du Domaine Vert. Le tissu y est plus classiquement unifamilial, avec des terrains généralement plus grands que dans le Faubourg et un accès rapide à la 640 et à la 15.</p>
+<p>À qui ça convient : ceux qui cherchent une maison détachée avec du terrain, un garage et de l'espace extérieur, sans payer les prix de Blainville juste à côté. L'écart entre les deux villes est réel : ${prixUni('blainville') ? `Blainville affiche ${prixUni('blainville')}` : 'Blainville se vend nettement plus cher'} contre ${prixUni('boisbriand') || '635 000 $'} à Boisbriand.</p>
+<p>Ce qu'il faut vérifier : l'année de construction et l'état des composantes majeures. Le secteur couvre plusieurs vagues de développement, et une maison des années 1980 n'a pas les mêmes besoins qu'une maison de 2010.</p>
+
+<h2>Le vieux Boisbriand et les abords de la rivière</h2>
+<p>Le noyau ancien, du côté de la Grande-Côte et de la rivière des Mille Îles, offre le stock le plus hétérogène de la ville. On y trouve des propriétés plus âgées, des terrains de formes irrégulières et, par endroits, du cachet qu'on ne construit plus.</p>
+<p>À qui ça convient : ceux qui acceptent des travaux en échange d'un emplacement et d'un caractère qu'un développement récent ne peut pas reproduire.</p>
+<p>Ce qu'il faut vérifier : c'est ici que l'inspection préachat compte le plus. Fondations, drain français, entrée électrique, présence d'un réservoir enfoui sur les propriétés jamais converties. Et pour tout ce qui touche la rivière, la cote de crue et les contraintes de la bande riveraine, à valider auprès de la ville avant l'offre.</p>
+
+<h2>Comment choisir</h2>
+<p>La question du secteur arrive en deuxième. Commencez par établir ce que vous cherchez comme propriété et ce que votre financement permet réellement. Le secteur découle presque toujours de ces deux réponses.</p>
+<p>Une fois la propriété ciblée, là on regarde les vraies ventes comparables de la rue et des rues avoisinantes. C'est le seul niveau de détail qui vaut quelque chose, et il n'existe dans aucune statistique publique.</p>
+<p><a href="/nos-proprietes/?city=boisbriand">Voir nos inscriptions à Boisbriand</a>, consulter les <a href="/marche-immobilier/boisbriand/">statistiques Centris de la ville</a>, ou <a href="/rendez-vous/">nous parler de votre projet</a>.</p>
+${srcCentris('Boisbriand')}`
+  }
 ];
 writePage('blog/index.html', layout({
   title:'Blog immobilier Rive-Nord | Équipe Jacques-Roussel',
@@ -5797,13 +6139,13 @@ writePage('blog/index.html', layout({
       <span style="display:inline-block;margin-top:1.2rem;color:var(--blue);border-bottom:1px solid var(--blue);padding-bottom:2px">Lire l'analyse complète →</span>
     </div>
   </a>
-  <h3 style="margin:3rem 0 1.5rem;font-size:1rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600">Prochainement sur le blog</h3>
-  <div class="blog-grid">${BLOG_POSTS.map(([s,t,city,teaser])=>{
-    const m = marketFor(city);
-    return `<a class="blog-card" href="/blog/${s}/">
+  <h3 style="margin:3rem 0 1.5rem;font-size:1rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600">Tous les articles</h3>
+  <div class="blog-grid">${BLOG_POSTS.map(p=>{
+    const m = marketFor(p.city);
+    return `<a class="blog-card" href="/blog/${p.slug}/">
       <span class="blog-card__city">${m ? m.name : 'Rive-Nord'}</span>
-      <h3>${t}</h3>
-      <p>${teaser}</p>
+      <h3>${p.title}</h3>
+      <p>${p.teaser}</p>
       <span class="more">Lire →</span>
     </a>`;
   }).join('')}</div>
@@ -5826,18 +6168,29 @@ writePage('blog/index.html', layout({
     .blog-card .more{font-size:.85rem;font-weight:600;color:var(--blue);margin-top:auto}
   </style>`
 }));
-for (const [s, t, city, teaser] of BLOG_POSTS) {
-  const m = marketFor(city);
-  writePage(`blog/${s}/index.html`, contentPage({
+for (const post of BLOG_POSTS) {
+  const m = marketFor(post.city);
+  writePage(`blog/${post.slug}/index.html`, contentPage({
     eyebrow: `Blog · ${m ? m.name : 'Rive-Nord'}`,
-    h1: t,
-    lead: teaser,
-    title: `${t} | Équipe Jacques-Roussel`,
-    desc: teaser,
-    canonical: `https://jacquesroussel.com/blog/${s}/`,
-    body: `<p>Cet article est en rédaction. En attendant, les chiffres Centris à jour de ${m ? m.name : 'votre municipalité'} sont ci-dessous, et notre <a href="/blog/${featuredArticle.slug}/">analyse du marché de Saint-Eustache</a> couvre déjà l'essentiel de la méthode.</p>
-    <p>Une question précise sur votre propriété ? N'attendez pas l'article : <a href="/contact/">écrivez-nous</a>, on vous répond avec les comparables de votre secteur.</p>`,
-    afterProse: marketHighlightsHtml(city)
+    h1: post.title,
+    lead: post.teaser,
+    image: post.image,
+    title: `${post.title} | Équipe Jacques-Roussel`,
+    desc: post.teaser,
+    canonical: `https://jacquesroussel.com/blog/${post.slug}/`,
+    jsonld: JSON.stringify({
+      "@context":"https://schema.org","@type":"Article",
+      "headline": post.title,
+      "description": post.teaser,
+      "author":{"@type":"Organization","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
+      "image":`https://jacquesroussel.com${post.image}`,
+      "datePublished": post.date,
+      "dateModified": market.fetchedAt || post.date,
+      "publisher":{"@type":"Organization","name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL"},
+      "mainEntityOfPage":`https://jacquesroussel.com/blog/${post.slug}/`
+    }),
+    body: post.body,
+    afterProse: marketHighlightsHtml(post.city)
   }));
 }
 
@@ -6131,7 +6484,7 @@ const allUrls = [
   ...SUBPAGES.map(([p])=>`/${p}/`),
   ...GUIDES.map(([s])=>`/guides/${s}/`),
   ...['statistiques-blainville','statistiques-sainte-therese','rapport-mensuel'].map(s=>`/marche-immobilier/${s}/`),
-  ...BLOG_POSTS.map(([s])=>`/blog/${s}/`),
+  ...BLOG_POSTS.map(p=>`/blog/${p.slug}/`),
   ...properties.map(p=>`/nos-proprietes/${p.slug}/`)
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
