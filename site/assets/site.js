@@ -311,28 +311,29 @@
       } catch (e) { /* fail silent */ }
     }
 
-    // Pinned horizontal property gallery (desktop only — native scroll below 1024px)
-    const hmProps = document.querySelector('[data-hm-props]');
+    // Galerie de propriétés — défilement horizontal piloté par deux flèches.
+    // La section n'épingle plus la page : descendre continue de descendre.
     const hmTrack = document.querySelector('[data-hm-props-track]');
-    if (hmProps && hmTrack && hasGSAP && hasST && !reduceMotion && typeof window.gsap.matchMedia === 'function') {
-      try {
-        const hmMM = window.gsap.matchMedia();
-        hmMM.add('(min-width: 1024px)', () => {
-          const viewport = hmTrack.parentElement;
-          const dist = () => Math.max(0, hmTrack.scrollWidth - viewport.clientWidth);
-          const tween = window.gsap.to(hmTrack, { x: () => -dist(), ease: 'none',
-            scrollTrigger: {
-              trigger: hmProps, start: 'top top',
-              end: () => '+=' + dist(),
-              scrub: true, pin: true, anticipatePin: 1, invalidateOnRefresh: true
-            } });
-          return () => {
-            if (tween.scrollTrigger) tween.scrollTrigger.kill();
-            tween.kill();
-            window.gsap.set(hmTrack, { clearProps: 'x' });
-          };
-        });
-      } catch (e) { /* fail silent */ }
+    const hmPrev = document.querySelector('[data-hm-props-prev]');
+    const hmNext = document.querySelector('[data-hm-props-next]');
+    if (hmTrack && hmPrev && hmNext) {
+      // Un pas = la largeur d'une carte + le gap, pour retomber sur un snap.
+      const step = () => {
+        const card = hmTrack.querySelector('.prop-card, .hm-endcard');
+        if (!card) return hmTrack.clientWidth * 0.8;
+        const gap = parseFloat(getComputedStyle(hmTrack).columnGap) || 0;
+        return card.getBoundingClientRect().width + gap;
+      };
+      const sync = () => {
+        const max = hmTrack.scrollWidth - hmTrack.clientWidth;
+        hmPrev.disabled = hmTrack.scrollLeft <= 1;
+        hmNext.disabled = hmTrack.scrollLeft >= max - 1;
+      };
+      hmPrev.addEventListener('click', () => hmTrack.scrollBy({ left: -step(), behavior: 'smooth' }));
+      hmNext.addEventListener('click', () => hmTrack.scrollBy({ left: step(), behavior: 'smooth' }));
+      hmTrack.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+      sync();
     }
 
     // Team image parallax

@@ -79,6 +79,13 @@ const TEAM_HAS_OPENING = true;
 // (obtenue dans Google Calendar → Créer → Plages horaires de rendez-vous → Ouvrir la page de réservation)
 const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1jp0v3sqPHnkxqbDx_5kSPLSBSBDTebM9-4ulplRyo47oVeYiP-JfPvhE-EWktfMF5nAPXplo8';
 
+// Point de chute des formulaires (guides, contact). Tant qu'il est vide, les
+// formulaires basculent sur le client courriel de la personne : rien ne se
+// perd en silence. Coller ici l'URL Formspree/Vercel du compte de l'équipe.
+const FORM_ENDPOINT = '';
+// Adresse de repli quand FORM_ENDPOINT est vide.
+const FORM_FALLBACK_EMAIL = 'info@jacquesroussel.com';
+
 function parseCSV(text) {
   const rows=[]; let row=[],f='',q=false,i=0;
   while(i<text.length){const c=text[i];
@@ -207,16 +214,27 @@ function inferTypeFromDesc(desc) {
   return 'Unifamiliale';
 }
 
-// Type code Centris → catégorie
-const TYPE_LABEL = code => {
-  const n = parseInt(code);
-  if (!n) return 'Unifamiliale';
-  if (n < 100) return 'Unifamiliale';
-  if (n < 300) return 'Multilogements';
-  if (n < 500) return 'Condo';
-  if (n < 2000) return 'Unifamiliale';  // ville, neuve, prestige, chalet : toutes des unifamiliales
-  return 'Terrain';
-};
+// Catégorie + genre Centris → catégorie du site.
+// INSCRIPTIONS.TXT col. 53 = catégorie, col. 54 = genre de propriété.
+// C'est la source qui fait foi : la description se trompait une fois sur deux
+// (un plain-pied dont le texte mentionne « terrain » finissait dans Terrain,
+// un duplex dans Unifamiliale, une maison dans Commercial).
+//   catégorie : R résidentiel · M multiplex · T terrain · C commercial
+//               I industriel  · P placement / ensemble à revenus
+//   genre     : AP appartement (condo) · PP plain-pied · ME à étages
+//               MPM paliers multiples  · 2X/3X/4X duplex…quadruplex
+//               TV terrain vacant · BCB bâtisse commerciale · LEC/LEI local
+const CENTRIS_GENRE_CONDO = new Set(['AP']);
+const CENTRIS_GENRE_PLEX = new Set(['2X', '3X', '4X', '5X']);
+function typeFromCentris(cat, genre) {
+  const c = (cat || '').trim().toUpperCase();
+  const g = (genre || '').trim().toUpperCase();
+  if (c === 'T' || g === 'TV') return 'Terrain';
+  if (c === 'M' || CENTRIS_GENRE_PLEX.has(g)) return 'Multilogements';
+  if (c === 'C' || c === 'I' || c === 'P') return 'Commercial';
+  if (c === 'R') return CENTRIS_GENRE_CONDO.has(g) ? 'Condo' : 'Unifamiliale';
+  return null;  // catégorie absente ou inconnue → on retombe sur la description
+}
 
 // Normalize a string : lowercase + remove diacritics
 const norm = (s) => (s || '').toString().toLowerCase()
@@ -341,21 +359,32 @@ function ingestFromCentris(membres) {
     ecartees.peuDePhotos.forEach(x => console.log(`       ${x}`));
   }
 
-  const properties = myListings.map(r => {
+  let properties = myListings.map(r => {
     const mls = r[0], price = parseFloat(r[6])||0;
     // r[25] = NO_CIVIQUE (vérifié contre ADDENDA), r[26] = parfois suffixe ou unité
     // r[27] = NOM_RUE, r[28] = unité/apt secondaire
-    const civic = (r[25]||'').trim();
-    const civicSuffix = (r[26]||'').trim();
+    // col 25 = numéro civique, col 26 = second numéro quand la propriété couvre
+    // deux adresses (un duplex 163-163A). Le « Z » final est un marqueur
+    // Centris, pas un chiffre : les coller tels quels donnait des adresses
+    // comme « 8510Z8510AZ Rue Duceppe » ou « 9797A Rue St-Louis ».
+    const stripZ = s => s.replace(/Z$/, '');
+    const civic = stripZ((r[25]||'').trim());
+    const civicEnd = stripZ((r[26]||'').trim());
     const streetName = (r[27]||'').trim();
     const unit = (r[28]||'').trim();
+    const civicFull = (!civicEnd || civicEnd === civic) ? civic
+      : /^\d/.test(civicEnd) ? `${civic}-${civicEnd}`   // deux civiques : « 163-163A »
+      : civic + civicEnd;                                // simple lettre : « 17A »
     // Si streetName contient déjà le civic au début (ex: "17A Rue Labonté"), on l'utilise tel quel
     const streetStartsWithCivic = civic && new RegExp('^' + civic + '\\b').test(streetName);
     const street = streetStartsWithCivic
       ? streetName + (unit ? `, app. ${unit}` : '')
-      : [civic + civicSuffix, streetName].filter(Boolean).join(' ') + (unit ? `, app. ${unit}` : '');
-    // Type de propriété — inféré de la description (r[25] n'est PAS un type code)
-    const typeCode = '';
+      : [civicFull, streetName].filter(Boolean).join(' ') + (unit ? `, app. ${unit}` : '');
+    // Type de propriété — r[53] catégorie et r[54] genre, les vrais codes
+    // Centris. La description ne sert plus que de filet quand ils manquent.
+    const centrisCat = (r[53] || '').trim();
+    const centrisGenre = (r[54] || '').trim();
+    const typeCode = [centrisCat, centrisGenre].filter(Boolean).join('/');
     const cp = r[29] || '';
     const city = cityFromCP(cp);
     const yearBuilt = r[59] && /^\d{4}$/.test(r[59]) ? r[59] : (r[68] && /^\d{4}$/.test(r[68]) ? r[68] : '');
@@ -367,7 +396,8 @@ function ingestFromCentris(membres) {
     return {
       mls,
       price,
-      typeCode, typeLabel: inferTypeFromDesc(desc),
+      typeCode,
+      typeLabel: typeFromCentris(centrisCat, centrisGenre) || inferTypeFromDesc(desc),
       street,
       city,
       postalCode: cp,
@@ -385,6 +415,45 @@ function ingestFromCentris(membres) {
       slug: `${mls}-${slug(street)}-${slug(city)}`
     };
   }).filter(p => p.price > 0 && p.photos.length >= MIN_PHOTOS);
+
+  // Une même propriété sort parfois deux fois de l'export, sous deux numéros
+  // MLS et deux catégories contradictoires (un 2X inscrit à la fois en
+  // résidentiel et en multiplex). Sur le site, ça donnait la même maison dans
+  // deux onglets de filtre. On garde l'inscription la mieux documentée.
+  const doublons = [];
+  {
+    const vus = new Map();      // clé canonique → inscription retenue
+    const index = new Map();    // toutes les clés d'une inscription → clé canonique
+    for (const p of properties) {
+      // Deux signatures : l'adresse (les coordonnées d'un même immeuble
+      // varient de quelques mètres d'une inscription à l'autre) et la
+      // position (l'adresse peut être saisie différemment).
+      const cles = [`a|${norm(p.street)}|${p.price}`];
+      if (p.lat && p.lon) cles.push(`g|${p.lat.toFixed(3)},${p.lon.toFixed(3)}|${p.price}`);
+      const cleExistante = cles.map(c => index.get(c)).find(Boolean);
+      if (!cleExistante) {
+        const canon = cles[0];
+        cles.forEach(c => index.set(c, canon));
+        vus.set(canon, p);
+        continue;
+      }
+      const cle = cleExistante;
+      const garde = vus.get(cle);
+      cles.forEach(c => index.set(c, cle));
+      // À prix et emplacement égaux : le plus de photos, puis la plus récente.
+      const gagne = p.photos.length !== garde.photos.length
+        ? p.photos.length > garde.photos.length
+        : (p.listedAt || '') > (garde.listedAt || '');
+      const perdant = gagne ? garde : p;
+      if (gagne) vus.set(cle, p);
+      doublons.push(`${perdant.mls} ${perdant.street} (${perdant.typeLabel}) — même propriété que ${(gagne ? p : garde).mls}`);
+    }
+    properties = [...vus.values()];
+  }
+  if (doublons.length) {
+    console.log(`  ↳ écartées, doublons Centris      : ${doublons.length}`);
+    doublons.forEach(d => console.log(`       ${d}`));
+  }
 
   console.log(`  → publiées sur le site            : ${properties.length}`);
   console.log(`──────────────────────────\n`);
@@ -541,7 +610,7 @@ const NAV = [
   { label: "L'équipe", href: '/a-propos/' }
 ];
 
-function layout({ title, description, canonical, body, extraHead='', bodyClass='', jsonld='' }) {
+function layout({ title, description, canonical, body, extraHead='', extraBody='', bodyClass='', jsonld='' }) {
   const curPath = (canonical || '').replace(/^https?:\/\/[^/]+/, '');
   const seg = s => (s || '').split('/').filter(Boolean)[0] || '';
   const curSeg = seg(curPath);
@@ -683,6 +752,7 @@ ${body}
 <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
+${extraBody}
 </body>
 </html>`;
 }
@@ -1317,6 +1387,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 /* Property card — la photo occupe toute la carte, l'information vit dessus
    sur un dégradé bleu qui monte du bas. La photo reste intacte : le dégradé
    s'arrête aux deux tiers, il n'y a aucun voile sur le sujet. */
+/* Le filtre pose l'attribut [hidden] sur les cartes. Sans cette règle, le
+   display:flex ci-dessous l'emporte sur le display:none du navigateur et
+   rien ne se cache : c'est pourquoi les filtres semblaient morts. */
+.prop-card[hidden]{ display: none; }
 .prop-card{
   position: relative;
   border-radius: 16px;
@@ -2365,31 +2439,45 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 .hm-props__track .prop-card{ flex: 0 0 clamp(280px, 78vw, 420px); }
-@media (max-width: 1023px){
-  .hm-props__track{
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: clamp(1rem, 4vw, 2rem);
-    padding-block-end: var(--space-4);
-    scrollbar-width: none;
-  }
-  .hm-props__track::-webkit-scrollbar{ display: none; }
-  .hm-props__track > *{ scroll-snap-align: start; }
+/* Défilement horizontal natif à toutes les tailles. La page continue de
+   descendre normalement : c'est le rail qui glisse, jamais la page. */
+.hm-props__track{
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block-end: var(--space-4);
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
 }
+.hm-props__track::-webkit-scrollbar{ display: none; }
+.hm-props__track > *{ scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce){ .hm-props__track{ scroll-behavior: auto; } }
 @media (min-width: 1024px){
-  .hm-props{
-    min-block-size: 100vh;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    align-content: start;
-    padding-block: var(--space-8) var(--space-6);
-  }
-  .hm-props__head{ inline-size: 100%; }
-  .hm-props__viewport{ display: flex; align-items: center; min-inline-size: 0; }
-  .hm-props__track{ will-change: transform; }
   .hm-props__track .prop-card{ flex: 0 0 clamp(360px, 30vw, 460px); }
 }
+
+/* Les deux flèches qui font glisser le rail — le seul moyen d'aller à droite */
+.hm-props__nav{
+  display: flex; gap: var(--space-2); align-items: center;
+  margin-block-start: var(--space-4);
+}
+.hm-props__arrow{
+  inline-size: 48px; block-size: 48px;
+  display: grid; place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.15rem; line-height: 1;
+  cursor: pointer;
+  transition: background 240ms var(--ease-out), color 240ms var(--ease-out),
+              border-color 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+.hm-props__arrow:hover:not(:disabled){ background: var(--teal); border-color: var(--teal); color: var(--cream); transform: translateY(-2px); }
+.hm-props__arrow:focus-visible{ outline: 2px solid var(--bronze); outline-offset: 3px; }
+.hm-props__arrow:disabled{ opacity: .35; cursor: default; }
+.hm-props__hint{ font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--stone); margin-inline-start: var(--space-2); }
 .hm-endcard{
   flex: 0 0 clamp(240px, 60vw, 320px);
   border-radius: 14px;
@@ -2701,9 +2789,12 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
   }
   .team-card.is-open .team-card__photo img{ object-position:center 22%; }
 
-  /* La largeur gagnée sert à raccourcir la bio, pas à allonger les lignes. */
-  .team-card.is-open .team-card__bio > div{ columns:2; column-gap:1.8rem; }
-  .team-card.is-open .team-card__bio p{ break-inside:avoid; max-inline-size:none; }
+  /* La largeur gagnée sert à raccourcir la bio, pas à allonger les lignes.
+     Pas de break-inside:avoid : le texte doit passer d'une colonne à l'autre
+     ligne par ligne, sinon un paragraphe entier saute d'un coup et les deux
+     colonnes se retrouvent de hauteurs très inégales. */
+  .team-card.is-open .team-card__bio > div{ columns:2; column-gap:1.8rem; column-fill:balance; }
+  .team-card.is-open .team-card__bio p{ max-inline-size:none; }
   .team-card.is-open .team-card__bio p:first-child{ margin-block-start:0; }
 }
 }
@@ -3138,28 +3229,29 @@ const JS = `
       } catch (e) { /* fail silent */ }
     }
 
-    // Pinned horizontal property gallery (desktop only — native scroll below 1024px)
-    const hmProps = document.querySelector('[data-hm-props]');
+    // Galerie de propriétés — défilement horizontal piloté par deux flèches.
+    // La section n'épingle plus la page : descendre continue de descendre.
     const hmTrack = document.querySelector('[data-hm-props-track]');
-    if (hmProps && hmTrack && hasGSAP && hasST && !reduceMotion && typeof window.gsap.matchMedia === 'function') {
-      try {
-        const hmMM = window.gsap.matchMedia();
-        hmMM.add('(min-width: 1024px)', () => {
-          const viewport = hmTrack.parentElement;
-          const dist = () => Math.max(0, hmTrack.scrollWidth - viewport.clientWidth);
-          const tween = window.gsap.to(hmTrack, { x: () => -dist(), ease: 'none',
-            scrollTrigger: {
-              trigger: hmProps, start: 'top top',
-              end: () => '+=' + dist(),
-              scrub: true, pin: true, anticipatePin: 1, invalidateOnRefresh: true
-            } });
-          return () => {
-            if (tween.scrollTrigger) tween.scrollTrigger.kill();
-            tween.kill();
-            window.gsap.set(hmTrack, { clearProps: 'x' });
-          };
-        });
-      } catch (e) { /* fail silent */ }
+    const hmPrev = document.querySelector('[data-hm-props-prev]');
+    const hmNext = document.querySelector('[data-hm-props-next]');
+    if (hmTrack && hmPrev && hmNext) {
+      // Un pas = la largeur d'une carte + le gap, pour retomber sur un snap.
+      const step = () => {
+        const card = hmTrack.querySelector('.prop-card, .hm-endcard');
+        if (!card) return hmTrack.clientWidth * 0.8;
+        const gap = parseFloat(getComputedStyle(hmTrack).columnGap) || 0;
+        return card.getBoundingClientRect().width + gap;
+      };
+      const sync = () => {
+        const max = hmTrack.scrollWidth - hmTrack.clientWidth;
+        hmPrev.disabled = hmTrack.scrollLeft <= 1;
+        hmNext.disabled = hmTrack.scrollLeft >= max - 1;
+      };
+      hmPrev.addEventListener('click', () => hmTrack.scrollBy({ left: -step(), behavior: 'smooth' }));
+      hmNext.addEventListener('click', () => hmTrack.scrollBy({ left: step(), behavior: 'smooth' }));
+      hmTrack.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+      sync();
     }
 
     // Team image parallax
@@ -3475,6 +3567,11 @@ const homeBody = `
         <span class="hm-endcard__arrow" aria-hidden="true">&rarr;</span>
       </a>
     </div>
+  </div>
+  <div class="container hm-props__nav">
+    <button type="button" class="hm-props__arrow" data-hm-props-prev aria-label="Voir les propriétés précédentes">&larr;</button>
+    <button type="button" class="hm-props__arrow" data-hm-props-next aria-label="Voir les propriétés suivantes">&rarr;</button>
+    <span class="hm-props__hint" aria-hidden="true">Faire défiler</span>
   </div>
 </section>
 
@@ -4553,11 +4650,11 @@ const SUBPAGES = [
 <h2>Salle de bain</h2><ul><li>Rangez tous les produits d'hygiène</li><li>Nettoyez les comptoirs et les miroirs</li><li>Baissez le siège de la toilette</li><li>Mettez des serviettes de couleurs agencées si possible</li></ul>
 <h2>Chambres</h2><ul><li>Faites les lits impeccablement</li><li>Rangez vos effets personnels et les photos de famille</li></ul>
 <h2>Extérieur</h2><ul><li>Stationnez les voitures dans la rue si possible</li><li>En été, taillez les haies et tondez le gazon</li><li>En hiver, déneigez l'entrée et cachez les pelles</li></ul>
-<h2>Le jour de la visite</h2><p>Une demeure épurée et propre, une musique de fond douce, une température entre 20 et 23 degrés et une lumière naturelle à profusion mettent les chances de votre côté. Une touche de vie, comme quelques fleurs dans un vase ou un bol d'agrumes bien à la vue, est toujours gagnante. Les visites se déroulent souvent mieux lorsque les vendeurs sont absents : profitez-en pendant que nous faisons notre travail.</p>`,'/photos/guide-vendre-preparer.jpg'],
+<h2>Le jour de la visite</h2><p>Une demeure épurée et propre, une musique de fond douce, une température entre 20 et 23 degrés et une lumière naturelle à profusion mettent les chances de votre côté. Une touche de vie, comme quelques fleurs dans un vase ou un bol d'agrumes bien à la vue, est toujours gagnante. Les visites se déroulent souvent mieux lorsque les vendeurs sont absents : profitez-en pendant que nous faisons notre travail.</p>`,'/photos/stock/interieur-salon-lumineux.jpg'],
   ['vendre/commission-courtier','Commission d\'un courtier immobilier','Commission & honoraires','Comprendre la commission, et pourquoi elle est rentable.','Commission d\'un courtier immobilier au Québec | Équipe Jacques-Roussel','Comment fonctionne la commission d\'un courtier immobilier au Québec : ce qui est inclus, quand elle est due, ce qui est négociable.',`<p>La commission est partagée entre le courtier inscripteur et le courtier collaborateur qui amène l'acheteur. Elle n'est due qu'à la vente : aucuns frais d'avance. Parlons-en directement, on vous explique le détail applicable à votre propriété.</p>
 <h2>Ce que votre commission couvre</h2><ul><li>Une analyse comparative de marché pour fixer le juste prix</li><li>Une prise de photo professionnelle et la rédaction de la fiche</li><li>La diffusion sur Centris, RE/MAX Québec, RE/MAX Crystal, REALTOR et notre site</li><li>La promotion auprès de notre réseau et de notre banque d'acheteurs</li><li>La gestion des visites, les suivis et les comptes rendus</li><li>La négociation des offres et l'accompagnement jusqu'au notaire</li></ul>
 <h2>Des programmes exclusifs RE/MAX, sans frais pour vous</h2><p>Comme clients, vous profitez d'avantages pensés pour votre tranquillité d'esprit :</p>
-<ul><li><strong>Garantie TRANQUILLI-T</strong> : une protection contre certains imprévus de la transaction (délai, annulation, litige). Le coût du programme est défrayé par nous.</li><li><strong>Garantie INTÉGRI-T</strong> : une protection contre les vices cachés après la vente.</li></ul>
+<ul><li><strong><a href="https://www.remax-quebec.com/fr/tranquilli-t" target="_blank" rel="noopener">Garantie TRANQUILLI-T</a></strong> : une protection contre certains imprévus de la transaction (délai, annulation, litige). Le coût du programme est défrayé par nous.</li><li><strong><a href="https://www.remax-quebec.com/fr/integri-t" target="_blank" rel="noopener">Garantie INTÉGRI-T</a></strong> : une protection contre les vices cachés après la vente.</li></ul>
 <p>Vendre sans courtier peut sembler une économie, mais une vente sans accompagnement se conclut souvent plus lentement et à un prix inférieur. Notre rôle est de maximiser votre profit net.</p>`,'/photos/guide-vendre-commission.jpg'],
   ['vendre/vendre-sans-stress','Vendre sans stress','Accompagnement complet','Un processus balisé : vous savez toujours où vous en êtes.','Vendre sa maison sans stress | Équipe Jacques-Roussel','Méthode pour vendre sa maison sans stress : planning clair, communication hebdo, checklist par étape.',`<p>Vendre est l'une des transactions les plus importantes et les plus stressantes d'une vie. Notre rôle est de transformer cette émotion en un processus prévisible, où vous savez toujours où vous en êtes.</p>
 <h2>Un plan d'action qui a fait ses preuves</h2><p>Nous prenons en charge la mise en marché, la promotion, les visites et toute la documentation. Vous gardez le contrôle des décisions; nous gérons l'exécution.</p>
@@ -4864,6 +4961,7 @@ const GUIDE_CARDS = [
     num: '01',
     eyebrow: 'Pour vendre',
     title: 'Guide du vendeur.',
+    formTitle: 'guide du vendeur',
     desc: 'Préparer la propriété, fixer le bon prix, comprendre la commission : les étapes d\'une vente sans stress, expliquées une par une.',
     img: 'https://placehold.co/600x800/2c4160/F7F2EA?text=Guide%5Cndu+vendeur&font=playfair-display',
     tilt: '-2.5deg'
@@ -4873,6 +4971,7 @@ const GUIDE_CARDS = [
     num: '02',
     eyebrow: 'Pour acheter',
     title: 'Guide de l\'acheteur.',
+    formTitle: 'guide de l\'acheteur',
     desc: 'Financement, inspection, promesse d\'achat : tout ce qu\'un premier acheteur doit savoir avant de signer quoi que ce soit.',
     img: 'https://placehold.co/600x800/CDB89A/13202E?text=Guide+de%5Cnl%27acheteur&font=playfair-display',
     tilt: '2.5deg'
@@ -4901,11 +5000,42 @@ writePage('guides/index.html', layout({
         <div class="guide-card__meta"><span class="guide-card__num">${g.num}</span><span class="guide-card__eye">${g.eyebrow}</span></div>
         <h2 class="guide-card__title">${g.title}</h2>
         <p class="guide-card__desc">${g.desc}</p>
-        <a class="guide-card__btn" href="/contact/?guide=${g.slug}">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></a>
+        <button type="button" class="guide-card__btn" data-guide-open data-guide-slug="${g.slug}" data-guide-name="${g.formTitle}">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></button>
       </div>
     </article>`).join('')}
   </div>
-</section>`,
+</section>
+
+<div class="guide-modal" data-guide-modal hidden>
+  <div class="guide-modal__scrim" data-guide-close></div>
+  <div class="guide-modal__panel" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
+    <button type="button" class="guide-modal__x" data-guide-close aria-label="Fermer">&times;</button>
+    <div class="guide-modal__fields">
+      <span class="eyebrow">Guide gratuit</span>
+      <h2 class="guide-modal__title" id="guide-modal-title">Laissez-nous vos informations pour recevoir votre guide.</h2>
+      <p class="guide-modal__sub">On vous l'envoie par courriel en PDF, tout de suite. Pas d'infolettre, pas de relance automatique.</p>
+      <form class="guide-modal__form" data-guide-form novalidate>
+        <input type="hidden" name="guide" data-guide-field-slug>
+        <div class="guide-modal__row">
+          <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
+          <label>Nom de famille<input type="text" name="nom" autocomplete="family-name"></label>
+        </div>
+        <div class="guide-modal__row">
+          <label>Courriel<input type="email" name="courriel" autocomplete="email" required></label>
+          <label>Téléphone<input type="tel" name="telephone" autocomplete="tel"></label>
+        </div>
+        <p class="guide-modal__note">Seuls le prénom et le courriel sont nécessaires pour l'envoi.</p>
+        <button type="submit" class="guide-modal__submit">Recevoir mon guide &rarr;</button>
+      </form>
+    </div>
+    <div class="guide-modal__done" hidden>
+      <span class="guide-modal__check" aria-hidden="true">&check;</span>
+      <h2>Merci&nbsp;!</h2>
+      <p data-guide-done-text>Votre guide s'en vient dans votre boîte de réception. S'il tarde, vérifiez vos indésirables.</p>
+      <button type="button" class="guide-modal__submit" data-guide-close>Fermer</button>
+    </div>
+  </div>
+</div>`,
   extraHead: `<style>
 .guides-grid{
   display:grid;
@@ -5004,7 +5134,193 @@ writePage('guides/index.html', layout({
 @media (max-width:760px){
   .guides-grid{ grid-template-columns:1fr; }
 }
-</style>`
+
+/* Fenêtre de collecte — propre à chaque guide, plutôt que de renvoyer
+   la personne au formulaire de contact général. */
+.guide-modal[hidden]{ display:none; }
+.guide-modal{
+  position:fixed; inset:0; z-index:200;
+  display:grid; place-items:center;
+  padding:clamp(1rem,4vw,2rem);
+}
+.guide-modal__scrim{
+  position:absolute; inset:0;
+  background:oklch(22% 0.04 240 / 0.62);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  animation:guideFade 260ms var(--ease-out);
+}
+.guide-modal__panel{
+  position:relative;
+  inline-size:min(560px,100%);
+  max-block-size:90dvh; overflow-y:auto;
+  background:var(--vellum);
+  border:1px solid var(--hairline);
+  border-radius:var(--radius-lg);
+  padding:clamp(1.6rem,4vw,2.6rem);
+  box-shadow:var(--shadow-card-hover);
+  animation:guideRise 320ms var(--ease-out);
+}
+@keyframes guideFade{ from{ opacity:0 } to{ opacity:1 } }
+@keyframes guideRise{ from{ opacity:0; transform:translateY(14px) } to{ opacity:1; transform:none } }
+@media (prefers-reduced-motion:reduce){
+  .guide-modal__scrim, .guide-modal__panel{ animation:none; }
+}
+.guide-modal__x{
+  position:absolute; inset-block-start:.7rem; inset-inline-end:.9rem;
+  inline-size:38px; block-size:38px; border:0; border-radius:999px;
+  background:transparent; color:var(--stone);
+  font-size:1.7rem; line-height:1; cursor:pointer;
+  transition:background 220ms var(--ease-out), color 220ms var(--ease-out);
+}
+.guide-modal__x:hover{ background:var(--cream); color:var(--ink); }
+.guide-modal__x:focus-visible{ outline:2px solid var(--bronze); outline-offset:2px; }
+.guide-modal__title{
+  font-size:clamp(1.3rem,2.4vw,1.7rem); font-weight:700;
+  letter-spacing:-.028em; line-height:1.18;
+  margin:.6rem 0 .5rem; color:var(--ink);
+}
+.guide-modal__sub{ color:var(--ink-2); font-size:.92rem; line-height:1.6; margin:0 0 1.4rem; }
+.guide-modal__form{ display:flex; flex-direction:column; gap:.9rem; }
+.guide-modal__row{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+@media (max-width:520px){ .guide-modal__row{ grid-template-columns:1fr; } }
+.guide-modal__form label{
+  display:flex; flex-direction:column; gap:.35rem;
+  font-size:.78rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--stone);
+}
+.guide-modal__form input{
+  font:400 1rem 'Montserrat', system-ui, sans-serif;
+  padding:.8rem .9rem;
+  border:1px solid var(--hairline); border-radius:8px;
+  background:#fff; color:var(--ink);
+  transition:border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+}
+.guide-modal__form input:focus{
+  outline:none; border-color:var(--teal);
+  box-shadow:0 0 0 3px oklch(37.3% 0.06 258 / 0.16);
+}
+.guide-modal__form input:user-invalid{ border-color:oklch(55% 0.18 27); }
+.guide-modal__note{ font-size:.78rem; color:var(--stone); margin:0; }
+.guide-modal__submit{
+  justify-self:start; margin-block-start:.3rem;
+  background:var(--teal); color:var(--cream);
+  border:0; border-radius:999px;
+  padding:1rem 1.7rem;
+  font:500 .95rem 'Montserrat', system-ui, sans-serif;
+  cursor:pointer;
+  transition:background 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+.guide-modal__submit:hover{ background:var(--ink); transform:translateY(-2px); }
+.guide-modal__submit:focus-visible{ outline:2px solid var(--bronze); outline-offset:3px; }
+.guide-modal__done{ text-align:center; padding-block:1.5rem; }
+.guide-modal__done h2{ font-size:1.5rem; font-weight:700; letter-spacing:-.028em; margin:.8rem 0 .5rem; color:var(--ink); }
+.guide-modal__done p{ color:var(--ink-2); line-height:1.6; margin:0 0 1.5rem; }
+.guide-modal__check{
+  display:grid; place-items:center; margin-inline:auto;
+  inline-size:56px; block-size:56px; border-radius:999px;
+  background:var(--teal); color:var(--cream); font-size:1.7rem;
+}
+</style>`,
+  extraBody: `<script>
+(function(){
+  var modal = document.querySelector('[data-guide-modal]');
+  if (!modal) return;
+  var panel  = modal.querySelector('.guide-modal__panel');
+  var fields = modal.querySelector('.guide-modal__fields');
+  var done   = modal.querySelector('.guide-modal__done');
+  var form   = modal.querySelector('[data-guide-form]');
+  var title  = modal.querySelector('[data-guide-modal-title], #guide-modal-title');
+  var doneTx = modal.querySelector('[data-guide-done-text]');
+  var slotSlug = modal.querySelector('[data-guide-field-slug]');
+  var lastFocus = null;
+
+  function open(slug, name){
+    lastFocus = document.activeElement;
+    slotSlug.value = slug;
+    title.textContent = 'Laissez-nous vos informations pour recevoir votre ' + name + '.';
+    doneTx.textContent = ENDPOINT
+      ? 'Votre ' + name + ' s\\'en vient dans votre boîte de réception. S\\'il tarde, vérifiez vos indésirables.'
+      : 'Votre logiciel de courriel vient de s\\'ouvrir avec le message prérempli : il ne reste qu\\'à l\\'envoyer et on vous fait parvenir votre ' + name + '.';
+    fields.hidden = false; done.hidden = true;
+    form.reset(); slotSlug.value = slug;
+    modal.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    var f = form.querySelector('input[name="prenom"]');
+    if (f) f.focus();
+  }
+  function close(){
+    modal.hidden = true;
+    document.documentElement.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('[data-guide-open]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      open(btn.dataset.guideSlug, btn.dataset.guideName);
+    });
+  });
+  modal.querySelectorAll('[data-guide-close]').forEach(function(el){
+    el.addEventListener('click', close);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !modal.hidden) close();
+    // Le focus reste dans la fenêtre tant qu'elle est ouverte.
+    if (e.key === 'Tab' && !modal.hidden) {
+      var f = panel.querySelectorAll('button, input, [href]');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  var ENDPOINT = ${JSON.stringify(FORM_ENDPOINT)};
+  var FALLBACK = ${JSON.stringify(FORM_FALLBACK_EMAIL)};
+
+  function succeed(){
+    fields.hidden = true; done.hidden = false;
+    var b = done.querySelector('button'); if (b) b.focus();
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    var d = Object.fromEntries(new FormData(form).entries());
+    var btn = form.querySelector('.guide-modal__submit');
+    btn.disabled = true; btn.textContent = 'Envoi…';
+
+    if (ENDPOINT) {
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(d)
+      }).then(function(r){
+        if (!r.ok) throw new Error(r.status);
+        succeed();
+      }).catch(function(){
+        btn.disabled = false; btn.textContent = 'Réessayer →';
+        alert('L\\'envoi a échoué. Écrivez-nous à ' + FALLBACK + ' et on vous fait parvenir le guide.');
+      });
+      return;
+    }
+
+    // Pas d'endpoint configuré : on ouvre le client courriel de la personne
+    // avec tout de prérempli. La demande part pour vrai, elle ne disparaît pas
+    // dans un formulaire qui fait semblant.
+    var sujet = 'Demande de ' + (d.guide === 'guide-du-vendeur-2026' ? 'guide du vendeur' : 'guide de l\\'acheteur');
+    var corps = 'Bonjour,\\n\\nJ\\'aimerais recevoir le ' + sujet.replace('Demande de ', '') + ' en PDF.\\n\\n'
+      + 'Prénom : ' + (d.prenom || '') + '\\n'
+      + 'Nom : ' + (d.nom || '') + '\\n'
+      + 'Courriel : ' + (d.courriel || '') + '\\n'
+      + 'Téléphone : ' + (d.telephone || '') + '\\n\\nMerci !';
+    window.location.href = 'mailto:' + FALLBACK
+      + '?subject=' + encodeURIComponent(sujet)
+      + '&body=' + encodeURIComponent(corps);
+    succeed();
+  });
+})();
+</script>`
 }));
 for (const [s,t] of GUIDES) {
   writePage(`guides/${s}/index.html`, contentPage({
@@ -5577,7 +5893,7 @@ writePage('a-propos/index.html', layout({
           <a href="tel:${m.tel}">${m.phone}</a>
           <a href="mailto:${m.email}">${m.email}</a>
         </div>
-        <a class="team-card__cta" href="/contact/">Contacter ${m.first} &rarr;</a>
+        <a class="team-card__cta" href="mailto:${m.email}">Écrire à ${m.first} &rarr;</a>
       </div>
     </article>`;
     }).join('')}

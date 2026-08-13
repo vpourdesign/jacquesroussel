@@ -627,6 +627,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 /* Property card — la photo occupe toute la carte, l'information vit dessus
    sur un dégradé bleu qui monte du bas. La photo reste intacte : le dégradé
    s'arrête aux deux tiers, il n'y a aucun voile sur le sujet. */
+/* Le filtre pose l'attribut [hidden] sur les cartes. Sans cette règle, le
+   display:flex ci-dessous l'emporte sur le display:none du navigateur et
+   rien ne se cache : c'est pourquoi les filtres semblaient morts. */
+.prop-card[hidden]{ display: none; }
 .prop-card{
   position: relative;
   border-radius: 16px;
@@ -1675,31 +1679,45 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 .hm-props__track .prop-card{ flex: 0 0 clamp(280px, 78vw, 420px); }
-@media (max-width: 1023px){
-  .hm-props__track{
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: clamp(1rem, 4vw, 2rem);
-    padding-block-end: var(--space-4);
-    scrollbar-width: none;
-  }
-  .hm-props__track::-webkit-scrollbar{ display: none; }
-  .hm-props__track > *{ scroll-snap-align: start; }
+/* Défilement horizontal natif à toutes les tailles. La page continue de
+   descendre normalement : c'est le rail qui glisse, jamais la page. */
+.hm-props__track{
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block-end: var(--space-4);
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
 }
+.hm-props__track::-webkit-scrollbar{ display: none; }
+.hm-props__track > *{ scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce){ .hm-props__track{ scroll-behavior: auto; } }
 @media (min-width: 1024px){
-  .hm-props{
-    min-block-size: 100vh;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    align-content: start;
-    padding-block: var(--space-8) var(--space-6);
-  }
-  .hm-props__head{ inline-size: 100%; }
-  .hm-props__viewport{ display: flex; align-items: center; min-inline-size: 0; }
-  .hm-props__track{ will-change: transform; }
   .hm-props__track .prop-card{ flex: 0 0 clamp(360px, 30vw, 460px); }
 }
+
+/* Les deux flèches qui font glisser le rail — le seul moyen d'aller à droite */
+.hm-props__nav{
+  display: flex; gap: var(--space-2); align-items: center;
+  margin-block-start: var(--space-4);
+}
+.hm-props__arrow{
+  inline-size: 48px; block-size: 48px;
+  display: grid; place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.15rem; line-height: 1;
+  cursor: pointer;
+  transition: background 240ms var(--ease-out), color 240ms var(--ease-out),
+              border-color 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+.hm-props__arrow:hover:not(:disabled){ background: var(--teal); border-color: var(--teal); color: var(--cream); transform: translateY(-2px); }
+.hm-props__arrow:focus-visible{ outline: 2px solid var(--bronze); outline-offset: 3px; }
+.hm-props__arrow:disabled{ opacity: .35; cursor: default; }
+.hm-props__hint{ font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--stone); margin-inline-start: var(--space-2); }
 .hm-endcard{
   flex: 0 0 clamp(240px, 60vw, 320px);
   border-radius: 14px;
@@ -2011,9 +2029,12 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
   }
   .team-card.is-open .team-card__photo img{ object-position:center 22%; }
 
-  /* La largeur gagnée sert à raccourcir la bio, pas à allonger les lignes. */
-  .team-card.is-open .team-card__bio > div{ columns:2; column-gap:1.8rem; }
-  .team-card.is-open .team-card__bio p{ break-inside:avoid; max-inline-size:none; }
+  /* La largeur gagnée sert à raccourcir la bio, pas à allonger les lignes.
+     Pas de break-inside:avoid : le texte doit passer d'une colonne à l'autre
+     ligne par ligne, sinon un paragraphe entier saute d'un coup et les deux
+     colonnes se retrouvent de hauteurs très inégales. */
+  .team-card.is-open .team-card__bio > div{ columns:2; column-gap:1.8rem; column-fill:balance; }
+  .team-card.is-open .team-card__bio p{ max-inline-size:none; }
   .team-card.is-open .team-card__bio p:first-child{ margin-block-start:0; }
 }
 }

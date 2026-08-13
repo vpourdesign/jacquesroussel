@@ -124,6 +124,93 @@
 @media (max-width:760px){
   .guides-grid{ grid-template-columns:1fr; }
 }
+
+/* Fenêtre de collecte — propre à chaque guide, plutôt que de renvoyer
+   la personne au formulaire de contact général. */
+.guide-modal[hidden]{ display:none; }
+.guide-modal{
+  position:fixed; inset:0; z-index:200;
+  display:grid; place-items:center;
+  padding:clamp(1rem,4vw,2rem);
+}
+.guide-modal__scrim{
+  position:absolute; inset:0;
+  background:oklch(22% 0.04 240 / 0.62);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  animation:guideFade 260ms var(--ease-out);
+}
+.guide-modal__panel{
+  position:relative;
+  inline-size:min(560px,100%);
+  max-block-size:90dvh; overflow-y:auto;
+  background:var(--vellum);
+  border:1px solid var(--hairline);
+  border-radius:var(--radius-lg);
+  padding:clamp(1.6rem,4vw,2.6rem);
+  box-shadow:var(--shadow-card-hover);
+  animation:guideRise 320ms var(--ease-out);
+}
+@keyframes guideFade{ from{ opacity:0 } to{ opacity:1 } }
+@keyframes guideRise{ from{ opacity:0; transform:translateY(14px) } to{ opacity:1; transform:none } }
+@media (prefers-reduced-motion:reduce){
+  .guide-modal__scrim, .guide-modal__panel{ animation:none; }
+}
+.guide-modal__x{
+  position:absolute; inset-block-start:.7rem; inset-inline-end:.9rem;
+  inline-size:38px; block-size:38px; border:0; border-radius:999px;
+  background:transparent; color:var(--stone);
+  font-size:1.7rem; line-height:1; cursor:pointer;
+  transition:background 220ms var(--ease-out), color 220ms var(--ease-out);
+}
+.guide-modal__x:hover{ background:var(--cream); color:var(--ink); }
+.guide-modal__x:focus-visible{ outline:2px solid var(--bronze); outline-offset:2px; }
+.guide-modal__title{
+  font-size:clamp(1.3rem,2.4vw,1.7rem); font-weight:700;
+  letter-spacing:-.028em; line-height:1.18;
+  margin:.6rem 0 .5rem; color:var(--ink);
+}
+.guide-modal__sub{ color:var(--ink-2); font-size:.92rem; line-height:1.6; margin:0 0 1.4rem; }
+.guide-modal__form{ display:flex; flex-direction:column; gap:.9rem; }
+.guide-modal__row{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+@media (max-width:520px){ .guide-modal__row{ grid-template-columns:1fr; } }
+.guide-modal__form label{
+  display:flex; flex-direction:column; gap:.35rem;
+  font-size:.78rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--stone);
+}
+.guide-modal__form input{
+  font:400 1rem 'Montserrat', system-ui, sans-serif;
+  padding:.8rem .9rem;
+  border:1px solid var(--hairline); border-radius:8px;
+  background:#fff; color:var(--ink);
+  transition:border-color 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
+}
+.guide-modal__form input:focus{
+  outline:none; border-color:var(--teal);
+  box-shadow:0 0 0 3px oklch(37.3% 0.06 258 / 0.16);
+}
+.guide-modal__form input:user-invalid{ border-color:oklch(55% 0.18 27); }
+.guide-modal__note{ font-size:.78rem; color:var(--stone); margin:0; }
+.guide-modal__submit{
+  justify-self:start; margin-block-start:.3rem;
+  background:var(--teal); color:var(--cream);
+  border:0; border-radius:999px;
+  padding:1rem 1.7rem;
+  font:500 .95rem 'Montserrat', system-ui, sans-serif;
+  cursor:pointer;
+  transition:background 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+.guide-modal__submit:hover{ background:var(--ink); transform:translateY(-2px); }
+.guide-modal__submit:focus-visible{ outline:2px solid var(--bronze); outline-offset:3px; }
+.guide-modal__done{ text-align:center; padding-block:1.5rem; }
+.guide-modal__done h2{ font-size:1.5rem; font-weight:700; letter-spacing:-.028em; margin:.8rem 0 .5rem; color:var(--ink); }
+.guide-modal__done p{ color:var(--ink-2); line-height:1.6; margin:0 0 1.5rem; }
+.guide-modal__check{
+  display:grid; place-items:center; margin-inline:auto;
+  inline-size:56px; block-size:56px; border-radius:999px;
+  background:var(--teal); color:var(--cream); font-size:1.7rem;
+}
 </style>
 
 </head>
@@ -172,7 +259,7 @@
         <div class="guide-card__meta"><span class="guide-card__num">01</span><span class="guide-card__eye">Pour vendre</span></div>
         <h2 class="guide-card__title">Guide du vendeur.</h2>
         <p class="guide-card__desc">Préparer la propriété, fixer le bon prix, comprendre la commission : les étapes d'une vente sans stress, expliquées une par une.</p>
-        <a class="guide-card__btn" href="/contact/?guide=guide-du-vendeur-2026">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></a>
+        <button type="button" class="guide-card__btn" data-guide-open data-guide-slug="guide-du-vendeur-2026" data-guide-name="guide du vendeur">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></button>
       </div>
     </article>
     <article class="guide-card" style="--tilt:2.5deg">
@@ -183,11 +270,42 @@
         <div class="guide-card__meta"><span class="guide-card__num">02</span><span class="guide-card__eye">Pour acheter</span></div>
         <h2 class="guide-card__title">Guide de l'acheteur.</h2>
         <p class="guide-card__desc">Financement, inspection, promesse d'achat : tout ce qu'un premier acheteur doit savoir avant de signer quoi que ce soit.</p>
-        <a class="guide-card__btn" href="/contact/?guide=guide-du-premier-acheteur">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></a>
+        <button type="button" class="guide-card__btn" data-guide-open data-guide-slug="guide-du-premier-acheteur" data-guide-name="guide de l'acheteur">Télécharger le guide<span class="guide-card__arrow" aria-hidden="true">&rarr;</span></button>
       </div>
     </article>
   </div>
 </section>
+
+<div class="guide-modal" data-guide-modal hidden>
+  <div class="guide-modal__scrim" data-guide-close></div>
+  <div class="guide-modal__panel" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
+    <button type="button" class="guide-modal__x" data-guide-close aria-label="Fermer">&times;</button>
+    <div class="guide-modal__fields">
+      <span class="eyebrow">Guide gratuit</span>
+      <h2 class="guide-modal__title" id="guide-modal-title">Laissez-nous vos informations pour recevoir votre guide.</h2>
+      <p class="guide-modal__sub">On vous l'envoie par courriel en PDF, tout de suite. Pas d'infolettre, pas de relance automatique.</p>
+      <form class="guide-modal__form" data-guide-form novalidate>
+        <input type="hidden" name="guide" data-guide-field-slug>
+        <div class="guide-modal__row">
+          <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
+          <label>Nom de famille<input type="text" name="nom" autocomplete="family-name"></label>
+        </div>
+        <div class="guide-modal__row">
+          <label>Courriel<input type="email" name="courriel" autocomplete="email" required></label>
+          <label>Téléphone<input type="tel" name="telephone" autocomplete="tel"></label>
+        </div>
+        <p class="guide-modal__note">Seuls le prénom et le courriel sont nécessaires pour l'envoi.</p>
+        <button type="submit" class="guide-modal__submit">Recevoir mon guide &rarr;</button>
+      </form>
+    </div>
+    <div class="guide-modal__done" hidden>
+      <span class="guide-modal__check" aria-hidden="true">&check;</span>
+      <h2>Merci&nbsp;!</h2>
+      <p data-guide-done-text>Votre guide s'en vient dans votre boîte de réception. S'il tarde, vérifiez vos indésirables.</p>
+      <button type="button" class="guide-modal__submit" data-guide-close>Fermer</button>
+    </div>
+  </div>
+</div>
 </main>
 <footer class="site-footer">
   <div class="site-footer__grid">
@@ -250,5 +368,104 @@
 <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
+<script>
+(function(){
+  var modal = document.querySelector('[data-guide-modal]');
+  if (!modal) return;
+  var panel  = modal.querySelector('.guide-modal__panel');
+  var fields = modal.querySelector('.guide-modal__fields');
+  var done   = modal.querySelector('.guide-modal__done');
+  var form   = modal.querySelector('[data-guide-form]');
+  var title  = modal.querySelector('[data-guide-modal-title], #guide-modal-title');
+  var doneTx = modal.querySelector('[data-guide-done-text]');
+  var slotSlug = modal.querySelector('[data-guide-field-slug]');
+  var lastFocus = null;
+
+  function open(slug, name){
+    lastFocus = document.activeElement;
+    slotSlug.value = slug;
+    title.textContent = 'Laissez-nous vos informations pour recevoir votre ' + name + '.';
+    doneTx.textContent = ENDPOINT
+      ? 'Votre ' + name + ' s\'en vient dans votre boîte de réception. S\'il tarde, vérifiez vos indésirables.'
+      : 'Votre logiciel de courriel vient de s\'ouvrir avec le message prérempli : il ne reste qu\'à l\'envoyer et on vous fait parvenir votre ' + name + '.';
+    fields.hidden = false; done.hidden = true;
+    form.reset(); slotSlug.value = slug;
+    modal.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    var f = form.querySelector('input[name="prenom"]');
+    if (f) f.focus();
+  }
+  function close(){
+    modal.hidden = true;
+    document.documentElement.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('[data-guide-open]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      open(btn.dataset.guideSlug, btn.dataset.guideName);
+    });
+  });
+  modal.querySelectorAll('[data-guide-close]').forEach(function(el){
+    el.addEventListener('click', close);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !modal.hidden) close();
+    // Le focus reste dans la fenêtre tant qu'elle est ouverte.
+    if (e.key === 'Tab' && !modal.hidden) {
+      var f = panel.querySelectorAll('button, input, [href]');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  var ENDPOINT = "";
+  var FALLBACK = "info@jacquesroussel.com";
+
+  function succeed(){
+    fields.hidden = true; done.hidden = false;
+    var b = done.querySelector('button'); if (b) b.focus();
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    var d = Object.fromEntries(new FormData(form).entries());
+    var btn = form.querySelector('.guide-modal__submit');
+    btn.disabled = true; btn.textContent = 'Envoi…';
+
+    if (ENDPOINT) {
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(d)
+      }).then(function(r){
+        if (!r.ok) throw new Error(r.status);
+        succeed();
+      }).catch(function(){
+        btn.disabled = false; btn.textContent = 'Réessayer →';
+        alert('L\'envoi a échoué. Écrivez-nous à ' + FALLBACK + ' et on vous fait parvenir le guide.');
+      });
+      return;
+    }
+
+    // Pas d'endpoint configuré : on ouvre le client courriel de la personne
+    // avec tout de prérempli. La demande part pour vrai, elle ne disparaît pas
+    // dans un formulaire qui fait semblant.
+    var sujet = 'Demande de ' + (d.guide === 'guide-du-vendeur-2026' ? 'guide du vendeur' : 'guide de l\'acheteur');
+    var corps = 'Bonjour,\n\nJ\'aimerais recevoir le ' + sujet.replace('Demande de ', '') + ' en PDF.\n\n'
+      + 'Prénom : ' + (d.prenom || '') + '\n'
+      + 'Nom : ' + (d.nom || '') + '\n'
+      + 'Courriel : ' + (d.courriel || '') + '\n'
+      + 'Téléphone : ' + (d.telephone || '') + '\n\nMerci !';
+    window.location.href = 'mailto:' + FALLBACK
+      + '?subject=' + encodeURIComponent(sujet)
+      + '&body=' + encodeURIComponent(corps);
+    succeed();
+  });
+})();
+</script>
 </body>
 </html>
