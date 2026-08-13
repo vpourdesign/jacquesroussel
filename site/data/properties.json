@@ -4530,6 +4530,401 @@
     "slug": "21987607-103-rue-st-louis-saint-eustache"
   },
   {
+    "mls": "23453291",
+    "price": 615000,
+    "typeCode": "",
+    "typeLabel": "Unifamiliale",
+    "street": "980 Rue de l'Harmonie",
+    "city": "Laval",
+    "postalCode": "H7A4E9",
+    "yearBuilt": "2003",
+    "areaTerrain": "5563.86 PC",
+    "lat": 45.66700287,
+    "lon": -73.58895618,
+    "descFr": "Bienvenue au 980 rue de l'Harmonie à Laval ! Charmante propriété où confort et tranquillité se rencontrent. Entretenue avec soin au fil des ans, elle offre un cadre de vie agréable directement face à un parc, un terrain de 5 563 pc et de nombreuses améliorations récentes pour votre tranquillité d'esprit. EN BREF * Maison unifamiliale isolée, construction 2003 * Toiture refaite à neuf en 2023 * Ajout d'isolation en cellulose dans l'entre-toit en 2023 * Capping/revêtement extérieur en aluminium refait en 2023 * Réparation des marches en béton à l'avant et du bas des colonnes en 2023 * Nouveau moteur de garage changé en 2025 * Traitement de gazon inclus/payé pour l'été 2026 * 2 chambres à coucher (1 au RDC et 1 au sous-sol) * 1 salle de bains complète au RDC + 1 salle d'eau avec laveuse/sécheuse au sous-sol * Thermopompe murale 2019 (chauffage et climatisation) * Garage intégré + allée en pavé uni pour 2 voitures * Cour aménagée avec véranda en composite, terrain clôturé et remise * Emplacement face au parc des Quatre-Vents (aucun voisin direct à l'avant) * Équipements inclus : lit escamotable au sous-sol, lave-vaisselle, aspirateur central, système d'alarme (non fonctionnel) CHAMBRES ET SALLES DE BAINS L'espace des chambres offre un aménagement fonctionnel réparti sur les deux niveaux. * 2 chambres à coucher au total (1 hors-sol, 1 au sous-sol) * Chambre à coucher principale spacieuse au RDC * Chambre au sous-sol avec lit escamotable inclus * Salle de bains complète au RDC avec revêtement de céramique * Salle d'eau avec espace laveuse/sécheuse au sous-sol ESPACES DE VIE ET SOUS-SOL Des espaces bien organisés et un sous-sol entièrement aménagé. * Hall d'entrée * Salon et salle à manger avec planchers en lattes de bois * Cuisine fonctionnelle avec armoires en mélamine et plancher de céramique * Sous-sol totalement aménagé avec grande salle familiale * Espace de rangement pratique sur béton au sous-sol EXTÉRIEUR Un aménagement extérieur complet, soigneusement entretenu et rénové. * Face au parc des Quatre-Vents * Marches en béton avant et bas des colonnes réparés (2023) * Terrain plat de 5 563,86 pc, clôturé et paysager (traitement de gazon payé pour l'été 2026) * Véranda arrière en lattes de composite * Remise extérieure * Allée en pavé uni (2 places) et garage intégré (1 place) avec moteur neuf d'ouvre porte (2025) ENVIRONS Située dans le quartier Saint-François à Laval, offrant un accès rapide aux commodités du secteur. * À proximité des garderies/CPE, des parcs et du transport en commun * Accès facile au boulevard Lévesque Est et aux autoroutes 440 et 25. On vous attend pour une visite !",
+    "remFr": "Charmant plain-pied isolé au 980, rue de l'Harmonie à Laval (Saint-François), face au parc des Quatre-Vents. 2 chambres (dont 1 au Sous-sol), 1 Salle de bain et salle de lavage distincte. Sous-sol aménagé avec salle familiale. Nombreuses améliorations : toiture 2023, cellulose entre-toit 2023, capping aluminium du garage 2023, réfection marches béton avant 2023, thermopompe mural 2019, moteur de garage 2025 et traitement de gazon été 2026 payé! Terrain clôturé de 5 563 pc avec véranda, remise, garage et pavé uni. Un clé en main!",
+    "photos": [
+      {
+        "seq": 1,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47174DD1AE35A9D1C&t=pi&f=I"
+      },
+      {
+        "seq": 2,
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719ADD1AE35A9D4B&t=pi&f=I"
+      },
+      {
+        "seq": 3,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471904D1AE35A9D24&t=pi&f=I"
+      },
+      {
+        "seq": 4,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471909D1AE35A9DCF&t=pi&f=I"
+      },
+      {
+        "seq": 5,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190BD1AE35A9DED&t=pi&f=I"
+      },
+      {
+        "seq": 6,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471905D1AE35A9DAC&t=pi&f=I"
+      },
+      {
+        "seq": 7,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719B2D1AE35A9D0B&t=pi&f=I"
+      },
+      {
+        "seq": 8,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719BFD1AE35A9DBE&t=pi&f=I"
+      },
+      {
+        "seq": 9,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190DD1AE35A9DFA&t=pi&f=I"
+      },
+      {
+        "seq": 10,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719AFD1AE35A9D84&t=pi&f=I"
+      },
+      {
+        "seq": 11,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719AAD1AE35A9D9D&t=pi&f=I"
+      },
+      {
+        "seq": 12,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F2D1AE35A9D71&t=pi&f=I"
+      },
+      {
+        "seq": 13,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719B5D1AE35A9D3F&t=pi&f=I"
+      },
+      {
+        "seq": 14,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F0D1AE35A9D50&t=pi&f=I"
+      },
+      {
+        "seq": 15,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471980D1AE35A9D6A&t=pi&f=I"
+      },
+      {
+        "seq": 16,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F9D1AE35A91DB&t=pi&f=I"
+      },
+      {
+        "seq": 17,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471984D1AE35A9111&t=pi&f=I"
+      },
+      {
+        "seq": 18,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471998D1AE35A914B&t=pi&f=I"
+      },
+      {
+        "seq": 19,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471983D1AE35A9121&t=pi&f=I"
+      },
+      {
+        "seq": 20,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471992D1AE35A91CA&t=pi&f=I"
+      },
+      {
+        "seq": 21,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197DD1AE35A91EE&t=pi&f=I"
+      },
+      {
+        "seq": 22,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197FD1AE35A91AE&t=pi&f=I"
+      },
+      {
+        "seq": 23,
+        "type": "SDL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193DD1AE35A910B&t=pi&f=I"
+      },
+      {
+        "seq": 24,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193ED1AE35A91BC&t=pi&f=I"
+      },
+      {
+        "seq": 25,
+        "type": "VER",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EEF5D1AE35A91F1&t=pi&f=I"
+      },
+      {
+        "seq": 26,
+        "type": "VER",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EA21D1AE35A918C&t=pi&f=I"
+      },
+      {
+        "seq": 27,
+        "type": "FACARR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471714D1AE35A9192&t=pi&f=I"
+      },
+      {
+        "seq": 28,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471936D1AE35A9174&t=pi&f=I"
+      },
+      {
+        "seq": 29,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47195FD1AE35A9131&t=pi&f=I"
+      },
+      {
+        "seq": 30,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4717D8D1AE35A915D&t=pi&f=I"
+      },
+      {
+        "seq": 31,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47196ED1AE35A916D&t=pi&f=I"
+      },
+      {
+        "seq": 32,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4717D1D1AE35A94DC&t=pi&f=I"
+      },
+      {
+        "seq": 33,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471710D1AE35A9414&t=pi&f=I"
+      },
+      {
+        "seq": 34,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719E8D1AE35A944A&t=pi&f=I"
+      },
+      {
+        "seq": 35,
+        "type": "PROX",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47174FD1AE35A9420&t=pi&f=I"
+      }
+    ],
+    "features": [
+      {
+        "code": "ALLE",
+        "value": "UNI"
+      },
+      {
+        "code": "LOC",
+        "value": "CEAU"
+      },
+      {
+        "code": "ARMO",
+        "value": "MELM"
+      },
+      {
+        "code": "CHAU",
+        "value": "PELC"
+      },
+      {
+        "code": "EAU",
+        "value": "AMU"
+      },
+      {
+        "code": "ENER",
+        "value": "ELEC"
+      },
+      {
+        "code": "EQUI",
+        "value": "ASP"
+      },
+      {
+        "code": "EQUI",
+        "value": "EAIR"
+      },
+      {
+        "code": "EQUI",
+        "value": "PELE"
+      },
+      {
+        "code": "EQUI",
+        "value": "SYAL"
+      },
+      {
+        "code": "EQUI",
+        "value": "THEM"
+      },
+      {
+        "code": "FENE",
+        "value": "PVC"
+      },
+      {
+        "code": "FOND",
+        "value": "BETO"
+      },
+      {
+        "code": "GARA",
+        "value": "CHAU"
+      },
+      {
+        "code": "GARA",
+        "value": "INTG"
+      },
+      {
+        "code": "GARA",
+        "value": "SIMP"
+      },
+      {
+        "code": "PROX",
+        "value": "AUTO"
+      },
+      {
+        "code": "PROX",
+        "value": "GCPE"
+      },
+      {
+        "code": "PROX",
+        "value": "PCYC"
+      },
+      {
+        "code": "PROX",
+        "value": "TRSP"
+      },
+      {
+        "code": "PARE",
+        "value": "AGRE"
+      },
+      {
+        "code": "PARE",
+        "value": "VINY"
+      },
+      {
+        "code": "SS",
+        "value": "6"
+      },
+      {
+        "code": "SS",
+        "value": "AMNT"
+      },
+      {
+        "code": "STAT",
+        "value": "EXT"
+      },
+      {
+        "code": "STAT",
+        "value": "GARA"
+      },
+      {
+        "code": "SYEG",
+        "value": "EGMU"
+      },
+      {
+        "code": "AMEN",
+        "value": "CLOT"
+      },
+      {
+        "code": "TFEN",
+        "value": "COUL"
+      },
+      {
+        "code": "TFEN",
+        "value": "MAN"
+      },
+      {
+        "code": "TOIT",
+        "value": "BAA"
+      },
+      {
+        "code": "TOPO",
+        "value": "PLAT"
+      },
+      {
+        "code": "ZONG",
+        "value": "RES"
+      }
+    ],
+    "rooms": [
+      {
+        "seq": 1,
+        "code": "HAL",
+        "level": "RC",
+        "dim": "8.10x4.4 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 2,
+        "code": "SAL",
+        "level": "RC",
+        "dim": "14.10x16.5 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 3,
+        "code": "SAM",
+        "level": "RC",
+        "dim": "14.11x11.9 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 4,
+        "code": "CUI",
+        "level": "RC",
+        "dim": "10.4x11.3 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 5,
+        "code": "CCP",
+        "level": "RC",
+        "dim": "13.3x13.11 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 6,
+        "code": "SDB",
+        "level": "RC",
+        "dim": "9.6x8.11 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 7,
+        "code": "SFM",
+        "level": "0",
+        "dim": "19.5x12 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 8,
+        "code": "CAC",
+        "level": "0",
+        "dim": "12.5x11.6 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 9,
+        "code": "SDL",
+        "level": "0",
+        "dim": "11.6x5.9 P",
+        "rev": "PFLO"
+      }
+    ],
+    "links": [],
+    "listedAt": "2026-08-12",
+    "isCoBroker": false,
+    "slug": "23453291-980-rue-de-l-harmonie-laval"
+  },
+  {
     "mls": "25964733",
     "price": 299900,
     "typeCode": "",
