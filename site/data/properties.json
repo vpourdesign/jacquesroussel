@@ -4531,7 +4531,7 @@
   },
   {
     "mls": "23453291",
-    "price": 615000,
+    "price": 614999,
     "typeCode": "",
     "typeLabel": "Unifamiliale",
     "street": "980 Rue de l'Harmonie",
@@ -4913,7 +4913,7 @@
       },
       {
         "seq": 9,
-        "code": "SDL",
+        "code": "S-E",
         "level": "0",
         "dim": "11.6x5.9 P",
         "rev": "PFLO"
