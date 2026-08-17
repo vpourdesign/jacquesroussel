@@ -42,6 +42,10 @@
 
 ## 🔍 Précisions
 
+- **Ne jamais lancer `node build.mjs` en pensant rafraîchir les données.** Le zip dans `_centris/` est celui du 7 août et Dropbox le restaure tout seul quand on le supprime. Avant, sa seule présence déclenchait le mode A et réécrasait `site/data/*.json`, effaçant les jours de données fraîches déjà committés par le cron. Depuis le 17 août, l'ingestion est explicite : le build ignore le zip et se sert du cache, sauf si on passe `--ingest` (le workflow GitHub pose `CENTRIS_INGEST=1`). Un avertissement s'affiche quand un zip est présent mais ignoré. (2026-08-17)
+- **Les corrections de données s'appliquent dans les deux modes.** Réparation des adresses doubles, reclassement des types et dédoublonnage vivaient dans l'ingestion du zip : dès que le cron republiait, tout revenait. Ils sont maintenant dans `normaliser()`, appelée aussi sur le cache. Les compteurs (`calculerStats`) sont recalculés de la même façon, sinon le filtre annonçait « Laval (3) » et n'affichait que 2 fiches. (2026-08-17)
+- **Un dossier préfixé d'un souligné dans `photos/` ne part pas en ligne.** `copyDir` les saute. C'est ce qui garde `photos/_originaux-delaves/` (1,4 Mo d'originaux avant retouche) hors du site. (2026-08-17)
+
 - Les statistiques de marché viennent de Centris, une page par ville : `site/data/market.json`, produit par `scripts/fetch-market-stats.mjs`. Aucun chiffre n'est saisi à la main. Si Centris ne publie pas une valeur (volume de transactions insuffisant), la case disparaît au lieu d'afficher une estimation. (2026-08-07)
 - Les bios de `/a-propos/` restent au « je » : c'est la personne qui parle. Tout le reste du site est au « nous » ou au « on ». (2026-08-07)
 - Images libres de droits dans `photos/stock/` (Unsplash). `copyDir` est maintenant récursif — avant, les sous-dossiers de `photos/` étaient silencieusement ignorés au build. (2026-08-07)

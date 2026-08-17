@@ -31,6 +31,10 @@ jobs:
         run: node scripts/fetch-centris.mjs
 
       - name: Build site
+        env:
+          # Autorise build.mjs à réingérer le zip fraîchement téléchargé.
+          # Sans ça, il se rabat sur site/data/*.json (voir build.mjs).
+          CENTRIS_INGEST: "1"
         run: |
           # On ne supprime que les fiches de propriétés et les données Centris.
           # site/data/market.json vient de Centris statistiques (rafraîchi par un

@@ -251,7 +251,120 @@ const slug = (s) => (s || '').toString().toLowerCase().normalize('NFD')
 const HAS_CENTRIS = fs.existsSync(path.join(CENTRIS, 'INSCRIPTIONS.TXT'));
 let properties, stats;
 
-if (HAS_CENTRIS) {
+// Les compteurs affichés (par ville, par type, fourchettes de prix) doivent
+// suivre la liste réellement publiée. En mode B, ceux du cache avaient été
+// calculés avant le dédoublonnage : le filtre annonçait « Laval (3) » et ne
+// montrait que 2 fiches.
+function calculerStats(properties) {
+  return {
+    total: properties.length,
+    avgPrice: Math.round(properties.reduce((s,p)=>s+p.price,0) / Math.max(1,properties.length)),
+    totalValue: properties.reduce((s,p)=>s+p.price,0),
+    byCity: properties.reduce((a,p)=>{a[p.city]=(a[p.city]||0)+1;return a;},{}),
+    byType: properties.reduce((a,p)=>{a[p.typeLabel]=(a[p.typeLabel]||0)+1;return a;},{}),
+    priceRanges: (() => {
+      const ranges = {'<300k':0,'300-500k':0,'500-800k':0,'800k-1.5M':0,'>1.5M':0};
+      for (const p of properties) {
+        if (p.price<300000) ranges['<300k']++;
+        else if (p.price<500000) ranges['300-500k']++;
+        else if (p.price<800000) ranges['500-800k']++;
+        else if (p.price<1500000) ranges['800k-1.5M']++;
+        else ranges['>1.5M']++;
+      }
+      return ranges;
+    })()
+  };
+}
+
+// ── NORMALISATION COMMUNE AUX DEUX MODES ───────────────────────────────
+// Ces corrections vivaient dans l'ingestion du zip. En mode B, le site se
+// rebâtit à partir du JSON mis en cache : elles ne s'appliquaient plus, et
+// les adresses collées et les doublons revenaient dès que le cron republiait.
+
+// « 112Z112BZ » et « 112112B » désignent la même adresse double : 112-112B.
+// Le Z est un marqueur Centris. On n'y touche que si un suffixe de lettre
+// confirme le doublement, sinon un civique comme 1212 serait coupé en deux.
+function reparerAdresse(street) {
+  if (!street) return street;
+  return street.replace(/^(\d+)Z(\d+[A-Z]?)Z(?=\s|,|$)/, '$1-$2')
+               .replace(/^(\d+)\1([A-Z])(?=\s|,|$)/, '$1-$1$2');
+}
+
+// Le type fait foi quand les codes Centris sont là (col. 53 et 54). Sans eux,
+// on récupère ce que la structure de l'adresse dit de façon sûre.
+function affinerType(p) {
+  const parCode = p.typeCode
+    ? typeFromCentris(...String(p.typeCode).split('/'))
+    : null;
+  if (parCode) return parCode;
+  const label = p.typeLabel || inferTypeFromDesc(p.descFr);
+  if (label !== 'Unifamiliale') return label;
+  // Un numéro d'appartement dans l'adresse : c'est une unité, pas une maison.
+  if (/,\s*app\.\s*\S/i.test(p.street || '')) return 'Condo';
+  // Adresse double plus un vocabulaire de revenus : c'est un plex.
+  if (/^\d+-\d+[A-Z]?\s/.test(p.street || '')
+      && /\b(revenus?|duplex|triplex|logements?|plex)\b/i.test(p.descFr || '')) {
+    return 'Multilogements';
+  }
+  return label;
+}
+
+// Centris sort parfois deux fois la même propriété, sous deux numéros MLS et
+// deux catégories contradictoires. On garde l'inscription la mieux documentée.
+function dedupliquer(liste, journal = []) {
+  const vus = new Map(), index = new Map();
+  for (const p of liste) {
+    const cles = [`a|${norm(p.street)}|${p.price}`];
+    if (p.lat && p.lon) cles.push(`g|${p.lat.toFixed(3)},${p.lon.toFixed(3)}|${p.price}`);
+    const cleExistante = cles.map(c => index.get(c)).find(Boolean);
+    if (!cleExistante) {
+      const canon = cles[0];
+      cles.forEach(c => index.set(c, canon));
+      vus.set(canon, p);
+      continue;
+    }
+    const garde = vus.get(cleExistante);
+    cles.forEach(c => index.set(c, cleExistante));
+    const gagne = p.photos.length !== garde.photos.length
+      ? p.photos.length > garde.photos.length
+      : (p.listedAt || '') > (garde.listedAt || '');
+    const perdant = gagne ? garde : p;
+    if (gagne) vus.set(cleExistante, p);
+    journal.push(`${perdant.mls} ${perdant.street} (${perdant.typeLabel}) — même propriété que ${(gagne ? p : garde).mls}`);
+  }
+  return [...vus.values()];
+}
+
+function normaliser(liste) {
+  const propres = liste.map(p => {
+    const street = reparerAdresse(p.street);
+    const q = { ...p, street };
+    return { ...q, typeLabel: affinerType(q) };
+  });
+  const journal = [];
+  const sansDoublons = dedupliquer(propres, journal);
+  if (journal.length) {
+    console.log(`  ↳ écartées, doublons Centris      : ${journal.length}`);
+    journal.forEach(d => console.log(`       ${d}`));
+  }
+  return sansDoublons;
+}
+
+// L'ingestion du zip écrase site/data/*.json. C'est destructif : un zip local
+// périmé (Dropbox le restaure tout seul après une suppression) réécrivait des
+// jours de données fraîches déjà committées par le cron. On l'exige donc
+// explicite. Le workflow GitHub pose CENTRIS_INGEST=1 ; en local, on passe
+// --ingest quand on veut vraiment réingérer.
+const INGEST = process.env.CENTRIS_INGEST === '1' || process.argv.includes('--ingest');
+const CACHE_EXISTE = fs.existsSync(path.join(SITE, 'data', 'properties.json'));
+
+if (HAS_CENTRIS && !INGEST && CACHE_EXISTE) {
+  console.log('⚠ Un zip Centris est présent dans _centris/ mais il est ignoré.');
+  console.log('  Le site se bâtit à partir de site/data/*.json, plus récent en principe.');
+  console.log('  Pour réingérer le zip et écraser ces données : node build.mjs --ingest');
+}
+
+if (HAS_CENTRIS && (INGEST || !CACHE_EXISTE)) {
   console.log('Mode A · Reading Centris zip…');
   const membres = read('MEMBRES.TXT');
   ({ properties, stats } = ingestFromCentris(membres));
@@ -266,9 +379,9 @@ if (HAS_CENTRIS) {
     console.error('❌ Ni _centris/ ni site/data/properties.json — impossible de bâtir le site.');
     process.exit(1);
   }
-  console.log('Mode B · Reading cached site/data/*.json (no Centris zip available)');
-  properties = JSON.parse(fs.readFileSync(propPath, 'utf8'));
-  stats = fs.existsSync(statPath) ? JSON.parse(fs.readFileSync(statPath, 'utf8')) : {};
+  console.log('Mode B · site/data/*.json (données mises en cache par le cron)');
+  properties = normaliser(JSON.parse(fs.readFileSync(propPath, 'utf8')));
+  stats = calculerStats(properties);
 }
 
 function ingestFromCentris(membres) {
@@ -416,66 +529,12 @@ function ingestFromCentris(membres) {
     };
   }).filter(p => p.price > 0 && p.photos.length >= MIN_PHOTOS);
 
-  // Une même propriété sort parfois deux fois de l'export, sous deux numéros
-  // MLS et deux catégories contradictoires (un 2X inscrit à la fois en
-  // résidentiel et en multiplex). Sur le site, ça donnait la même maison dans
-  // deux onglets de filtre. On garde l'inscription la mieux documentée.
-  const doublons = [];
-  {
-    const vus = new Map();      // clé canonique → inscription retenue
-    const index = new Map();    // toutes les clés d'une inscription → clé canonique
-    for (const p of properties) {
-      // Deux signatures : l'adresse (les coordonnées d'un même immeuble
-      // varient de quelques mètres d'une inscription à l'autre) et la
-      // position (l'adresse peut être saisie différemment).
-      const cles = [`a|${norm(p.street)}|${p.price}`];
-      if (p.lat && p.lon) cles.push(`g|${p.lat.toFixed(3)},${p.lon.toFixed(3)}|${p.price}`);
-      const cleExistante = cles.map(c => index.get(c)).find(Boolean);
-      if (!cleExistante) {
-        const canon = cles[0];
-        cles.forEach(c => index.set(c, canon));
-        vus.set(canon, p);
-        continue;
-      }
-      const cle = cleExistante;
-      const garde = vus.get(cle);
-      cles.forEach(c => index.set(c, cle));
-      // À prix et emplacement égaux : le plus de photos, puis la plus récente.
-      const gagne = p.photos.length !== garde.photos.length
-        ? p.photos.length > garde.photos.length
-        : (p.listedAt || '') > (garde.listedAt || '');
-      const perdant = gagne ? garde : p;
-      if (gagne) vus.set(cle, p);
-      doublons.push(`${perdant.mls} ${perdant.street} (${perdant.typeLabel}) — même propriété que ${(gagne ? p : garde).mls}`);
-    }
-    properties = [...vus.values()];
-  }
-  if (doublons.length) {
-    console.log(`  ↳ écartées, doublons Centris      : ${doublons.length}`);
-    doublons.forEach(d => console.log(`       ${d}`));
-  }
+  properties = normaliser(properties);
 
   console.log(`  → publiées sur le site            : ${properties.length}`);
   console.log(`──────────────────────────\n`);
 
-  const stats = {
-    total: properties.length,
-    avgPrice: Math.round(properties.reduce((s,p)=>s+p.price,0) / Math.max(1,properties.length)),
-    totalValue: properties.reduce((s,p)=>s+p.price,0),
-    byCity: properties.reduce((a,p)=>{a[p.city]=(a[p.city]||0)+1;return a;},{}),
-    byType: properties.reduce((a,p)=>{a[p.typeLabel]=(a[p.typeLabel]||0)+1;return a;},{}),
-    priceRanges: (() => {
-      const ranges = {'<300k':0,'300-500k':0,'500-800k':0,'800k-1.5M':0,'>1.5M':0};
-      for (const p of properties) {
-        if (p.price<300000) ranges['<300k']++;
-        else if (p.price<500000) ranges['300-500k']++;
-        else if (p.price<800000) ranges['500-800k']++;
-        else if (p.price<1500000) ranges['800k-1.5M']++;
-        else ranges['>1.5M']++;
-      }
-      return ranges;
-    })()
-  };
+  const stats = calculerStats(properties);
 
   return { properties, stats };
 }
@@ -3411,6 +3470,9 @@ function copyDir(from, to){
   }
   fs.mkdirSync(to,{recursive:true});
   for (const f of fs.readdirSync(from)) {
+    // Un dossier préfixé d'un souligné est un dossier de travail : archives,
+    // originaux avant retouche. Il reste en local et ne part pas en ligne.
+    if (f.startsWith('_')) continue;
     const s = path.join(from,f), d = path.join(to,f);
     // récursif : photos/stock/ était silencieusement ignoré avant
     if (fs.statSync(s).isDirectory()) copyDir(s, d);
