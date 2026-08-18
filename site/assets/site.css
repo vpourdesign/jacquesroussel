@@ -1,6 +1,7 @@
 
 :root{
-  --cream:#F7F2EA;
+  /* Crème officielle RE/MAX (guide sept. 2025, p. 8) — remplace le #F7F2EA maison. */
+  --cream:#F7F5EE;
   --vellum:#FBF8F2;
   --hairline:#E8E2D7;
   --ink:#1A1B1D;
@@ -181,6 +182,7 @@ strong{ font-weight: 600; }
 .btn-ghost--on-teal:hover{ background: oklch(96% 0.012 80 / 0.1); border-color: var(--cream); color: var(--cream); }
 
 /* Header */
+:root{ --hdr-h: 5.5rem; }
 .site-header{
   position: sticky; top: 0; z-index: 50;
   --hdr-bg: oklch(96% 0.012 80 / 0.82);
@@ -243,6 +245,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 2rem;
+}
+/* Logo de l'équipe + lockup RE/MAX côte à côte, au-dessus de la ligne des 400 px.
+   Le guide (p. 4) exige un espace libre d'au moins la moitié de la hauteur du
+   « X » de RE/MAX sur les quatre côtés : c'est le rôle du gap et du padding
+   vertical de .site-header__inner. Aucune boîte ni cadre autour du logo. */
+.site-header__brands{ display: inline-flex; align-items: center; gap: clamp(1.1rem, 2.2vw, 1.6rem); }
+.site-header__remax{
+  block-size: clamp(24px, 2.5vw, 31px);
+  inline-size: auto;
+  display: block;
+  flex-shrink: 0;
 }
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
@@ -906,7 +919,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .wordmark--footer .wordmark__name{ color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; letter-spacing: 0.04em; }
 .wordmark--footer .wordmark__sub{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .site-footer__tag{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.8); max-inline-size: 30ch; }
-.site-footer__addr{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.7); font-style: normal; font-size: var(--text-sm); }
+/* Pas de lockup RE/MAX ici : le pied de page est sombre et le logotype officiel
+   n'existe qu'en noir et crème (guide, p. 4). Le poser sur une plage crème
+   reviendrait à l'enfermer dans une boîte, ce que le guide interdit. Les deux
+   logos vivent dans l'en-tête, au-dessus de la ligne des 400 px — c'est là que
+   la norme les exige. Le pied ne porte que les mentions écrites. */
+.site-footer__addr{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.7); font-style: normal; font-size: var(--text-sm); line-height: 1.7; }
+.site-footer__agency{ display: block; color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; }
+.site-footer__agency-legal{ display: block; color: oklch(96% 0.012 80 / 0.88); }
+.site-footer__addr a{ color: oklch(96% 0.012 80 / 0.7); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer__addr a:hover{ color: var(--cream); }
+.site-footer__role{ font-size: 0.76rem; color: oklch(96% 0.012 80 / 0.62); line-height: 1.5; }
 .site-footer__contact{ gap: var(--space-3) !important; }
 .site-footer__contact li{ display: flex; flex-direction: column; gap: 2px; }
 .site-footer__name{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--cream); font-size: 1rem; opacity: 1; }
@@ -1606,7 +1629,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 /* Hero — plaque vidéo plein écran, titre masqué ligne par ligne */
 .hm-hero{
   position: relative;
-  min-block-size: 100dvh;
+  /* L'en-tête n'est plus transparent sur l'accueil (conformité RE/MAX : fond
+     neutre derrière le logotype), il occupe donc sa propre hauteur au-dessus
+     du hero. On la retranche pour que le premier écran reste plein. */
+  min-block-size: calc(100dvh - var(--hdr-h));
   overflow: hidden;
   isolation: isolate;
   display: grid;
@@ -1668,6 +1694,48 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   .hm-hero__bar{ grid-template-columns: 1fr; gap: var(--space-3); justify-items: start; }
   .hm-hero__bar-meta{ display: none; }
   .hm-hero__cta{ inline-size: 100%; justify-content: center; }
+}
+
+/* Bandeau des mentions RE/MAX — nom et titre au permis de chaque courtier,
+   agence, mention « Agence immobilière », adresse civique, téléphone principal
+   et mention de franchisé. Guide des normes, sept. 2025, p. 27. */
+.hm-legal{
+  background: var(--vellum);
+  border-block-end: 1px solid var(--hairline);
+  padding-block: clamp(1.4rem, 3.5vh, 2.2rem);
+}
+.hm-legal__inner{
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(1.2rem, 4vw, 3rem);
+  align-items: start;
+}
+.hm-legal__brokers{ list-style: none; display: grid; gap: 0.4rem; }
+.hm-legal__brokers li{ display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.05rem 0.5rem; }
+.hm-legal__name{ font-weight: 600; color: var(--ink); font-size: var(--text-sm); }
+.hm-legal__role{ color: var(--stone); font-size: 0.8rem; }
+.hm-legal__agency{
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--stone);
+}
+.hm-legal__agency-name{ display: block; font-weight: 600; color: var(--ink); font-size: var(--text-sm); }
+.hm-legal__agency-legal{ display: block; color: var(--ink); }
+.hm-legal__agency a{ color: var(--stone); text-decoration: underline; text-underline-offset: 3px; }
+.hm-legal__agency a:hover{ color: var(--ink); }
+.hm-legal__franchise{
+  grid-column: 1 / -1;
+  margin-block-start: 0.2rem;
+  padding-block-start: clamp(0.8rem, 2vh, 1.1rem);
+  border-block-start: 1px solid var(--hairline);
+  font-size: 0.78rem;
+  color: var(--stone);
+}
+.hm-legal__franchise a{ color: var(--stone); text-decoration: underline; text-underline-offset: 3px; }
+.hm-legal__franchise a:hover{ color: var(--ink); }
+@media (max-width: 760px){
+  .hm-legal__inner{ grid-template-columns: 1fr; gap: var(--space-4); }
 }
 
 /* Les chiffres — compteurs bronze, colonnes hairline */

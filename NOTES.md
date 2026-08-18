@@ -9,6 +9,12 @@
 
 ## ✅ À faire
 
+### Conformité RE/MAX Québec — ce qui reste à trancher (2026-08-18)
+
+- **Les couleurs dominantes du site doivent être le bleu, le blanc et le rouge RE/MAX.** C'est écrit noir sur blanc au guide des normes (éd. septembre 2025, p. 27, section « Sites web › Précisions ») et ce n'est *pas* dans la liste du courriel de RE/MAX Québec. Le site est actuellement crème, marine et sable. J'ai aligné le crème sur la valeur officielle `#F7F5EE`, mais le marine `#13202E`, le sable `#CDB89A` et le bronze `#B58A4F` ne sont pas des couleurs RE/MAX. **Trois options :** (1) ne rien faire et voir si le service des normes le soulève — c'est le point le plus susceptible de causer un deuxième refus ; (2) retint minimal : marine → bleu pont `#0C2749`, sable/bronze → rouge `#FF1200` en accent ; (3) retint complet vers bleu `#0043FF` / blanc / rouge `#FF1200`, ce qui change l'identité du site. **Ma recommandation : option 2**, ça reste élégant et ça devient défendable. À décider avec Jacques-Roussel, c'est leur image.
+- **Le lockup RE/MAX crème de l'extranet.** Le fichier fourni (`remax_ballon_logotype.png`) est en noir. Le guide (p. 4) dit que le logotype existe en noir *et en crème*, et qu'il doit poser sur un fond neutre. Faute de version crème, j'ai retiré l'en-tête transparent de la page d'accueil : la barre est maintenant crème pleine largeur. **Si vous téléchargez le lockup crème dans l'extranet**, on peut redonner à l'accueil son en-tête transparent par-dessus la vidéo (une ligne : `bodyClass: 'header-overlay'` dans `build.mjs`).
+- **Quel est le vrai numéro principal du bureau ?** Le JSON-LD de l'accueil portait `+1-450-430-5555`, alors que le dossier RE/MAX CRYSTAL donne `450 430-4207`. Le guide exige « le numéro de téléphone principal de l'agence ». J'ai mis 450 430-4207 partout. **À confirmer** avant de renvoyer le site aux normes.
+
 ### Round de commentaires client du 2026-08-13 — ce qui attend une décision
 
 - **⚠️ Aucun formulaire du site n'envoie quoi que ce soit.** Découvert en traitant les commentaires. Le bouton « Envoyer le message » de `/contact/` est un `type="button"` sans gestionnaire : il ne fait rien du tout, et la personne n'a même pas de message d'erreur. Idem pour le formulaire d'évaluation gratuite. **Toutes les demandes envoyées depuis le site depuis la mise en ligne sont perdues.** Il faut un point de chute : la constante `FORM_ENDPOINT` est en place en haut de `build.mjs`, il suffit d'y coller une URL (Formspree ~ 10 $/mois, ou une fonction Vercel). En attendant, la fenêtre des guides bascule sur le client courriel de la personne — rien ne se perd en silence, mais c'est un dépannage, pas une solution. (2026-08-13)
@@ -51,6 +57,15 @@
 - Images libres de droits dans `photos/stock/` (Unsplash). `copyDir` est maintenant récursif — avant, les sous-dossiers de `photos/` étaient silencieusement ignorés au build. (2026-08-07)
 
 ## ✓ Fait
+
+- **Mise en conformité RE/MAX Québec de la page d'accueil.** (2026-08-18) Le service des normes bloquait l'activation du lien de redirection depuis la page courtier RE/MAX Québec. Le courriel renvoyait aux p. 41-42 du guide : c'est la pagination de l'ancienne édition, la liste est à la **p. 27 de l'édition de septembre 2025** (`Nouveau_guide_normes_publicite_remax_2025.pdf`, à la racine du projet). Le guide exige deux choses de plus que le courriel : la mention « Franchisé indépendant et autonome de RE/MAX Québec » et un lien vers remax-quebec.com.
+  - Les deux logos officiels (montgolfière + logotype RE/MAX) sont dans l'en-tête, à côté du logo de l'équipe, **à 50 px du haut** — largement sous la ligne des 400 px, sur toutes les pages.
+  - L'accueil a perdu son en-tête transparent : le guide (p. 4) impose un fond neutre derrière le logo, la barre est donc crème. Le hero garde sa pleine hauteur (`calc(100dvh - var(--hdr-h))`).
+  - Nouveau bandeau de mentions sous le hero : les trois courtiers avec leur titre exact au permis, `RE/MAX CRYSTAL`, « Agence immobilière », `228 boul. du Curé-Labelle, Sainte-Thérèse (Québec) J7E 2X7`, `450 430-4207`, et la mention de franchisé liée à remax-quebec.com.
+  - Pied de page : adresse civique complète et téléphone du bureau à la place de « Rive-Nord ouest, Québec », titre au permis sous chaque nom, mention de franchisé dans la ligne du bas.
+  - Tout part d'une seule constante `AGENCY` en haut de `build.mjs`, à côté de `TEAM` — les titres viennent de `TEAM[].role`. Rien n'est écrit en dur dans les gabarits.
+  - Le crème du site passe de `#F7F2EA` à la valeur officielle RE/MAX `#F7F5EE` (guide, p. 8).
+  - Pas de lockup RE/MAX au pied de page : le fond y est sombre, le logotype n'existe qu'en noir et crème, et le poser sur une plage crème reviendrait à l'enfermer dans une boîte — ce que le guide interdit (p. 4).
 
 - **Les six articles de blog sont écrits.** (2026-08-13) De 715 à 935 mots chacun, ton professionnel, français du Québec, sans tiret cadratin. Ils remplacent les pages « Cet article est en rédaction ».
   - *Combien vaut ma maison à Saint-Eustache ?* La médiane et ses limites, pourquoi l'évaluation municipale n'est pas la valeur marchande, ce qui entre vraiment dans une analyse comparative.

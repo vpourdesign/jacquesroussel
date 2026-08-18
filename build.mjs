@@ -75,6 +75,44 @@ const TEAM = [
 // Une place reste visible tant que le quatrième membre n'est pas annoncé.
 const TEAM_HAS_OPENING = true;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// AGENCE — mentions imposées par RE/MAX Québec.
+// Source : Guide des normes de publicité RE/MAX, édition septembre 2025, p. 27
+// (« SITES WEB → INFORMATIONS OBLIGATOIRES → Page d'accueil »). Le courriel du
+// service des normes renvoie aux p. 41-42, la pagination de l'édition
+// précédente : c'est la même liste.
+//
+// La page d'accueil DOIT porter, sans exception :
+//   • le nom de chaque courtier et son titre exact au permis OACIQ (voir TEAM.role);
+//   • le nom de l'agence, la mention « Agence immobilière » et l'adresse civique complète;
+//   • le numéro de téléphone principal de l'agence;
+//   • le logo RE/MAX et la montgolfière EN COULEUR;
+//   • la mention « Franchisé indépendant et autonome de RE/MAX Québec »;
+//   • les deux logos officiels au-dessus de la ligne des 400 px (→ l'en-tête).
+//
+// Le lien vers remax-quebec.com est lui aussi exigé : sans contribution au
+// trafic du site du franchiseur, la redirection depuis la page courtier
+// RE/MAX Québec vers ce site n'est pas activée.
+//
+// Ne rien retirer d'ici sans repasser par le service des normes.
+const AGENCY = {
+  name: 'RE/MAX CRYSTAL',
+  legal: 'Agence immobilière',
+  street: '228 boul. du Curé-Labelle',
+  city: 'Sainte-Thérèse',
+  region: 'Québec',
+  postal: 'J7E 2X7',
+  phone: '450 430-4207',
+  tel: '+14504304207',
+  franchise: 'Franchisé indépendant et autonome de RE/MAX Québec',
+  franchisorUrl: 'https://www.remax-quebec.com',
+  franchisorLabel: 'RE/MAX Québec'
+};
+// Verrou de conformité : la montgolfière ne peut jamais paraître sans le
+// logotype RE/MAX (guide, p. 4). Les deux sont dans un seul fichier verrouillé
+// — ne pas le recadrer, le recolorer ni le redimensionner de façon non uniforme.
+const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
+
 // Google Calendar Appointment Schedule — remplace par ton URL complète
 // (obtenue dans Google Calendar → Créer → Plages horaires de rendez-vous → Ouvrir la page de réservation)
 const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1jp0v3sqPHnkxqbDx_5kSPLSBSBDTebM9-4ulplRyo47oVeYiP-JfPvhE-EWktfMF5nAPXplo8';
@@ -729,7 +767,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${description}">
 <meta name="twitter:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
-<meta name="theme-color" content="#F7F2EA">
+<meta name="theme-color" content="#F7F5EE">
 <link rel="icon" type="image/png" href="/brand_assets/favicon.png">
 <link rel="apple-touch-icon" href="/brand_assets/favicon.png">
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
@@ -742,10 +780,13 @@ ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
 <a class="skip-link" href="#main">Aller au contenu</a>
 <header class="site-header" data-header>
   <div class="site-header__inner">
-    <a class="wordmark" href="/" aria-label="Équipe Jacques-Roussel, accueil">
-      <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-blanc.png" alt="Équipe Jacques-Roussel" width="700" height="680" decoding="async">
-      <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/equipejrnoir.png" alt="" aria-hidden="true" width="700" height="680" decoding="async">
-    </a>
+    <div class="site-header__brands">
+      <a class="wordmark" href="/" aria-label="Équipe Jacques-Roussel, accueil">
+        <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-blanc.png" alt="Équipe Jacques-Roussel" width="700" height="680" decoding="async">
+        <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/equipejrnoir.png" alt="" aria-hidden="true" width="700" height="680" decoding="async">
+      </a>
+      <img class="site-header__remax" src="${REMAX_LOCKUP}" alt="RE/MAX" width="1000" height="274" decoding="async">
+    </div>
     <nav class="site-nav" aria-label="Navigation principale">
       ${navHtml}
     </nav>
@@ -772,10 +813,15 @@ ${body}
     <div class="site-footer__col site-footer__col--brand">
       <div class="wordmark wordmark--footer">
         <span class="wordmark__name">JACQUES &middot; ROUSSEL</span>
-        <span class="wordmark__sub">RE/MAX CRYSTAL</span>
       </div>
       <p class="site-footer__tag">Vos courtiers d'expérience sur la Rive-Nord</p>
-      <address class="site-footer__addr">RE/MAX CRYSTAL<br>Rive-Nord ouest, Québec</address>
+      <address class="site-footer__addr">
+        <span class="site-footer__agency">${AGENCY.name}</span>
+        <span class="site-footer__agency-legal">${AGENCY.legal}</span>
+        ${AGENCY.street}<br>
+        ${AGENCY.city} (${AGENCY.region})&nbsp;${AGENCY.postal}<br>
+        <a href="tel:${AGENCY.tel}">${AGENCY.phone}</a>
+      </address>
     </div>
     <div class="site-footer__col">
       <h4 class="eyebrow">Plan du site</h4>
@@ -798,6 +844,7 @@ ${body}
       <ul class="site-footer__contact">
         ${TEAM.map(m => `<li>
           <span class="site-footer__name">${m.first} ${m.last}</span>
+          <span class="site-footer__role">${m.role}</span>
           <a href="mailto:${m.email}">${m.email}</a>
           <a href="tel:${m.tel}">${m.phone}</a>
         </li>`).join('')}
@@ -810,7 +857,7 @@ ${body}
     </div>
   </div>
   <div class="site-footer__bottom">
-    <span>&copy; ${new Date().getFullYear()} Équipe Jacques-Roussel &middot; Permis OACIQ</span>
+    <span>&copy; ${new Date().getFullYear()} Équipe Jacques-Roussel &middot; ${AGENCY.franchise.replace(AGENCY.franchisorLabel, `<a href="${AGENCY.franchisorUrl}" target="_blank" rel="noopener">${AGENCY.franchisorLabel}</a>`)} &middot; Permis OACIQ</span>
     <span class="site-footer__legal"><a href="/a-propos/">À propos</a> &middot; <a href="/contact/">Contact</a></span>
   </div>
 </footer>
@@ -828,7 +875,8 @@ ${extraBody}
 // --- CSS (inline in one file) ---
 const CSS = `
 :root{
-  --cream:#F7F2EA;
+  /* Crème officielle RE/MAX (guide sept. 2025, p. 8) — remplace le #F7F2EA maison. */
+  --cream:#F7F5EE;
   --vellum:#FBF8F2;
   --hairline:#E8E2D7;
   --ink:#1A1B1D;
@@ -1009,6 +1057,7 @@ strong{ font-weight: 600; }
 .btn-ghost--on-teal:hover{ background: oklch(96% 0.012 80 / 0.1); border-color: var(--cream); color: var(--cream); }
 
 /* Header */
+:root{ --hdr-h: 5.5rem; }
 .site-header{
   position: sticky; top: 0; z-index: 50;
   --hdr-bg: oklch(96% 0.012 80 / 0.82);
@@ -1071,6 +1120,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 2rem;
+}
+/* Logo de l'équipe + lockup RE/MAX côte à côte, au-dessus de la ligne des 400 px.
+   Le guide (p. 4) exige un espace libre d'au moins la moitié de la hauteur du
+   « X » de RE/MAX sur les quatre côtés : c'est le rôle du gap et du padding
+   vertical de .site-header__inner. Aucune boîte ni cadre autour du logo. */
+.site-header__brands{ display: inline-flex; align-items: center; gap: clamp(1.1rem, 2.2vw, 1.6rem); }
+.site-header__remax{
+  block-size: clamp(24px, 2.5vw, 31px);
+  inline-size: auto;
+  display: block;
+  flex-shrink: 0;
 }
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
@@ -1734,7 +1794,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .wordmark--footer .wordmark__name{ color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; letter-spacing: 0.04em; }
 .wordmark--footer .wordmark__sub{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .site-footer__tag{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.8); max-inline-size: 30ch; }
-.site-footer__addr{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.7); font-style: normal; font-size: var(--text-sm); }
+/* Pas de lockup RE/MAX ici : le pied de page est sombre et le logotype officiel
+   n'existe qu'en noir et crème (guide, p. 4). Le poser sur une plage crème
+   reviendrait à l'enfermer dans une boîte, ce que le guide interdit. Les deux
+   logos vivent dans l'en-tête, au-dessus de la ligne des 400 px — c'est là que
+   la norme les exige. Le pied ne porte que les mentions écrites. */
+.site-footer__addr{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.7); font-style: normal; font-size: var(--text-sm); line-height: 1.7; }
+.site-footer__agency{ display: block; color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; }
+.site-footer__agency-legal{ display: block; color: oklch(96% 0.012 80 / 0.88); }
+.site-footer__addr a{ color: oklch(96% 0.012 80 / 0.7); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer__addr a:hover{ color: var(--cream); }
+.site-footer__role{ font-size: 0.76rem; color: oklch(96% 0.012 80 / 0.62); line-height: 1.5; }
 .site-footer__contact{ gap: var(--space-3) !important; }
 .site-footer__contact li{ display: flex; flex-direction: column; gap: 2px; }
 .site-footer__name{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--cream); font-size: 1rem; opacity: 1; }
@@ -2434,7 +2504,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 /* Hero — plaque vidéo plein écran, titre masqué ligne par ligne */
 .hm-hero{
   position: relative;
-  min-block-size: 100dvh;
+  /* L'en-tête n'est plus transparent sur l'accueil (conformité RE/MAX : fond
+     neutre derrière le logotype), il occupe donc sa propre hauteur au-dessus
+     du hero. On la retranche pour que le premier écran reste plein. */
+  min-block-size: calc(100dvh - var(--hdr-h));
   overflow: hidden;
   isolation: isolate;
   display: grid;
@@ -2496,6 +2569,48 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   .hm-hero__bar{ grid-template-columns: 1fr; gap: var(--space-3); justify-items: start; }
   .hm-hero__bar-meta{ display: none; }
   .hm-hero__cta{ inline-size: 100%; justify-content: center; }
+}
+
+/* Bandeau des mentions RE/MAX — nom et titre au permis de chaque courtier,
+   agence, mention « Agence immobilière », adresse civique, téléphone principal
+   et mention de franchisé. Guide des normes, sept. 2025, p. 27. */
+.hm-legal{
+  background: var(--vellum);
+  border-block-end: 1px solid var(--hairline);
+  padding-block: clamp(1.4rem, 3.5vh, 2.2rem);
+}
+.hm-legal__inner{
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(1.2rem, 4vw, 3rem);
+  align-items: start;
+}
+.hm-legal__brokers{ list-style: none; display: grid; gap: 0.4rem; }
+.hm-legal__brokers li{ display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.05rem 0.5rem; }
+.hm-legal__name{ font-weight: 600; color: var(--ink); font-size: var(--text-sm); }
+.hm-legal__role{ color: var(--stone); font-size: 0.8rem; }
+.hm-legal__agency{
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--stone);
+}
+.hm-legal__agency-name{ display: block; font-weight: 600; color: var(--ink); font-size: var(--text-sm); }
+.hm-legal__agency-legal{ display: block; color: var(--ink); }
+.hm-legal__agency a{ color: var(--stone); text-decoration: underline; text-underline-offset: 3px; }
+.hm-legal__agency a:hover{ color: var(--ink); }
+.hm-legal__franchise{
+  grid-column: 1 / -1;
+  margin-block-start: 0.2rem;
+  padding-block-start: clamp(0.8rem, 2vh, 1.1rem);
+  border-block-start: 1px solid var(--hairline);
+  font-size: 0.78rem;
+  color: var(--stone);
+}
+.hm-legal__franchise a{ color: var(--stone); text-decoration: underline; text-underline-offset: 3px; }
+.hm-legal__franchise a:hover{ color: var(--ink); }
+@media (max-width: 760px){
+  .hm-legal__inner{ grid-template-columns: 1fr; gap: var(--space-4); }
 }
 
 /* Les chiffres — compteurs bronze, colonnes hairline */
@@ -3637,8 +3752,13 @@ const homeJsonld = JSON.stringify({
   "@context":"https://schema.org","@type":"RealEstateAgent",
   "name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com",
   "image":"https://jacquesroussel.com/photos/equipe-jacques-roussel.jpg",
-  "telephone":"+1-450-430-5555","priceRange":"$$",
-  "address":{"@type":"PostalAddress","addressLocality":"Sainte-Thérèse","addressRegion":"QC","addressCountry":"CA"},
+  // À CONFIRMER : le +1-450-430-5555 qui figurait ici ne correspond pas à la ligne
+  // principale du bureau relevée au dossier RE/MAX CRYSTAL (450 430-4207). Le guide
+  // exige le numéro principal de l'agence — on affiche donc AGENCY.phone.
+  "telephone":AGENCY.tel,"priceRange":"$$",
+  "address":{"@type":"PostalAddress","streetAddress":AGENCY.street,"addressLocality":AGENCY.city,"addressRegion":"QC","postalCode":AGENCY.postal,"addressCountry":"CA"},
+  "parentOrganization":{"@type":"Organization","name":AGENCY.name,"url":AGENCY.franchisorUrl},
+  "employee":TEAM.map(m => ({"@type":"RealEstateAgent","name":`${m.first} ${m.last}`,"jobTitle":m.role,"telephone":m.tel,"email":m.email})),
   "areaServed":["Saint-Eustache","Deux-Montagnes","Sainte-Marthe-sur-le-Lac","Boisbriand","Mirabel","Sainte-Thérèse","Blainville","Rosemère","Lorraine"]
 });
 
@@ -3672,6 +3792,24 @@ const homeBody = `
     <span class="hm-hero__bar-names">${TEAM.map(m => `${m.first} ${m.last}`).join(' &middot; ')}</span>
     <span class="hm-hero__bar-meta">Centris &middot; ${stats.total ? stats.total + ' inscriptions actives' : 'mis à jour quotidiennement'}</span>
     <a class="btn-cream hm-hero__cta" href="/nos-proprietes/">Voir nos propriétés &rarr;</a>
+  </div>
+</section>
+
+<!-- Mentions imposées par RE/MAX Québec (guide sept. 2025, p. 27). Ne pas retirer :
+     sans ce bloc, la redirection depuis la page courtier RE/MAX Québec reste inactive. -->
+<section class="hm-legal" aria-label="Mentions RE/MAX Québec">
+  <div class="container hm-legal__inner">
+    <ul class="hm-legal__brokers">
+      ${TEAM.map(m => `<li><span class="hm-legal__name">${m.first} ${m.last}</span><span class="hm-legal__role">${m.role}</span></li>`).join('')}
+    </ul>
+    <address class="hm-legal__agency">
+      <span class="hm-legal__agency-name">${AGENCY.name}</span>
+      <span class="hm-legal__agency-legal">${AGENCY.legal}</span>
+      ${AGENCY.street}<br>
+      ${AGENCY.city} (${AGENCY.region})&nbsp;${AGENCY.postal}<br>
+      <a href="tel:${AGENCY.tel}">${AGENCY.phone}</a>
+    </address>
+    <p class="hm-legal__franchise">${AGENCY.franchise.replace(AGENCY.franchisorLabel, `<a href="${AGENCY.franchisorUrl}" target="_blank" rel="noopener">${AGENCY.franchisorLabel}</a>`)}</p>
   </div>
 </section>
 
@@ -3823,7 +3961,12 @@ writePage('index.html', layout({
   title: 'Équipe Jacques-Roussel · Courtier immobilier Saint-Eustache et Rive-Nord | RE/MAX CRYSTAL',
   description: `Équipe Jacques-Roussel, ${TEAM.length} courtiers immobiliers RE/MAX CRYSTAL à Saint-Eustache, Deux-Montagnes, Sainte-Marthe-sur-le-Lac, Boisbriand et Mirabel. Statistiques Centris à jour, évaluation gratuite et mise en marché sur mesure.`,
   canonical: 'https://jacquesroussel.com/',
-  bodyClass: 'header-overlay',
+  // Plus d'en-tête transparent sur l'accueil : le guide RE/MAX (p. 4) impose un
+  // fond neutre derrière le logotype et la montgolfière. Une barre crème pleine
+  // largeur satisfait la règle sans enfermer le logo dans une boîte. Si le
+  // lockup crème officiel est obtenu à l'extranet, on pourra revenir à
+  // bodyClass: 'header-overlay' et laisser la vidéo repasser sous l'en-tête.
+  bodyClass: 'home',
   body: homeBody,
   jsonld: homeJsonld
 }));
