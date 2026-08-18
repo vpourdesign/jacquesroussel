@@ -1,25 +1,25 @@
 {
   "total": 17,
-  "avgPrice": 1317888,
-  "totalValue": 22404099,
+  "avgPrice": 1289412,
+  "totalValue": 21919999,
   "byCity": {
     "Sainte-Anne-des-Plaines": 1,
-    "Rive-Nord": 8,
+    "Rive-Nord": 9,
     "Sainte-Thérèse": 2,
     "Saint-Eustache": 3,
-    "Laval": 3
+    "Laval": 2
   },
   "byType": {
-    "Unifamiliale": 7,
-    "Commercial": 6,
-    "Terrain": 2,
-    "Condo": 1,
-    "Multilogements": 1
+    "Unifamiliale": 5,
+    "Terrain": 6,
+    "Condo": 2,
+    "Commercial": 2,
+    "Multilogements": 2
   },
   "priceRanges": {
     "<300k": 5,
-    "300-500k": 0,
-    "500-800k": 6,
+    "300-500k": 1,
+    "500-800k": 5,
     "800k-1.5M": 2,
     ">1.5M": 4
   }

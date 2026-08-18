@@ -2,7 +2,7 @@
   {
     "mls": "10207368",
     "price": 524000,
-    "typeCode": "",
+    "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "9275 Rue Godfroy-Langlois",
     "city": "Sainte-Anne-des-Plaines",
@@ -439,8 +439,8 @@
   {
     "mls": "10920974",
     "price": 8000000,
-    "typeCode": "",
-    "typeLabel": "Commercial",
+    "typeCode": "T/TV",
+    "typeLabel": "Terrain",
     "street": "994 Rue Lamontagne",
     "city": "Rive-Nord",
     "postalCode": "J5L1V2",
@@ -604,7 +604,7 @@
   {
     "mls": "12206682",
     "price": 67500,
-    "typeCode": "",
+    "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "Rue d'Amay",
     "city": "Rive-Nord",
@@ -645,8 +645,8 @@
   {
     "mls": "12237631",
     "price": 1800000,
-    "typeCode": "",
-    "typeLabel": "Commercial",
+    "typeCode": "T/TV",
+    "typeLabel": "Terrain",
     "street": "Rue Schulz",
     "city": "Sainte-Thérèse",
     "postalCode": "J7Y5C3",
@@ -815,7 +815,7 @@
   {
     "mls": "14475622",
     "price": 259900,
-    "typeCode": "",
+    "typeCode": "R/AP",
     "typeLabel": "Condo",
     "street": "3825 Boul. Lévesque O., app. 15",
     "city": "Rive-Nord",
@@ -1031,7 +1031,7 @@
   {
     "mls": "14553615",
     "price": 1475000,
-    "typeCode": "",
+    "typeCode": "C/BCB",
     "typeLabel": "Commercial",
     "street": "107 Rue St-Louis",
     "city": "Saint-Eustache",
@@ -1597,8 +1597,8 @@
   {
     "mls": "15522328",
     "price": 1280000,
-    "typeCode": "",
-    "typeLabel": "Commercial",
+    "typeCode": "R/PP",
+    "typeLabel": "Unifamiliale",
     "street": "3465 Rue Émile",
     "city": "Rive-Nord",
     "postalCode": "J6Y1B6",
@@ -2400,8 +2400,8 @@
   {
     "mls": "16054106",
     "price": 3000000,
-    "typeCode": "",
-    "typeLabel": "Commercial",
+    "typeCode": "T/TV",
+    "typeLabel": "Terrain",
     "street": "844 Boul. de La Salette",
     "city": "Rive-Nord",
     "postalCode": "J5L2J3",
@@ -2541,10 +2541,391 @@
     "slug": "16054106-844-boul-de-la-salette-rive-nord"
   },
   {
+    "mls": "16429428",
+    "price": 314900,
+    "typeCode": "R/ME",
+    "typeLabel": "Unifamiliale",
+    "street": "38 Rue Mallette",
+    "city": "Rive-Nord",
+    "postalCode": "J8H2W3",
+    "yearBuilt": "1942",
+    "areaTerrain": "489.50 MC",
+    "lat": 45.64916562,
+    "lon": -74.35506071,
+    "descFr": "Charmante maisonnette au cachet ancestral à Lachute Découvrez cette véritable perle rare dans un secteur tranquille de Lachute. Avec son magnifique revêtement extérieur en pierre et son cachet d'antan, cette propriété chaleureuse est le refuge parfait pour les amoureux d'authenticité et de calme. Un intérieur où il fait bon vivre. Dès votre entrée, vous serez séduit par les matériaux ancestraux qui confèrent à la maison une ambiance unique et réconfortante. INTÉRIEUR - Superbes planchers de bois s'étendent à travers les pièces, tandis que la cuisine se distingue par sa luminosité et ses comptoirs en bois, parfait pour cuisiner dans une ambiance conviviale. - Vous y trouverez deux chambres à coucher ainsi qu'un petit boudoir plein de charme, l'espace idéal pour y aménager un coin lecture, un bureau à domicile ou un espace de détente. - La maison dispose d'une très grande salle de bain, offrant tout l'espace nécessaire pour votre confort quotidien. EXTÉRIEUR - Grand terrain en coin de rue, offrant intimité et espace. - Terrain soigneusement aménagé et particulièrement lumineux, vous permettant de profiter pleinement des belles journées ensoleillées. - Rangement abondant : Un atout majeur de cette propriété est sans contredit son immense garage/grange. Très spacieux, ce bâtiment offre un potentiel de rangement exceptionnel pour vos outils, vos équipements de plein air ou même pour y réaliser vos projets d'atelier. EMPLACEMENT - Située dans un secteur tranquille de Lachute, cette maisonnette vous offre la paix d'esprit d'un secteur paisible tout en restant à proximité des services essentiels de la région. Une propriété avec autant de caractère et un terrain aussi exceptionnel est une rareté sur le marché. Venez découvrir votre futur havre de paix ! Osez venir la visiter ! *Le courtier du vendeur informe l'acheteur qu'il ne peut le représenter ni défendre ses intérêts. Il lui rappelle qu'il peut être représenté par un autre courtier de son choix. Si l'acheteur choisit tout de même de communiquer directement avec le courtier du vendeur, ce dernier lui accordera un traitement équitable et lui fournira, de manière objective, l'information pertinente à l'achat.*",
+    "remFr": "Charmante maisonnette ancestrale à vendre à Lachute se trouvant dans un secteur tranquille, cette perle rare au revêtement de pierre vous séduira par son authenticité. L'intérieur chaleureux offre de beaux planchers de bois, une cuisine lumineuse avec comptoirs en bois, deux chambres, un boudoir et une très grande salle de bain. À l'extérieur, profitez d'un grand terrain de coin ensoleillé, magnifiquement aménagé pour un maximum d'intimité. Un immense garage/grange procure un espace de rangement et d'atelier exceptionnel. Un havre de paix alliant cachet unique et commodités. À visiter sans tarder !",
+    "photos": [
+      {
+        "seq": 1,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C157DD68910CD1D&t=pi&f=I"
+      },
+      {
+        "seq": 2,
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C153DD68910CD44&t=pi&f=I"
+      },
+      {
+        "seq": 3,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C155DD68910CD2C&t=pi&f=I"
+      },
+      {
+        "seq": 4,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C156DD68910CDCA&t=pi&f=I"
+      },
+      {
+        "seq": 5,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16DDD68910CDEA&t=pi&f=I"
+      },
+      {
+        "seq": 6,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C164DD68910CDAF&t=pi&f=I"
+      },
+      {
+        "seq": 7,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C161DD68910CD0F&t=pi&f=I"
+      },
+      {
+        "seq": 8,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16CDD68910CDB2&t=pi&f=I"
+      },
+      {
+        "seq": 9,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C162DD68910CDF2&t=pi&f=I"
+      },
+      {
+        "seq": 10,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16EDD68910CD82&t=pi&f=I"
+      },
+      {
+        "seq": 11,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16ADD68910CD9E&t=pi&f=I"
+      },
+      {
+        "seq": 12,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16BDD68910CD7B&t=pi&f=I"
+      },
+      {
+        "seq": 13,
+        "type": "SDL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C160DD68910CD3B&t=pi&f=I"
+      },
+      {
+        "seq": 14,
+        "type": "BOU",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C165DD68910CD52&t=pi&f=I"
+      },
+      {
+        "seq": 15,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C16FDD68910CD64&t=pi&f=I"
+      },
+      {
+        "seq": 16,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C168DD68910C1DF&t=pi&f=I"
+      },
+      {
+        "seq": 17,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C169DD68910C111&t=pi&f=I"
+      },
+      {
+        "seq": 18,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C163DD68910C14C&t=pi&f=I"
+      },
+      {
+        "seq": 19,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4DDDD68910C12C&t=pi&f=I"
+      },
+      {
+        "seq": 20,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C166DD68910C1CB&t=pi&f=I"
+      },
+      {
+        "seq": 21,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4D0DD68910C1E2&t=pi&f=I"
+      },
+      {
+        "seq": 22,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4D4DD68910C1AF&t=pi&f=I"
+      },
+      {
+        "seq": 23,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4D2DD68910C101&t=pi&f=I"
+      },
+      {
+        "seq": 24,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4DCDD68910C1B2&t=pi&f=I"
+      },
+      {
+        "seq": 25,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4DEDD68910C1FE&t=pi&f=I"
+      },
+      {
+        "seq": 26,
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4D1DD68910C18F&t=pi&f=I"
+      },
+      {
+        "seq": 27,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C4DBDD68910C190&t=pi&f=I"
+      }
+    ],
+    "features": [
+      {
+        "code": "ALLE",
+        "value": "ASPH"
+      },
+      {
+        "code": "ARMO",
+        "value": "MELM"
+      },
+      {
+        "code": "CHAU",
+        "value": "PELC"
+      },
+      {
+        "code": "EAU",
+        "value": "AMU"
+      },
+      {
+        "code": "EFFN",
+        "value": "CENR"
+      },
+      {
+        "code": "ENER",
+        "value": "ELEC"
+      },
+      {
+        "code": "EQUI",
+        "value": "COUR"
+      },
+      {
+        "code": "FENE",
+        "value": "BOIS"
+      },
+      {
+        "code": "FENE",
+        "value": "PVC"
+      },
+      {
+        "code": "FOND",
+        "value": "PIER"
+      },
+      {
+        "code": "GARA",
+        "value": "DET"
+      },
+      {
+        "code": "GARA",
+        "value": "SIMP"
+      },
+      {
+        "code": "PART",
+        "value": "COIN"
+      },
+      {
+        "code": "PROX",
+        "value": "AU"
+      },
+      {
+        "code": "PROX",
+        "value": "AUTO"
+      },
+      {
+        "code": "PROX",
+        "value": "CEGP"
+      },
+      {
+        "code": "PROX",
+        "value": "GCPE"
+      },
+      {
+        "code": "PROX",
+        "value": "GOLF"
+      },
+      {
+        "code": "PROX",
+        "value": "HOP"
+      },
+      {
+        "code": "PROX",
+        "value": "PARC"
+      },
+      {
+        "code": "PROX",
+        "value": "PCYC"
+      },
+      {
+        "code": "PROX",
+        "value": "PRIM"
+      },
+      {
+        "code": "PROX",
+        "value": "SEC"
+      },
+      {
+        "code": "PROX",
+        "value": "SFON"
+      },
+      {
+        "code": "PROX",
+        "value": "SMOT"
+      },
+      {
+        "code": "PROX",
+        "value": "SVTT"
+      },
+      {
+        "code": "PROX",
+        "value": "TRSP"
+      },
+      {
+        "code": "PARE",
+        "value": "AGRE"
+      },
+      {
+        "code": "PARE",
+        "value": "PIER"
+      },
+      {
+        "code": "PARE",
+        "value": "VINY"
+      },
+      {
+        "code": "SS",
+        "value": "BAS"
+      },
+      {
+        "code": "SS",
+        "value": "AMNN"
+      },
+      {
+        "code": "SS",
+        "value": "VSAN"
+      },
+      {
+        "code": "STAT",
+        "value": "EXT"
+      },
+      {
+        "code": "STAT",
+        "value": "GARA"
+      },
+      {
+        "code": "SYEG",
+        "value": "EGMU"
+      },
+      {
+        "code": "AMEN",
+        "value": "CLOT"
+      },
+      {
+        "code": "AMEN",
+        "value": "PAY"
+      },
+      {
+        "code": "TFEN",
+        "value": "MAN"
+      },
+      {
+        "code": "TFEN",
+        "value": "OSBA"
+      },
+      {
+        "code": "TOIT",
+        "value": "AU"
+      },
+      {
+        "code": "TOPO",
+        "value": "PLAT"
+      },
+      {
+        "code": "ZONG",
+        "value": "RES"
+      }
+    ],
+    "rooms": [
+      {
+        "seq": 1,
+        "code": "SAM",
+        "level": "RC",
+        "dim": "10.5x6.3 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 2,
+        "code": "CUI",
+        "level": "RC",
+        "dim": "10.5x7.8 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 3,
+        "code": "SDB",
+        "level": "RC",
+        "dim": "18.2x7.3 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 4,
+        "code": "SAL",
+        "level": "RC",
+        "dim": "10.8x15.8 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 5,
+        "code": "BOU",
+        "level": "2",
+        "dim": "7.9x15.3 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 6,
+        "code": "CCP",
+        "level": "2",
+        "dim": "9.4x15.6 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 7,
+        "code": "CAC",
+        "level": "2",
+        "dim": "8.9x12.7 P",
+        "rev": "PFLO"
+      }
+    ],
+    "links": [],
+    "listedAt": "2026-08-17",
+    "isCoBroker": false,
+    "slug": "16429428-38-rue-mallette-rive-nord"
+  },
+  {
     "mls": "17143574",
     "price": 297500,
-    "typeCode": "",
-    "typeLabel": "Unifamiliale",
+    "typeCode": "R/AP",
+    "typeLabel": "Condo",
     "street": "14 Rue Louis-Jolliet, app. 4",
     "city": "Sainte-Thérèse",
     "postalCode": "J7Y0C3",
@@ -2894,9 +3275,9 @@
   {
     "mls": "17713553",
     "price": 799000,
-    "typeCode": "",
-    "typeLabel": "Unifamiliale",
-    "street": "112Z112BZ Boul. Curé-Labelle",
+    "typeCode": "M/3X",
+    "typeLabel": "Multilogements",
+    "street": "112-112B Boul. Curé-Labelle",
     "city": "Laval",
     "postalCode": "H7L2Z4",
     "yearBuilt": "",
@@ -3186,12 +3567,12 @@
     "links": [],
     "listedAt": "2026-05-05",
     "isCoBroker": false,
-    "slug": "17713553-112z112bz-boul-cure-labelle-laval"
+    "slug": "17713553-112-112b-boul-cure-labelle-laval"
   },
   {
     "mls": "18350240",
     "price": 577500,
-    "typeCode": "",
+    "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "56 Rue Annik",
     "city": "Rive-Nord",
@@ -3631,9 +4012,9 @@
   {
     "mls": "21982022",
     "price": 524900,
-    "typeCode": "",
+    "typeCode": "M/2X",
     "typeLabel": "Multilogements",
-    "street": "9797A Rue St-Louis",
+    "street": "97-97A Rue St-Louis",
     "city": "Saint-Eustache",
     "postalCode": "J7R1X8",
     "yearBuilt": "",
@@ -4033,12 +4414,12 @@
     "links": [],
     "listedAt": "2026-04-15",
     "isCoBroker": false,
-    "slug": "21982022-9797a-rue-st-louis-saint-eustache"
+    "slug": "21982022-97-97a-rue-st-louis-saint-eustache"
   },
   {
     "mls": "21987607",
     "price": 1999900,
-    "typeCode": "",
+    "typeCode": "P",
     "typeLabel": "Commercial",
     "street": "103 Rue St-Louis",
     "city": "Saint-Eustache",
@@ -4246,7 +4627,7 @@
   {
     "mls": "23453291",
     "price": 614999,
-    "typeCode": "",
+    "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "980 Rue de l'Harmonie",
     "city": "Laval",
@@ -4641,7 +5022,7 @@
   {
     "mls": "25964733",
     "price": 299900,
-    "typeCode": "",
+    "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "3350 Route 125",
     "city": "Rive-Nord",
@@ -4787,8 +5168,8 @@
   {
     "mls": "27533692",
     "price": 85000,
-    "typeCode": "",
-    "typeLabel": "Unifamiliale",
+    "typeCode": "T/TV",
+    "typeLabel": "Terrain",
     "street": "4420 Route 337",
     "city": "Rive-Nord",
     "postalCode": "J0K2T0",
@@ -4880,294 +5261,5 @@
     "listedAt": "2026-03-24",
     "isCoBroker": false,
     "slug": "27533692-4420-route-337-rive-nord"
-  },
-  {
-    "mls": "28741070",
-    "price": 799000,
-    "typeCode": "",
-    "typeLabel": "Unifamiliale",
-    "street": "112112B Boul. Curé-Labelle",
-    "city": "Laval",
-    "postalCode": "H7L2Z4",
-    "yearBuilt": "",
-    "areaTerrain": "864.70 MC",
-    "lat": 45.61003438,
-    "lon": -73.79169833,
-    "descFr": "*L'ACHETEUR est responsable de vérifier la destination qu'il entend donner à l'IMMEUBLE* **Le courtier du vendeur informe l'acheteur qu'il ne peut le représenter ni défendre ses intérêts. Il lui rappelle qu'il peut être représenté par un autre courtier de son choix. Si l'acheteur choisit tout de même de communiquer directement avec le courtier du vendeur, ce dernier lui accordera un traitement équitable et lui fournira, de manière objective, l'information pertinente à l'achat.**",
-    "remFr": "TRIPLEX Résidentiel et commercial ! Immeuble très bien situé au coin des boul. Ste-Rose et Curé-Labelle à Laval (Ste-Rose). L'immeuble génère présentement des revenus de annuels de 54 468$ (MRB en dessous de 15!) . 1 logement résidentiel et 2 commerces de proximités bien établit (Restaurant de Grillades - Moto-Experts). PLUSIEURS POSSIBILITÉS SELON LE ZONAGE, DEMANDEZ-NOUS. Présentement 2 bâtiment sur le lot, celui qui donne sur la rue compte 3 étages, le garage derrière spacieux a un espace pour le commerce et plus du rangement. Espace disponible dans la cour arrière pour stationnement ou entreposage.",
-    "photos": [
-      {
-        "seq": 1,
-        "type": "FACA",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCDAD19AB375D14&t=pi&f=I"
-      },
-      {
-        "seq": 2,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCCFD19AB375D4D&t=pi&f=I"
-      },
-      {
-        "seq": 3,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCDBD19AB375D2A&t=pi&f=I"
-      },
-      {
-        "seq": 4,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCD8D19AB375DCA&t=pi&f=I"
-      },
-      {
-        "seq": 5,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCD7D19AB375DEF&t=pi&f=I"
-      },
-      {
-        "seq": 6,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCD3D19AB375DA1&t=pi&f=I"
-      },
-      {
-        "seq": 7,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCD6D19AB375D0C&t=pi&f=I"
-      },
-      {
-        "seq": 8,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC14D19AB375DBA&t=pi&f=I"
-      },
-      {
-        "seq": 9,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC1AD19AB375DF1&t=pi&f=I"
-      },
-      {
-        "seq": 10,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC1BD19AB375D81&t=pi&f=I"
-      },
-      {
-        "seq": 11,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC1FD19AB375D92&t=pi&f=I"
-      },
-      {
-        "seq": 12,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC19D19AB375D72&t=pi&f=I"
-      },
-      {
-        "seq": 13,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC15D19AB375D30&t=pi&f=I"
-      },
-      {
-        "seq": 14,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC4DD19AB375D5B&t=pi&f=I"
-      },
-      {
-        "seq": 15,
-        "type": "S-E",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC4CD19AB375D62&t=pi&f=I"
-      },
-      {
-        "seq": 16,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC72D19AB3751DB&t=pi&f=I"
-      },
-      {
-        "seq": 17,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC7AD19AB375114&t=pi&f=I"
-      },
-      {
-        "seq": 18,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC7ED19AB375144&t=pi&f=I"
-      },
-      {
-        "seq": 19,
-        "type": "CUI",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC49D19AB37512F&t=pi&f=I"
-      },
-      {
-        "seq": 20,
-        "type": "SAM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC43D19AB3751C4&t=pi&f=I"
-      },
-      {
-        "seq": 21,
-        "type": "SDB",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC4FD19AB3751E4&t=pi&f=I"
-      },
-      {
-        "seq": 22,
-        "type": "CAC",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC41D19AB3751AE&t=pi&f=I"
-      },
-      {
-        "seq": 23,
-        "type": "CCP",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC42D19AB37510B&t=pi&f=I"
-      },
-      {
-        "seq": 24,
-        "type": "SAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC4AD19AB3751B4&t=pi&f=I"
-      },
-      {
-        "seq": 25,
-        "type": "SAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC40D19AB3751FC&t=pi&f=I"
-      },
-      {
-        "seq": 26,
-        "type": "BALCON",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC45D19AB37518A&t=pi&f=I"
-      },
-      {
-        "seq": 27,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC2CD19AB375191&t=pi&f=I"
-      },
-      {
-        "seq": 28,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC22D19AB375171&t=pi&f=I"
-      },
-      {
-        "seq": 29,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC2DD19AB37513F&t=pi&f=I"
-      },
-      {
-        "seq": 30,
-        "type": "COMM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC21D19AB375151&t=pi&f=I"
-      },
-      {
-        "seq": 31,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCC0D19AB37516F&t=pi&f=I"
-      },
-      {
-        "seq": 32,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC20D19AB3754D0&t=pi&f=I"
-      },
-      {
-        "seq": 33,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC2FD19AB37541D&t=pi&f=I"
-      },
-      {
-        "seq": 34,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDC25D19AB375442&t=pi&f=I"
-      },
-      {
-        "seq": 35,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCC2D19AB375420&t=pi&f=I"
-      },
-      {
-        "seq": 36,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCCED19AB3754CD&t=pi&f=I"
-      },
-      {
-        "seq": 37,
-        "type": "VDE",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDADEDCCBD19AB3754EC&t=pi&f=I"
-      }
-    ],
-    "features": [
-      {
-        "code": "ALLE",
-        "value": "ASPH"
-      },
-      {
-        "code": "CHAU",
-        "value": "PELC"
-      },
-      {
-        "code": "EAU",
-        "value": "AMU"
-      },
-      {
-        "code": "ENER",
-        "value": "ELEC"
-      },
-      {
-        "code": "EQUI",
-        "value": "ENS"
-      },
-      {
-        "code": "EQUI",
-        "value": "THEM"
-      },
-      {
-        "code": "PART",
-        "value": "EV1"
-      },
-      {
-        "code": "PART",
-        "value": "EV2"
-      },
-      {
-        "code": "GARA",
-        "value": "DET"
-      },
-      {
-        "code": "GARA",
-        "value": "DOUB"
-      },
-      {
-        "code": "PROX",
-        "value": "AUTO"
-      },
-      {
-        "code": "PROX",
-        "value": "TRSP"
-      },
-      {
-        "code": "SS",
-        "value": "6"
-      },
-      {
-        "code": "SS",
-        "value": "AMNT"
-      },
-      {
-        "code": "STAT",
-        "value": "EXT"
-      },
-      {
-        "code": "STAT",
-        "value": "GARA"
-      },
-      {
-        "code": "SYEG",
-        "value": "EGMU"
-      },
-      {
-        "code": "AMEN",
-        "value": "CLOT"
-      },
-      {
-        "code": "ZONG",
-        "value": "COMM"
-      },
-      {
-        "code": "ZONG",
-        "value": "RES"
-      }
-    ],
-    "rooms": [],
-    "links": [],
-    "listedAt": "2026-04-29",
-    "isCoBroker": false,
-    "slug": "28741070-112112b-boul-cure-labelle-laval"
   }
 ]
