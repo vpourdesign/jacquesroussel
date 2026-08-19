@@ -3211,23 +3211,46 @@ const JS = `
         if (heroH1 && heroH1.querySelector('.char')) {
           window.gsap.fromTo('.hero__h1 .char',
             { yPercent: 100, opacity: 0 },
-            { yPercent: 0, opacity: 1, duration: 1, ease: 'back.out(1.2)', stagger: 0.025, delay: 0.2, immediateRender: false }
+            { yPercent: 0, opacity: 1, duration: 1, ease: 'back.out(1.2)', stagger: 0.025, delay: 0.2 }
           );
         }
       } catch (e) { /* fail silent — content stays visible */ }
     }
 
-    // Scroll-triggered reveal — additive only, never hides
-    if (hasGSAP && hasST && !reduceMotion) {
+    // Révélation au défilement — on cache d'avance les blocs sous la ligne de
+    // flottaison, puis on anime seulement VERS l'état visible (jamais de
+    // fromTo(immediateRender:false), qui repassait un bloc déjà affiché à
+    // opacity 0 au déclenchement : c'était le flash). Le déclencheur est un
+    // IntersectionObserver : fiable même si l'onglet est chargé en arrière-plan
+    // ou redimensionné, là où ScrollTrigger pouvait ne jamais partir.
+    if (hasGSAP && !reduceMotion && 'IntersectionObserver' in window && window.innerHeight > 0) {
       try {
+        const threshold = window.innerHeight * 0.85;
+        const show = (el) => window.gsap.to(el, { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out', clearProps: 'transform', overwrite: true });
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (!en.isIntersecting) return;
+            io.unobserve(en.target);
+            show(en.target);
+          });
+        }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
+        const pending = [];
         window.gsap.utils.toArray('.reveal').forEach((el) => {
-          window.gsap.fromTo(el,
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out', immediateRender: false,
-              scrollTrigger: { trigger: el, start: 'top 85%', once: true } }
-          );
+          if (el.getBoundingClientRect().top < threshold) return; // déjà à l'écran : on n'y touche pas
+          window.gsap.set(el, { y: 40, opacity: 0 });
+          pending.push(el);
+          io.observe(el);
         });
-      } catch (e) { /* fail silent */ }
+        // Filet de sécurité : rien ne reste caché si l'observateur ne part pas.
+        window.setTimeout(() => {
+          pending.forEach((el) => {
+            if (window.getComputedStyle(el).opacity === '0' && el.getBoundingClientRect().top < window.innerHeight) {
+              io.unobserve(el);
+              show(el);
+            }
+          });
+        }, 4000);
+      } catch (e) { /* fail silent — le contenu reste visible */ }
     }
 
     // Sticky header scrolled state
