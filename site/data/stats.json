@@ -3,11 +3,14 @@
   "avgPrice": 1287553,
   "totalValue": 21888399,
   "byCity": {
-    "Sainte-Anne-des-Plaines": 1,
-    "Rive-Nord": 9,
-    "Sainte-Thérèse": 2,
+    "Mirabel": 1,
+    "Saint-Jérôme": 4,
+    "Laval": 4,
     "Saint-Eustache": 3,
-    "Laval": 2
+    "Terrebonne": 1,
+    "Lachute": 1,
+    "Saint-Hippolyte": 1,
+    "Sainte-Julienne": 2
   },
   "byType": {
     "Unifamiliale": 5,

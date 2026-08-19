@@ -5,7 +5,8 @@
     "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "9275 Rue Godfroy-Langlois",
-    "city": "Sainte-Anne-des-Plaines",
+    "city": "Mirabel",
+    "munCode": "74005",
     "postalCode": "J7N0B4",
     "yearBuilt": "2010",
     "areaTerrain": "5607.99 PC",
@@ -434,7 +435,7 @@
     "links": [],
     "listedAt": "2026-06-30",
     "isCoBroker": false,
-    "slug": "10207368-9275-rue-godfroy-langlois-sainte-anne-des-plaines"
+    "slug": "10207368-9275-rue-godfroy-langlois-mirabel"
   },
   {
     "mls": "10920974",
@@ -442,7 +443,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "994 Rue Lamontagne",
-    "city": "Rive-Nord",
+    "city": "Saint-Jérôme",
+    "munCode": "75017",
     "postalCode": "J5L1V2",
     "yearBuilt": "",
     "areaTerrain": "15246.20 MC",
@@ -599,7 +601,7 @@
     ],
     "listedAt": "2026-07-08",
     "isCoBroker": false,
-    "slug": "10920974-994-rue-lamontagne-rive-nord"
+    "slug": "10920974-994-rue-lamontagne-saint-jerome"
   },
   {
     "mls": "12206682",
@@ -607,7 +609,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "Rue d'Amay",
-    "city": "Rive-Nord",
+    "city": "Laval",
+    "munCode": "65108",
     "postalCode": "H7K3N5",
     "yearBuilt": "",
     "areaTerrain": "464.50 MC",
@@ -640,7 +643,7 @@
     "links": [],
     "listedAt": "2025-03-04",
     "isCoBroker": false,
-    "slug": "12206682-rue-d-amay-rive-nord"
+    "slug": "12206682-rue-d-amay-laval"
   },
   {
     "mls": "12237631",
@@ -648,7 +651,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "Rue Schulz",
-    "city": "Sainte-Thérèse",
+    "city": "Saint-Jérôme",
+    "munCode": "75017",
     "postalCode": "J7Y5C3",
     "yearBuilt": "",
     "areaTerrain": "2934.40 MC",
@@ -810,7 +814,7 @@
     ],
     "listedAt": "2025-11-25",
     "isCoBroker": false,
-    "slug": "12237631-rue-schulz-sainte-therese"
+    "slug": "12237631-rue-schulz-saint-jerome"
   },
   {
     "mls": "14475622",
@@ -818,7 +822,8 @@
     "typeCode": "R/AP",
     "typeLabel": "Condo",
     "street": "3825 Boul. Lévesque O., app. 15",
-    "city": "Rive-Nord",
+    "city": "Laval",
+    "munCode": "65105",
     "postalCode": "H7V1G6",
     "yearBuilt": "1966",
     "areaTerrain": "",
@@ -1026,7 +1031,7 @@
     "links": [],
     "listedAt": "2025-05-19",
     "isCoBroker": false,
-    "slug": "14475622-3825-boul-levesque-o-app-15-rive-nord"
+    "slug": "14475622-3825-boul-levesque-o-app-15-laval"
   },
   {
     "mls": "14553615",
@@ -1035,6 +1040,7 @@
     "typeLabel": "Commercial",
     "street": "107 Rue St-Louis",
     "city": "Saint-Eustache",
+    "munCode": "72005",
     "postalCode": "J7R1X8",
     "yearBuilt": "1975",
     "areaTerrain": "1170.40 MC",
@@ -1600,7 +1606,8 @@
     "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "3465 Rue Émile",
-    "city": "Rive-Nord",
+    "city": "Terrebonne",
+    "munCode": "64008",
     "postalCode": "J6Y1B6",
     "yearBuilt": "2021",
     "areaTerrain": "18297 PC",
@@ -2395,7 +2402,7 @@
     ],
     "listedAt": "2026-08-08",
     "isCoBroker": false,
-    "slug": "15522328-3465-rue-emile-rive-nord"
+    "slug": "15522328-3465-rue-emile-terrebonne"
   },
   {
     "mls": "16054106",
@@ -2403,7 +2410,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "844 Boul. de La Salette",
-    "city": "Rive-Nord",
+    "city": "Saint-Jérôme",
+    "munCode": "75017",
     "postalCode": "J5L2J3",
     "yearBuilt": "",
     "areaTerrain": "5914.20 MC",
@@ -2538,7 +2546,7 @@
     ],
     "listedAt": "2026-06-22",
     "isCoBroker": false,
-    "slug": "16054106-844-boul-de-la-salette-rive-nord"
+    "slug": "16054106-844-boul-de-la-salette-saint-jerome"
   },
   {
     "mls": "16429428",
@@ -2546,7 +2554,8 @@
     "typeCode": "R/ME",
     "typeLabel": "Unifamiliale",
     "street": "38 Rue Mallette",
-    "city": "Rive-Nord",
+    "city": "Lachute",
+    "munCode": "76020",
     "postalCode": "J8H2W3",
     "yearBuilt": "1942",
     "areaTerrain": "489.50 MC",
@@ -2919,7 +2928,7 @@
     "links": [],
     "listedAt": "2026-08-17",
     "isCoBroker": false,
-    "slug": "16429428-38-rue-mallette-rive-nord"
+    "slug": "16429428-38-rue-mallette-lachute"
   },
   {
     "mls": "17143574",
@@ -2927,7 +2936,8 @@
     "typeCode": "R/AP",
     "typeLabel": "Condo",
     "street": "14 Rue Louis-Jolliet, app. 4",
-    "city": "Sainte-Thérèse",
+    "city": "Saint-Jérôme",
+    "munCode": "75017",
     "postalCode": "J7Y0C3",
     "yearBuilt": "2012",
     "areaTerrain": "",
@@ -3270,7 +3280,7 @@
     "links": [],
     "listedAt": "2026-03-09",
     "isCoBroker": false,
-    "slug": "17143574-14-rue-louis-jolliet-app-4-sainte-therese"
+    "slug": "17143574-14-rue-louis-jolliet-app-4-saint-jerome"
   },
   {
     "mls": "17713553",
@@ -3279,6 +3289,7 @@
     "typeLabel": "Multilogements",
     "street": "112-112B Boul. Curé-Labelle",
     "city": "Laval",
+    "munCode": "65106",
     "postalCode": "H7L2Z4",
     "yearBuilt": "",
     "areaTerrain": "9307.55 PC",
@@ -3575,7 +3586,8 @@
     "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "56 Rue Annik",
-    "city": "Rive-Nord",
+    "city": "Saint-Hippolyte",
+    "munCode": "75045",
     "postalCode": "J8A0E3",
     "yearBuilt": "2015",
     "areaTerrain": "4048.90 MC",
@@ -4003,7 +4015,7 @@
     "links": [],
     "listedAt": "2026-08-18",
     "isCoBroker": false,
-    "slug": "18834457-56-rue-annik-rive-nord"
+    "slug": "18834457-56-rue-annik-saint-hippolyte"
   },
   {
     "mls": "21982022",
@@ -4012,6 +4024,7 @@
     "typeLabel": "Multilogements",
     "street": "97-97A Rue St-Louis",
     "city": "Saint-Eustache",
+    "munCode": "72005",
     "postalCode": "J7R1X8",
     "yearBuilt": "",
     "areaTerrain": "430.70 MC",
@@ -4419,6 +4432,7 @@
     "typeLabel": "Commercial",
     "street": "103 Rue St-Louis",
     "city": "Saint-Eustache",
+    "munCode": "72005",
     "postalCode": "J7R1X8",
     "yearBuilt": "",
     "areaTerrain": "17234.09 PC",
@@ -4627,6 +4641,7 @@
     "typeLabel": "Unifamiliale",
     "street": "980 Rue de l'Harmonie",
     "city": "Laval",
+    "munCode": "65113",
     "postalCode": "H7A4E9",
     "yearBuilt": "2003",
     "areaTerrain": "5563.86 PC",
@@ -5021,7 +5036,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "3350 Route 125",
-    "city": "Rive-Nord",
+    "city": "Sainte-Julienne",
+    "munCode": "63060",
     "postalCode": "J0K1S0",
     "yearBuilt": "",
     "areaTerrain": "34135.40 MC",
@@ -5159,7 +5175,7 @@
     "links": [],
     "listedAt": "2026-08-08",
     "isCoBroker": false,
-    "slug": "25964733-3350-route-125-rive-nord"
+    "slug": "25964733-3350-route-125-sainte-julienne"
   },
   {
     "mls": "27533692",
@@ -5167,7 +5183,8 @@
     "typeCode": "T/TV",
     "typeLabel": "Terrain",
     "street": "4420 Route 337",
-    "city": "Rive-Nord",
+    "city": "Sainte-Julienne",
+    "munCode": "63060",
     "postalCode": "J0K2T0",
     "yearBuilt": "",
     "areaTerrain": "1631.70 MC",
@@ -5256,6 +5273,6 @@
     "links": [],
     "listedAt": "2026-03-24",
     "isCoBroker": false,
-    "slug": "27533692-4420-route-337-rive-nord"
+    "slug": "27533692-4420-route-337-sainte-julienne"
   }
 ]
