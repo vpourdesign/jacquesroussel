@@ -138,23 +138,52 @@ function parseCSV(text) {
 }
 const read = n => parseCSV(new TextDecoder('windows-1252').decode(fs.readFileSync(path.join(CENTRIS,n))));
 
-// Postal-code prefix → city (territoire Équipe Jacques-Roussel · Rive-Nord ouest)
-const CP_CITY = {
-  'J7Y':'Sainte-Thérèse','J7Z':'Sainte-Thérèse',
-  'J7B':'Blainville','J7C':'Blainville','J6Z':'Lorraine',
-  'J7E':'Saint-Eustache','J7P':'Saint-Eustache','J7R':'Saint-Eustache',
-  'J7G':'Boisbriand','J7H':'Boisbriand',
-  'J7J':'Mirabel','J6T':'Lorraine',
-  'J7M':'Rosemère',
-  'J0N':'Sainte-Marthe-sur-le-Lac','J7T':'Deux-Montagnes','J7V':'Deux-Montagnes',
-  'J7N':'Sainte-Anne-des-Plaines','J5N':'Sainte-Anne-des-Plaines',
-  'J7A':'Mirabel','J7K':'Mirabel','J7L':'Mirabel',
-  'J5K':'Saint-Jérôme',
-  'J6J':'Laval','H7W':'Laval','H7N':'Laval','H7A':'Laval','H7L':'Laval',
-  'J0T':'Saint-Adolphe-d\u2019Howard','J0R':'Saint-Sauveur/Laurentides','J8B':'Morin-Heights','J8E':'Mont-Tremblant',
-  'H2G':'Montréal','H2X':'Montréal'
+// ── VILLE D'UNE INSCRIPTION ────────────────────────────────────────────
+// La source de vérité est le code de municipalité Centris (col. 22 de
+// INSCRIPTIONS.TXT) : ce sont les codes géographiques officiels du Québec
+// (répertoire du MAMH, scripts/data/municipalites.json). Deviner la ville à
+// partir du code postal était la cause des mauvaises villes : un même préfixe
+// couvre plusieurs municipalités (J7N = Mirabel ET Sainte-Anne-des-Plaines,
+// J7Y = Saint-Jérôme, pas Sainte-Thérèse, J5L = Saint-Jérôme, J8H = Lachute…).
+const MUN_NAMES = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'municipalites.json'), 'utf8'));
+// Codes que Centris emploie mais qui ne sont pas dans le répertoire : secteurs
+// de grandes villes et anciens codes d'avant les fusions de 2002.
+const MUN_SECTEURS = {
+  '64005': 'Terrebonne', '64010': 'Terrebonne', '64020': 'Terrebonne',  // La Plaine, Lachenaie, Terrebonne
+  '77015': 'Sainte-Marguerite-du-Lac-Masson',                           // Sainte-Marguerite-Estérel (2002-2006)
+  '77040': 'Saint-Sauveur',                                             // Saint-Sauveur-des-Monts (village)
 };
-const cityFromCP = cp => CP_CITY[(cp||'').toUpperCase().slice(0,3)] || 'Rive-Nord';
+// Préfixes de secteur : Laval 651xx, Montréal 665xx/666xx, Québec 23xxx.
+const MUN_PREFIXES = [['651', 'Laval'], ['665', 'Montréal'], ['666', 'Montréal'], ['23', 'Québec']];
+
+// Filet de secours seulement, quand le code manque (anciennes données en cache).
+const CP_CITY = {
+  'J7E':'Sainte-Thérèse','J7P':'Saint-Eustache','J7R':'Saint-Eustache',
+  'J7B':'Blainville','J7C':'Blainville','J6Z':'Lorraine','J7A':'Rosemère',
+  'J7G':'Boisbriand','J7H':'Boisbriand','J7J':'Mirabel','J7N':'Mirabel',
+  'J5N':'Sainte-Anne-des-Plaines','J0N':'Sainte-Marthe-sur-le-Lac','J7T':'Deux-Montagnes','J7V':'Deux-Montagnes',
+  'J7Y':'Saint-Jérôme','J7Z':'Saint-Jérôme','J5L':'Saint-Jérôme','J5K':'Saint-Colomban',
+  'J7K':'Mascouche','J7L':'Mascouche','J7M':'Terrebonne','J6V':'Terrebonne','J6W':'Terrebonne','J6X':'Terrebonne','J6Y':'Terrebonne',
+  'J8H':'Lachute','J8B':'Sainte-Adèle','J8E':'Mont-Tremblant','J8C':'Sainte-Agathe-des-Monts',
+  'H7A':'Laval','H7B':'Laval','H7C':'Laval','H7E':'Laval','H7G':'Laval','H7H':'Laval','H7J':'Laval','H7K':'Laval','H7L':'Laval',
+  'H7M':'Laval','H7N':'Laval','H7P':'Laval','H7R':'Laval','H7S':'Laval','H7T':'Laval','H7V':'Laval','H7W':'Laval','H7X':'Laval','H7Y':'Laval',
+};
+const cityFromCP = cp => CP_CITY[(cp||'').toUpperCase().slice(0,3)] || '';
+const codesMunInconnus = new Set();
+function villeDepuisCentris(munCode, cp, mls, actuelle = '') {
+  const code = String(munCode || '').trim();
+  if (code) {
+    if (MUN_NAMES[code]) return MUN_NAMES[code];
+    if (MUN_SECTEURS[code]) return MUN_SECTEURS[code];
+    const pref = MUN_PREFIXES.find(([k]) => code.startsWith(k));
+    if (pref) return pref[1];
+    if (!codesMunInconnus.has(code)) {
+      codesMunInconnus.add(code);
+      console.warn(`⚠ Code de municipalité Centris inconnu : ${code} (MLS ${mls}) → repli sur le code postal`);
+    }
+  }
+  return cityFromCP(cp) || actuelle || 'Rive-Nord';
+}
 
 // Centris feature code → human label (catégorie + valeur)
 // Format : { CODE_CARAC: { name: 'Catégorie', vals: { CODE_VAL: 'Valeur lisible' } } }
@@ -376,7 +405,10 @@ function dedupliquer(liste, journal = []) {
 function normaliser(liste) {
   const propres = liste.map(p => {
     const street = reparerAdresse(p.street);
-    const q = { ...p, street };
+    // La ville se recalcule depuis le code Centris à chaque build, même en
+    // mode B : une correction de table s'applique sans réingérer le zip.
+    const city = villeDepuisCentris(p.munCode, p.postalCode, p.mls, p.city);
+    const q = { ...p, street, city, slug: `${p.mls}-${slug(street)}-${slug(city)}` };
     return { ...q, typeLabel: affinerType(q) };
   });
   const journal = [];
@@ -537,7 +569,8 @@ function ingestFromCentris(membres) {
     const centrisGenre = (r[54] || '').trim();
     const typeCode = [centrisCat, centrisGenre].filter(Boolean).join('/');
     const cp = r[29] || '';
-    const city = cityFromCP(cp);
+    const munCode = (r[22] || '').trim();
+    const city = villeDepuisCentris(munCode, cp, mls);
     const yearBuilt = r[59] && /^\d{4}$/.test(r[59]) ? r[59] : (r[68] && /^\d{4}$/.test(r[68]) ? r[68] : '');
     const areaTerrain = r[75] ? `${r[75]} ${r[76]||''}`.trim() : '';
     const lat = parseFloat(r[144])||null, lon = parseFloat(r[145])||null;
@@ -551,6 +584,7 @@ function ingestFromCentris(membres) {
       typeLabel: typeFromCentris(centrisCat, centrisGenre) || inferTypeFromDesc(desc),
       street,
       city,
+      munCode,
       postalCode: cp,
       yearBuilt,
       areaTerrain,
