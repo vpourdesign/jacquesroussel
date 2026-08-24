@@ -1879,7 +1879,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .section-dark .stat .l, .section-blue .stat .l{ color: oklch(96% 0.012 80 / 0.7); }
 
 /* Property grid / pcard legacy */
-.prop-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6); }
+.prop-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6); margin-block-end: var(--space-8); }
 
 /* Grille des catégories de propriété */
 .cat-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-4); }
@@ -3779,6 +3779,18 @@ const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
 const fmtPrice = p => p ? `${p.toLocaleString('fr-CA')} $` : 'Prix sur demande';
 const fmtNum = n => (n||0).toLocaleString('fr-CA');
 
+// La superficie de terrain arrive brute de Centris : « 1170.40 MC », « 17234.09 PC ».
+// On garde l'unité déclarée à l'inscription (le courtier saisit l'une ou l'autre) et
+// on met en forme le nombre, sinon la carte affiche « 1170.40 MC ».
+const fmtArea = raw => {
+  const m = String(raw || '').trim().match(/^([\d.,]+)\s*(MC|PC)?$/i);
+  if (!m) return '';
+  const n = Math.round(parseFloat(m[1].replace(',', '.')));
+  if (!Number.isFinite(n) || n <= 0) return '';
+  const unit = { MC: 'm²', PC: 'pi²' }[(m[2] || '').toUpperCase()] || '';
+  return `${n.toLocaleString('fr-CA')}${unit ? ' ' + unit : ''}`;
+};
+
 // --- Helpers ---
 function writePage(relpath, html) {
   const out = path.join(SITE, relpath);
@@ -3992,8 +4004,15 @@ function propertyCard(p) {
   const ph = p.photos[0]?.url || `https://picsum.photos/seed/${encodeURIComponent(p.mls)}/800/600`;
   const beds = (p.rooms || []).filter(r => ['CAC','CCP','CC2'].includes(r.code)).length;
   const baths = (p.rooms || []).filter(r => r.code === 'SDB' || r.code === 'SDE').length;
-  const sqftRoom = (p.rooms || []).find(r => r.dim);
   const isNew = isRecentListing(p);
+  // Un local commercial ou un terrain n'a ni chambre ni salle de bain : les
+  // tirets faisaient croire à une fiche incomplète. On ne montre que ce qui existe.
+  const metaParts = [
+    beds ? `<span>${beds} ch.</span>` : '',
+    baths ? `<span>${baths} sdb.</span>` : '',
+    fmtArea(p.areaTerrain) ? `<span>${fmtArea(p.areaTerrain)}</span>` : ''
+  ].filter(Boolean);
+  const metaHtml = metaParts.length ? `<div class="prop-card__meta">${metaParts.join('')}</div>` : '';
   return `<article class="prop-card" data-type="${CATEGORY_SLUG[p.typeLabel] || slug(p.typeLabel)}" data-city="${slug(p.city)}">
     <a href="/nos-proprietes/${p.slug}/" aria-label="${p.street}, ${p.city} · ${fmtPrice(p.price)}">
       <div class="prop-card__media">
@@ -4004,11 +4023,7 @@ function propertyCard(p) {
         <span class="prop-card__city">${p.city}</span>
         <div class="prop-card__price">${fmtPrice(p.price)}</div>
         <div class="prop-card__addr">${p.street}</div>
-        <div class="prop-card__meta">
-          <span>${beds || '—'} ch.</span>
-          <span>${baths || '—'} sdb.</span>
-          <span>${p.areaTerrain || '—'}</span>
-        </div>
+        ${metaHtml}
       </div>
     </a>
   </article>`;
@@ -4206,7 +4221,7 @@ function detailPage(p) {
       </div>
       <div class="prop-metric__sep" aria-hidden="true"></div>
       <div class="prop-metric">
-        <div class="prop-metric__n">${p.areaTerrain || '—'}</div>
+        <div class="prop-metric__n">${fmtArea(p.areaTerrain) || '—'}</div>
         <div class="prop-metric__l">Terrain</div>
       </div>
     </div>
@@ -4549,20 +4564,30 @@ const TYPES = [
     <h2>Notre approche</h2>
     <ul><li>Lecture du bail et évaluation de la qualité du flux de revenus</li><li>Validation du zonage et des usages permis pour votre projet</li><li>Accompagnement au financement commercial, distinct de l'hypothèque résidentielle</li></ul>`]
 ];
+// Le pluriel ne se devine pas en ajoutant un « s » : « Commercial » donnait
+// « Nos commercials à vendre ». Chaque catégorie porte donc son propre libellé.
+const TYPE_PLURAL = {
+  'Unifamiliale':   'unifamiliales',
+  'Condo':          'condos',
+  'Terrain':        'terrains',
+  'Multilogements': 'multilogements',
+  'Commercial':     'propriétés commerciales'
+};
+
 // Une image d'ambiance par catégorie (banque libre de droits, photos/stock/)
 const TYPE_IMAGE = {
   'Unifamiliale':   '/photos/stock/maison-deux-etages.jpg',
   'Condo':          '/photos/stock/immeuble-condos.jpg',
   'Terrain':        '/photos/stock/terrain-boise.jpg',
   'Multilogements': '/photos/stock/immeuble-logements.jpg',
-  'Commercial':     '/photos/stock/immeuble-commercial.jpg'
+  'Commercial':     '/photos/commercial-a-vendre.jpg'
 };
 
 for (const [s, title, lead, bodyCopy] of TYPES) {
   const catProps = properties.filter(p => p.typeLabel === title);
   const listing = catProps.length
     ? `<section class="container">
-  <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Nos ${title.toLowerCase()}${/s$/.test(title) ? '' : 's'} à vendre</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
+  <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Nos ${TYPE_PLURAL[title] || title.toLowerCase()} à vendre</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
   <div class="prop-grid">${catProps.slice(0, 6).map(propertyCard).join('')}</div>
 </section>`
     : `<section class="container">

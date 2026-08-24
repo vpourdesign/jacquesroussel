@@ -970,7 +970,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .section-dark .stat .l, .section-blue .stat .l{ color: oklch(96% 0.012 80 / 0.7); }
 
 /* Property grid / pcard legacy */
-.prop-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6); }
+.prop-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-6); margin-block-end: var(--space-8); }
 
 /* Grille des catégories de propriété */
 .cat-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-4); }
