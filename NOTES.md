@@ -55,6 +55,8 @@
 - Les statistiques de marché viennent de Centris, une page par ville : `site/data/market.json`, produit par `scripts/fetch-market-stats.mjs`. Aucun chiffre n'est saisi à la main. Si Centris ne publie pas une valeur (volume de transactions insuffisant), la case disparaît au lieu d'afficher une estimation. (2026-08-07)
 - Les bios de `/a-propos/` restent au « je » : c'est la personne qui parle. Tout le reste du site est au « nous » ou au « on ». (2026-08-07)
 - Images libres de droits dans `photos/stock/` (Unsplash). `copyDir` est maintenant récursif — avant, les sous-dossiers de `photos/` étaient silencieusement ignorés au build. (2026-08-07)
+- **Les bannières des guides sont les vraies photos de l'équipe.** Les fichiers `xnom.jpg` déposés dans `site/photos/` sont des originaux : le `x` est la nomenclature de Vincent, le reste du nom dit la page de destination. On les recadre (jamais de retouche de couleur : les blancs délavés de la série précédente sont dans `photos/_originaux-delaves/`), on les renomme `guide-*.jpg` dans `photos/` et on efface les originaux de `site/photos/`, que le build purge de toute façon. Format retenu : 1400 px de large, rapport 1,8, sujet au centre vertical parce que la bannière recadre à 2,3:1 sur grand écran et à 1,4:1 sur téléphone. (2026-08-24)
+- **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
 

@@ -6286,7 +6286,7 @@ ${srcCentris('Saint-Eustache')}`
     title: 'Premier acheteur à Saint-Eustache : quel revenu faut-il ?',
     city: 'saint-eustache',
     teaser: 'Mise de fonds, test de résistance et frais oubliés : le calcul complet, sans arrondir vers le bas.',
-    image: '/photos/stock/maison-bois.jpg',
+    image: '/photos/stock/saint-eustache-vue-aerienne.jpg',
     date: '2026-08-13',
     body: `
 <p>On va faire le calcul au complet sur une propriété au prix médian de Saint-Eustache, soit ${prixUni('saint-eustache') || '597 000 $'} au ${trim}. Les chiffres sont moins encourageants que ce que la plupart des gens espèrent, et c'est justement pour ça qu'il vaut mieux les voir maintenant.</p>
@@ -6340,6 +6340,7 @@ ${srcCentris('Saint-Eustache')}`
 <h2>Si le compte n'y est pas</h2>
 <p>C'est le cas de beaucoup de premiers acheteurs, et il reste des options réelles. Le condo, d'abord : la médiane s'établit à ${prixCopro('saint-eustache') || '378 000 $'} à Saint-Eustache, un écart considérable avec l'unifamiliale. Le plex ensuite, où les revenus de location sont partiellement reconnus par le prêteur. Et les municipalités voisines, où le prix médian varie de plus de 100 000 $ d'une ville à l'autre sur notre territoire.</p>
 <p>Faites vos scénarios avec nos <a href="/acheter/calculatrices/">calculatrices hypothécaires</a>, puis parlez à un courtier hypothécaire avant de visiter quoi que ce soit. Connaître votre montant réel change complètement la recherche. On peut vous <a href="/acheter/financement-hypothecaire/">diriger vers nos partenaires</a>.</p>
+<p class="note"><strong>Photo.</strong> Vue aérienne du centre de Saint-Eustache, par <a href="https://commons.wikimedia.org/wiki/User:Gacard" target="_blank" rel="noopener">Gacard</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC BY-SA 4.0</a>, via Wikimedia Commons. Image recadrée.</p>
 ${srcCentris('Saint-Eustache')}`
   },
 
