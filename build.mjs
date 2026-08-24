@@ -4576,7 +4576,7 @@ const TYPE_PLURAL = {
 
 // Une image d'ambiance par catégorie (banque libre de droits, photos/stock/)
 const TYPE_IMAGE = {
-  'Unifamiliale':   '/photos/stock/maison-deux-etages.jpg',
+  'Unifamiliale':   '/photos/unifamiliale-a-vendre.jpg',
   'Condo':          '/photos/stock/immeuble-condos.jpg',
   'Terrain':        '/photos/stock/terrain-boise.jpg',
   'Multilogements': '/photos/stock/immeuble-logements.jpg',
