@@ -2940,12 +2940,12 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
 .blue-block .eye{ font:500 11px 'Montserrat', system-ui, sans-serif; text-transform:uppercase; letter-spacing:0.18em; }
 /* Bannière image (pages de contenu) */
 /* Bannière de page — la photo déborde légèrement pour permettre la parallaxe */
-.content-hero{ margin:0 0 clamp(1.5rem,3vw,2.5rem); border-radius:var(--radius-lg); overflow:hidden; position:relative; box-shadow:var(--shadow-card); block-size:clamp(220px,32vw,440px); }
+.content-hero{ margin:0 0 clamp(1.5rem,3vw,2.5rem); border-radius:var(--radius-lg); overflow:hidden; position:relative; box-shadow:var(--shadow-card); block-size:clamp(220px,34vw,560px); }
 .content-hero::after{
   content:""; position:absolute; inset:0; pointer-events:none;
   background:linear-gradient(to top, oklch(22% 0.04 240 / 0.55) 0%, oklch(37.3% 0.06 258 / 0.18) 45%, transparent 75%);
 }
-.content-hero img{ display:block; inline-size:100%; block-size:118%; object-fit:cover; will-change:transform; }
+.content-hero img{ display:block; inline-size:100%; block-size:108%; object-fit:cover; will-change:transform; }
 @media (prefers-reduced-motion: reduce){ .content-hero img{ block-size:100%; } }
 /* Pages de ville — titre plus mesuré + bande de stats éditoriale */
 .page-head--city h1{ font-size:clamp(1.9rem,4.2vw,3.1rem); letter-spacing:-0.02em; max-inline-size:16ch; }
@@ -3571,13 +3571,17 @@ const JS = `
     }
 
     // Bannières de page — la photo glisse un peu plus lentement que la page.
-    // La photo mesure 118 % de la hauteur du cadre : on ne fait que déplacer
-    // le surplus, il n'y a jamais de bande vide.
+    // La photo mesure 108 % de la hauteur du cadre : on ne fait que déplacer
+    // le surplus, il n'y a jamais de bande vide. Le débordement était de 18 %
+    // et le cadre plafonnait à 440 px : sur un grand écran, entre le recadrage
+    // de object-fit et la course de la parallaxe, la moitié de la photo pouvait
+    // sortir du champ et les têtes se faisaient couper. Garder yPercent égal au
+    // débordement, soit (108 - 100) / 108.
     if (hasGSAP && hasST && !reduceMotion) {
       document.querySelectorAll('[data-parallax] img').forEach((img) => {
         try {
           window.gsap.fromTo(img,
-            { yPercent: -15 },
+            { yPercent: -7.4 },
             { yPercent: 0, ease: 'none', immediateRender: false,
               scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }
           );

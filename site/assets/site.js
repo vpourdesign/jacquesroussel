@@ -372,13 +372,17 @@
     }
 
     // Bannières de page — la photo glisse un peu plus lentement que la page.
-    // La photo mesure 118 % de la hauteur du cadre : on ne fait que déplacer
-    // le surplus, il n'y a jamais de bande vide.
+    // La photo mesure 108 % de la hauteur du cadre : on ne fait que déplacer
+    // le surplus, il n'y a jamais de bande vide. Le débordement était de 18 %
+    // et le cadre plafonnait à 440 px : sur un grand écran, entre le recadrage
+    // de object-fit et la course de la parallaxe, la moitié de la photo pouvait
+    // sortir du champ et les têtes se faisaient couper. Garder yPercent égal au
+    // débordement, soit (108 - 100) / 108.
     if (hasGSAP && hasST && !reduceMotion) {
       document.querySelectorAll('[data-parallax] img').forEach((img) => {
         try {
           window.gsap.fromTo(img,
-            { yPercent: -15 },
+            { yPercent: -7.4 },
             { yPercent: 0, ease: 'none', immediateRender: false,
               scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }
           );
