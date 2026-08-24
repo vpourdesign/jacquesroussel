@@ -113,9 +113,13 @@ const AGENCY = {
 // — ne pas le recadrer, le recolorer ni le redimensionner de façon non uniforme.
 const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
 
-// Google Calendar Appointment Schedule — remplace par ton URL complète
-// (obtenue dans Google Calendar → Créer → Plages horaires de rendez-vous → Ouvrir la page de réservation)
-const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1jp0v3sqPHnkxqbDx_5kSPLSBSBDTebM9-4ulplRyo47oVeYiP-JfPvhE-EWktfMF5nAPXplo8';
+// Google Calendar Appointment Schedule — l'URL longue de la page de réservation
+// (Google Agenda → Créer → Planification de rendez-vous → Partager → Copier le lien).
+// Il faut la version longue, calendar.google.com/calendar/appointments/schedules/…
+// Le lien court calendar.app.google/… ne s'intègre pas : sa redirection répond
+// x-frame-options: SAMEORIGIN et le cadre reste blanc. Pour convertir un lien
+// court, l'ouvrir et copier l'adresse d'arrivée.
+const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2UIJvhwNZ8nggid9vBsvMCLRlE-OZakBWU_2r1Z_TD6tibnwFK-lYgG1dSr_n2H6ox3aBz_t54';
 
 // Point de chute des formulaires (guides, contact). Tant qu'il est vide, les
 // formulaires basculent sur le client courriel de la personne : rien ne se
@@ -6685,9 +6689,17 @@ const gcalEmbed = GCAL_APPOINTMENT_URL.includes('REMPLACE_MOI')
          <a class="btn" href="tel:4504305555" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">📞 450.430.5555</a>
        </div>
      </div>`
+  : GCAL_APPOINTMENT_URL.includes('calendar.app.google')
+  // Lien court : Google refuse de le laisser intégrer. Plutôt qu'un cadre
+  // blanc, on affiche le bouton qui ouvre l'agenda dans un nouvel onglet.
+  ? `<div class="gcal-fallback" style="display:flex">
+       <div>
+         <p style="margin-bottom:1rem;color:var(--ink-2)">Réservez votre plage directement dans notre agenda.</p>
+         <a class="btn" href="${GCAL_APPOINTMENT_URL}" target="_blank" rel="noopener" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">Ouvrir l'agenda &rarr;</a>
+       </div>
+     </div>`
   : (() => {
-      const isShort = GCAL_APPOINTMENT_URL.includes('calendar.app.google');
-      const src = isShort ? GCAL_APPOINTMENT_URL : GCAL_APPOINTMENT_URL + '?gv=true';
+      const src = GCAL_APPOINTMENT_URL + '?gv=true';
       return `<div class="gcal-wrap">
         <iframe
           src="${src}"
