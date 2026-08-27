@@ -1,9 +1,8 @@
 {
-  "total": 17,
-  "avgPrice": 1287547,
-  "totalValue": 21888299,
+  "total": 16,
+  "avgPrice": 1335269,
+  "totalValue": 21364299,
   "byCity": {
-    "Mirabel": 1,
     "Saint-Jérôme": 4,
     "Laval": 4,
     "Saint-Eustache": 3,
@@ -13,16 +12,16 @@
     "Sainte-Julienne": 2
   },
   "byType": {
-    "Unifamiliale": 5,
     "Terrain": 6,
     "Condo": 2,
     "Commercial": 2,
+    "Unifamiliale": 4,
     "Multilogements": 2
   },
   "priceRanges": {
     "<300k": 5,
     "300-500k": 1,
-    "500-800k": 5,
+    "500-800k": 4,
     "800k-1.5M": 2,
     ">1.5M": 4
   }
