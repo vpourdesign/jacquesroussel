@@ -828,7 +828,7 @@ ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
     <nav class="site-nav" aria-label="Navigation principale">
       ${navHtml}
     </nav>
-    <a class="btn-primary site-header__cta" href="/vendre/evaluation-gratuite/">Évaluation gratuite</a>
+    <a class="btn-primary site-header__cta" href="/rendez-vous/">Prendre rendez-vous</a>
     <button class="site-header__burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" data-drawer-toggle>
       <span></span><span></span><span></span>
     </button>
@@ -839,7 +839,7 @@ ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
     <button class="drawer__close" type="button" aria-label="Fermer le menu" data-drawer-close>&times;</button>
     <nav class="drawer__nav" aria-label="Menu mobile">
       ${drawerHtml}
-      <a class="btn-primary drawer__cta" href="/vendre/evaluation-gratuite/">Évaluation gratuite</a>
+      <a class="btn-primary drawer__cta" href="/rendez-vous/">Prendre rendez-vous</a>
     </nav>
   </div>
 </aside>
