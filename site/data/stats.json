@@ -1,25 +1,25 @@
 {
-  "total": 16,
-  "avgPrice": 1334644,
-  "totalValue": 21354299,
+  "total": 17,
+  "avgPrice": 1258482,
+  "totalValue": 21394199,
   "byCity": {
     "Saint-Jérôme": 4,
     "Laval": 4,
+    "Sainte-Julienne": 3,
     "Saint-Eustache": 3,
     "Terrebonne": 1,
     "Lachute": 1,
-    "Saint-Hippolyte": 1,
-    "Sainte-Julienne": 2
+    "Saint-Hippolyte": 1
   },
   "byType": {
-    "Terrain": 6,
+    "Terrain": 7,
     "Condo": 2,
     "Commercial": 2,
     "Unifamiliale": 4,
     "Multilogements": 2
   },
   "priceRanges": {
-    "<300k": 5,
+    "<300k": 6,
     "300-500k": 1,
     "500-800k": 4,
     "800k-1.5M": 2,

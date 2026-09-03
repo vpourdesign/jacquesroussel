@@ -379,6 +379,100 @@
     "slug": "12237631-rue-schulz-saint-jerome"
   },
   {
+    "mls": "12901748",
+    "price": 39900,
+    "typeCode": "T/TV",
+    "typeLabel": "Terrain",
+    "street": "Route 337",
+    "city": "Sainte-Julienne",
+    "munCode": "63060",
+    "postalCode": "J0K2T0",
+    "yearBuilt": "",
+    "areaTerrain": "4542.90 MC",
+    "lat": 46.02990494,
+    "lon": -73.70876435,
+    "descFr": "Sainte-Julienne, tout près de Rawdon - centre-ville de Rawdon à 5 minutes en voiture Terrain de 4 542 m² (48 899,4 pi²) pour maison unifamiliale plain-pied ou 2 étages Accès facile grâce à la proximité des routes 337 et 125 SERVICES - Route 348 animée dans le centre de Rawdon: restaurants, bars et commerces variés - Supermarchés Metro Plus et Maxi à Rawdon - Pharmacies et autres services utiles - Écoles primaires Boutons-d'Or et Virevents - École secondaire Havre-Jeunesse ACTIVITÉS - Ski - Sentiers variés (motoneige, VTT, raquettes et randonnée) - Golf - Parc des chutes Darwin Construire sur ce terrain, c'est posséder un grand espace boisé où vous profiterez d'une intimité absolue, tout en pouvant faire vos courses ou déposer les enfants à l'école en moins de 10 minutes. C'est l'endroit idéal pour une vie au contact de la nature, tout en restant proche de toutes les commodités ! Note : Vous désirez encore plus d'espace? Le terrain voisin est également en vente (MLS# 27533692). Un achat combiné/simultané vous permettra de doubler votre superficie et de créer un domaine sur mesure. *L'acheteur est avisé qu'il devra effectuer ses propres recherches et vérifications auprès des autorités compétentes concernant la vocation qu'il entend donner à l'immeuble, notamment en matière de réglementation municipale, de zonage et d'usages permis.* **Le courtier du vendeur informe l'acheteur qu'il ne peut pas le représenter et l'invite à faire affaire avec son propre courtier. L'acheteur peut tout de même traiter avec le courtier du vendeur directement et recevoir un traitement juste et équitable.**",
+    "remFr": "Ste-Julienne juste à côté de Rawdon. Terrain de 48 899,4 pi2 pour construction unifamiliale 1 ou 2 étages à 5 mins du centre-ville. Opportunité : terrain voisin également en vente pour achat simultané et lot plus grand! Ski, sentiers et golf à proximité + parc des chutes Darwin. Accès rapide routes 337/125. Un grand terrain boisé pour vous sentir seul au monde, tout en étant à moins de 10 min des écoles et services. L'emplacement idéal pour vivre en nature près de tout!",
+    "photos": [
+      {
+        "seq": 1,
+        "type": "ACON",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2C7256DD7C330CD1D&t=pi&f=I"
+      }
+    ],
+    "features": [
+      {
+        "code": "EAU",
+        "value": "AUCN"
+      },
+      {
+        "code": "PROX",
+        "value": "GCPE"
+      },
+      {
+        "code": "PROX",
+        "value": "GOLF"
+      },
+      {
+        "code": "PROX",
+        "value": "PARC"
+      },
+      {
+        "code": "PROX",
+        "value": "PCYC"
+      },
+      {
+        "code": "PROX",
+        "value": "PRIM"
+      },
+      {
+        "code": "PROX",
+        "value": "SALP"
+      },
+      {
+        "code": "PROX",
+        "value": "SEC"
+      },
+      {
+        "code": "PROX",
+        "value": "SFON"
+      },
+      {
+        "code": "PROX",
+        "value": "SMOT"
+      },
+      {
+        "code": "PROX",
+        "value": "SVTT"
+      },
+      {
+        "code": "PROX",
+        "value": "TRSP"
+      },
+      {
+        "code": "SYEG",
+        "value": "AUCN"
+      },
+      {
+        "code": "PART",
+        "value": "BOIS"
+      },
+      {
+        "code": "TOPO",
+        "value": "PLAT"
+      },
+      {
+        "code": "ZONG",
+        "value": "RES"
+      }
+    ],
+    "rooms": [],
+    "links": [],
+    "listedAt": "2026-09-02",
+    "isCoBroker": false,
+    "slug": "12901748-route-337-sainte-julienne"
+  },
+  {
     "mls": "14475622",
     "price": 259900,
     "typeCode": "R/AP",
