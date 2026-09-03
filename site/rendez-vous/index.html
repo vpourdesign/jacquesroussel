@@ -120,7 +120,7 @@
           <div>✉ <a href="mailto:alexandre.roussel@remax-quebec.com" style="color:var(--blue)">alexandre.roussel@remax-quebec.com</a></div>
         </div>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.f-ok').hidden=false; this.querySelector('.f-fields').hidden=true;">
+      <form class="contact-form" data-lead-form>
         <div class="f-fields">
           <label>Nom complet<input type="text" name="name" required></label>
           <div class="f-row">
@@ -149,6 +149,72 @@
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var ENDPOINT = "";
+  var FALLBACK = "alexRcourtier@gmail.com";
+
+  document.querySelectorAll('form[data-lead-form]').forEach(function(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      var d = Object.fromEntries(new FormData(form).entries());
+      var btn = form.querySelector('.f-submit');
+      var fields = form.querySelector('.f-fields');
+      var ok = form.querySelector('.f-ok');
+
+      function afficherOk(titre, message){
+        if (ok && titre){
+          var hh = ok.querySelector('h3');
+          if (hh) hh.textContent = titre;
+        }
+        if (ok && message){
+          var pp = ok.querySelector('p');
+          if (pp) pp.textContent = message;
+        }
+        if (fields) fields.hidden = true;
+        if (ok) ok.hidden = false;
+      }
+
+      var sujet = 'Site web — ' + (d.subject || 'Message') + (d.name ? ' — ' + d.name : '');
+      var corps = [
+        'Nom : ' + (d.name || ''),
+        'Courriel : ' + (d.email || ''),
+        'Téléphone : ' + (d.phone || ''),
+        d.subject ? 'Sujet : ' + d.subject : '',
+        '',
+        (d.message || '')
+      ].filter(function(l, i){ return l !== '' || i === 4; }).join('\r\n');
+
+      if (ENDPOINT){
+        if (btn){ btn.disabled = true; btn.textContent = 'Envoi…'; }
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(d)
+        }).then(function(r){
+          if (!r.ok) throw new Error(r.status);
+          afficherOk();
+        }).catch(function(){
+          if (btn){ btn.disabled = false; btn.textContent = 'Réessayer →'; }
+          alert("L'envoi a échoué. Écrivez-nous à " + FALLBACK + " et on vous répond rapidement.");
+        });
+        return;
+      }
+
+      // Pas de point de chute configuré : la demande part par le logiciel de
+      // courriel de la personne. On le dit clairement plutôt que d'annoncer
+      // un envoi qui n'a pas eu lieu.
+      window.location.href = 'mailto:' + FALLBACK
+        + '?subject=' + encodeURIComponent(sujet)
+        + '&body=' + encodeURIComponent(corps);
+      afficherOk('Dernière étape.', "Votre logiciel de courriel s'ouvre avec le message prérempli — il ne reste qu'à appuyer sur Envoyer.");
+    });
+  });
+})();
+</script>
 </main>
 <footer class="site-footer">
   <div class="site-footer__grid">

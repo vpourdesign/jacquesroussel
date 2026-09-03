@@ -136,7 +136,81 @@ const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/appointments/
 // perd en silence. Coller ici l'URL Formspree/Vercel du compte de l'équipe.
 const FORM_ENDPOINT = '';
 // Adresse de repli quand FORM_ENDPOINT est vide.
-const FORM_FALLBACK_EMAIL = 'info@jacquesroussel.com';
+const FORM_FALLBACK_EMAIL = 'alexRcourtier@gmail.com';
+
+// Gestionnaire commun aux formulaires de /contact/ et /rendez-vous/. Aucun des
+// deux n'envoyait quoi que ce soit : le bouton de /contact/ etait un
+// type="button" sans gestionnaire, et /rendez-vous/ affichait « Message
+// envoye » sur un simple preventDefault. Toutes les demandes recues depuis la
+// mise en ligne sont perdues (voir NOTES.md). Meme mecanique que la fenetre
+// des guides : on poste sur FORM_ENDPOINT s'il est configure, sinon on ouvre
+// le logiciel de courriel de la personne avec tout de prerempli.
+const leadFormScript = `
+<script>
+(function(){
+  var ENDPOINT = ${JSON.stringify(FORM_ENDPOINT)};
+  var FALLBACK = ${JSON.stringify(FORM_FALLBACK_EMAIL)};
+
+  document.querySelectorAll('form[data-lead-form]').forEach(function(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      var d = Object.fromEntries(new FormData(form).entries());
+      var btn = form.querySelector('.f-submit');
+      var fields = form.querySelector('.f-fields');
+      var ok = form.querySelector('.f-ok');
+
+      function afficherOk(titre, message){
+        if (ok && titre){
+          var hh = ok.querySelector('h3');
+          if (hh) hh.textContent = titre;
+        }
+        if (ok && message){
+          var pp = ok.querySelector('p');
+          if (pp) pp.textContent = message;
+        }
+        if (fields) fields.hidden = true;
+        if (ok) ok.hidden = false;
+      }
+
+      var sujet = 'Site web — ' + (d.subject || 'Message') + (d.name ? ' — ' + d.name : '');
+      var corps = [
+        'Nom : ' + (d.name || ''),
+        'Courriel : ' + (d.email || ''),
+        'Téléphone : ' + (d.phone || ''),
+        d.subject ? 'Sujet : ' + d.subject : '',
+        '',
+        (d.message || '')
+      ].filter(function(l, i){ return l !== '' || i === 4; }).join('\\r\\n');
+
+      if (ENDPOINT){
+        if (btn){ btn.disabled = true; btn.textContent = 'Envoi…'; }
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(d)
+        }).then(function(r){
+          if (!r.ok) throw new Error(r.status);
+          afficherOk();
+        }).catch(function(){
+          if (btn){ btn.disabled = false; btn.textContent = 'Réessayer →'; }
+          alert("L'envoi a échoué. Écrivez-nous à " + FALLBACK + " et on vous répond rapidement.");
+        });
+        return;
+      }
+
+      // Pas de point de chute configuré : la demande part par le logiciel de
+      // courriel de la personne. On le dit clairement plutôt que d'annoncer
+      // un envoi qui n'a pas eu lieu.
+      window.location.href = 'mailto:' + FALLBACK
+        + '?subject=' + encodeURIComponent(sujet)
+        + '&body=' + encodeURIComponent(corps);
+      afficherOk('Dernière étape.', "Votre logiciel de courriel s'ouvre avec le message prérempli — il ne reste qu'à appuyer sur Envoyer.");
+    });
+  });
+})();
+</script>`;
 
 function parseCSV(text) {
   const rows=[]; let row=[],f='',q=false,i=0;
@@ -500,6 +574,31 @@ function ingestFromCentris(membres) {
   const isOurs = (no) => no && BROKER_NOS.includes(no);
 
   const inscr = read('INSCRIPTIONS.TXT');
+
+  // ── Diagnostic « pourquoi cette inscription est-elle encore en ligne ? » ──
+  // Une propriété vendue disparaît normalement de l'export Centris, et
+  // pruneStaleListings() efface alors sa page — ça a fonctionné cinq fois
+  // depuis août. Quand une fiche vendue reste malgré tout dans l'export, il
+  // faut voir la ligne brute pour savoir si Centris porte un statut qu'on
+  // n'ingère pas : le build ne lit que 15 des ~150 colonnes.
+  // Lancer le workflow « Daily Centris ingest » à la main en renseignant le
+  // numéro MLS, puis lire le journal.
+  const debugMls = (process.env.CENTRIS_DEBUG_MLS || '').trim();
+  if (debugMls) {
+    const ligne = inscr.find(r => String(r[0]).trim() === debugMls);
+    if (!ligne) {
+      console.log(`\n🔍 MLS ${debugMls} : ABSENT de INSCRIPTIONS.TXT.`);
+      console.log('   Centris ne l\'exporte plus — la fiche sera retirée du site à ce build.\n');
+    } else {
+      console.log(`\n🔍 MLS ${debugMls} : PRÉSENT dans INSCRIPTIONS.TXT (${ligne.length} colonnes).`);
+      console.log('   Colonnes non vides — chercher celle qui porte le statut :');
+      ligne.forEach((v, i) => {
+        const t = String(v == null ? '' : v).trim();
+        if (t) console.log(`     [${String(i).padStart(3)}] ${t.slice(0, 70)}`);
+      });
+      console.log('');
+    }
+  }
   const photos = read('PHOTOS.TXT');
   const addenda = read('ADDENDA.TXT');
   const remarques = read('REMARQUES.TXT');
@@ -4161,11 +4260,14 @@ writePage('nos-proprietes/index.html', layout({
 // Trois critères, tous obligatoires. Aucun candidat conforme → la section
 // disparaît, plutôt que de meubler avec n'importe quoi.
 const SIMILAR = {
-  memeType: true,      // une unifamiliale n'est comparée qu'à une unifamiliale
-  ecartPrix: 0.35,     // ±35 % du prix affiché
-  rayonKm: 40,         // à vol d'oiseau autour de la propriété
-  ecartPrixElargi: 0.60, // 2e passe si la 1re ne remplit pas les cases
-  nombre: 2            // cases affichées sur la fiche
+  // Le type de propriété passe avant tout : c'est un filtre absolu, jamais
+  // un critère qu'on relâche. Une unifamiliale n'est comparée qu'à une
+  // unifamiliale, un terrain qu'à un terrain — quitte à proposer un écart
+  // de prix large plutôt qu'un voisin du bon budget mais du mauvais genre.
+  ecartPrix: 0.35,       // 1re passe : ±35 % du prix affiché
+  rayonKm: 40,           // 1re passe : à vol d'oiseau autour de la propriété
+  ecartPrixElargi: 0.60, // 2e passe : fourchette élargie, plus de limite de distance
+  nombre: 2              // cases affichées sur la fiche
 };
 
 // Distance à vol d'oiseau en km (haversine). null si une coordonnée manque.
@@ -4180,8 +4282,9 @@ function distanceKm(a, b) {
 
 function similarProperties(p) {
   if (!p.price) return [];
+  // Filtre absolu : même type de propriété, point.
   const bassin = properties.filter(x =>
-    x.mls !== p.mls && x.price > 0 && (!SIMILAR.memeType || x.typeLabel === p.typeLabel));
+    x.mls !== p.mls && x.price > 0 && x.typeLabel === p.typeLabel);
 
   const trier = (ecartMax, rayonMax) => bassin
     .map(x => {
@@ -4202,13 +4305,18 @@ function similarProperties(p) {
     .map(r => r.x);
 
   const retenues = trier(SIMILAR.ecartPrix, SIMILAR.rayonKm);
-  if (retenues.length < SIMILAR.nombre) {
-    // 2e passe : fourchette de prix élargie et rayon levé. Le type, lui, ne
-    // bouge jamais — c'est ce qui rendait les suggestions absurdes.
-    for (const x of trier(SIMILAR.ecartPrixElargi, null)) {
+  const completer = liste => {
+    for (const x of liste) {
+      if (retenues.length >= SIMILAR.nombre) return;
       if (!retenues.includes(x)) retenues.push(x);
     }
-  }
+  };
+  // 2e passe : fourchette de prix élargie, plus de limite de distance.
+  if (retenues.length < SIMILAR.nombre) completer(trier(SIMILAR.ecartPrixElargi, null));
+  // 3e passe : tout le bassin du même type, du prix le plus proche au plus
+  // éloigné. Avec seize inscriptions actives, masquer la section revenait
+  // souvent à ne rien proposer alors qu'une propriété du bon genre existait.
+  if (retenues.length < SIMILAR.nombre) completer(trier(Infinity, null));
   return retenues.slice(0, SIMILAR.nombre);
 }
 
@@ -4384,20 +4492,18 @@ function faitsSaillants(p) {
   const plex = String(p.typeCode || '').match(/^M\/(\d)X$/);
   if (plex) ajouter(plex[1], Number(plex[1]) > 1 ? 'Logements' : 'Logement');
 
-  // 2. Chambres, au format Centris « 3 + 1 » : hors sous-sol, puis au sous-sol.
+  // 2. Chambres au format Centris « 3 + 1 » : hors sous-sol, puis au sous-sol.
   const chHaut = compter(['CAC','CCP','CC2'], r => !auSousSol(r));
   const chBas = compter(['CAC','CCP','CC2'], auSousSol);
-  const chTotal = chHaut + chBas;
-  if (chTotal) {
-    ajouter(chHaut && chBas ? chHaut + ' + ' + chBas : String(chTotal),
-            chTotal > 1 ? 'Chambres' : 'Chambre');
-  }
+  if (chHaut + chBas) ajouter(chHaut + ' + ' + chBas, 'Chambres');
 
-  // 3. Salles de bain (baignoire ou douche), 4. salles d'eau (toilette seule).
+  // 3. Salles de bain et salles d'eau dans une seule case, « 2 + 0 » comme
+  //    sur Centris : la salle d'eau n'a ni bain ni douche, elle ne se compte
+  //    pas avec les autres. Les tenir séparées mangeait deux des quatre
+  //    cases et repoussait le garage et la piscine hors de la fiche.
   const sdb = compter(['SDB']);
-  if (sdb) ajouter(String(sdb), sdb > 1 ? 'Salles de bain' : 'Salle de bain');
   const sde = compter(['SDE','S-E']);
-  if (sde) ajouter(String(sde), sde > 1 ? "Salles d'eau" : "Salle d'eau");
+  if (sdb + sde) ajouter(sdb + ' + ' + sde, "Salles de bain + salles d'eau");
 
   // 5. Garage, 6. piscine avec ce qui la caractérise, 7. superficie du terrain.
   ajouter(libelle('GARA', VAL_GARAGE), 'Garage', true);
@@ -4462,18 +4568,16 @@ function detailPage(p) {
   // l'agenda : réserver un créneau avant même d'avoir vu la propriété demandait
   // un engagement de trop, et FORM_ENDPOINT est encore vide de toute façon.
   const visiteSujet = `Demande de visite — ${p.street}, ${p.city} (MLS ${p.mls})`;
+  // Court volontairement : le prix, les disponibilités et le numéro ont été
+  // retirés. Moins il reste de champs à remplir, plus la personne envoie.
+  // L'objet porte déjà l'adresse et le numéro MLS pour retrouver la fiche.
   const visiteCorps = [
     'Bonjour,',
     '',
-    `J'aimerais beaucoup visiter la propriété située au ${p.street}, ${p.city}${p.price ? ` (${fmtPrice(p.price)})` : ''}.`,
+    `J'aimerais beaucoup visiter la propriété située au ${p.street}, ${p.city}.`,
     'Est-ce possible de me recontacter pour convenir d\'un moment ?',
     '',
-    'Mes disponibilités : ',
-    'Mon numéro de téléphone : ',
-    '',
-    'Merci !',
-    '',
-    `Fiche : ${ficheUrl}`
+    'Merci !'
   ].join('\r\n');
   const visiteMailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(visiteSujet)}&body=${encodeURIComponent(visiteCorps)}`;
 
@@ -6967,7 +7071,7 @@ writePage('contact/index.html', layout({
     <h3>Courriel</h3><p style="margin:.5rem 0 1.5rem"><a href="mailto:${CONTACT.email}">${CONTACT.email}</a></p>
     <h3>Bureau</h3><p>RE/MAX CRYSTAL<br>Sainte-Thérèse, QC</p>
   </div>
-  <form class="contact-form" style="background:#fff;padding:clamp(1.8rem,4vw,2.5rem);border:1px solid var(--line);border-radius:var(--radius-lg)">
+  <form class="contact-form" data-lead-form style="background:#fff;padding:clamp(1.8rem,4vw,2.5rem);border:1px solid var(--line);border-radius:var(--radius-lg)">
     <div class="f-fields">
       <label>Nom complet<input type="text" name="name" required></label>
       <div class="f-row">
@@ -6975,7 +7079,12 @@ writePage('contact/index.html', layout({
         <label>Téléphone<input type="tel" name="phone"></label>
       </div>
       <label>Message<textarea name="message" rows="5" required></textarea></label>
-      <button type="button" class="f-submit">Envoyer le message &rarr;</button>
+      <button type="submit" class="f-submit">Envoyer le message &rarr;</button>
+    </div>
+    <div class="f-ok" hidden>
+      <div class="f-ok-icon">&#10003;</div>
+      <h3>Message envoy&eacute;.</h3>
+      <p>Merci. On vous r&eacute;pond personnellement sous 24 h.</p>
     </div>
   </form>
 </div></section>
@@ -6991,7 +7100,8 @@ writePage('contact/index.html', layout({
   const ta = document.querySelector('form textarea');
   if (ta && !ta.value) ta.value = 'Bonjour, j\\'aimerais recevoir le ' + t + ' en PDF par courriel. Merci !';
 })();
-</script>`
+</script>
+${leadFormScript}`
 }));
 
 writePage('temoignages/index.html', contentPage({
@@ -7092,7 +7202,7 @@ writePage('rendez-vous/index.html', layout({
           <div>✉ <a href="mailto:${CONTACT.email}" style="color:var(--blue)">${CONTACT.email}</a></div>
         </div>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.f-ok').hidden=false; this.querySelector('.f-fields').hidden=true;">
+      <form class="contact-form" data-lead-form>
         <div class="f-fields">
           <label>Nom complet<input type="text" name="name" required></label>
           <div class="f-row">
@@ -7120,7 +7230,8 @@ writePage('rendez-vous/index.html', layout({
       </form>
     </div>
   </div>
-</section>`
+</section>
+${leadFormScript}`
 }));
 
 // --- PERFORMANCE DASHBOARD ---
