@@ -337,18 +337,6 @@
         });
       });
 
-      // Amenities expand
-      propPage.querySelectorAll('[data-amenities-toggle]').forEach((btn) => {
-        const target = propPage.querySelector(btn.dataset.amenitiesToggle);
-        btn.addEventListener('click', () => {
-          if (!target) return;
-          const isOpen = target.hasAttribute('open');
-          if (isOpen) target.removeAttribute('open');
-          else target.setAttribute('open', '');
-          btn.textContent = isOpen ? btn.dataset.labelMore : btn.dataset.labelLess;
-        });
-      });
-
       // Mobile map modal
       const mapModal = document.querySelector('[data-map-modal]');
       let mapModalInited = false;

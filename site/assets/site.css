@@ -14,6 +14,12 @@
   /* Rouge RE/MAX — réservé aux pastilles d'état (« Nouveau »), jamais au texte
      courant ni aux liens : DESIGN.md interdit le rouge partout ailleurs. */
   --remax-red:#DC1C2E;
+  /* Étiquettes en petites capitales (« PRIX DEMANDÉ », « CARACTÉRISTIQUES »).
+     --sand ne donnait que 1,76:1 sur le crème : illisible à 11 px. --label
+     monte à 4,55:1, le seuil WCAG AA, en restant dans le même bronze chaud.
+     Réservé aux fonds clairs — sur le pied de page et les héros sombres,
+     les règles gardent --sand, qui y est parfaitement lisible. */
+  --label:#8C6A38;
   /* Aliases pour les pages de contenu (vendre / acheter / guides) */
   --ink-2:var(--stone);
   --blue:var(--teal);
@@ -76,6 +82,7 @@
     --sand: oklch(78% 0.04 75);
     --bronze: oklch(62% 0.08 70);
     --remax-red: oklch(55.4% 0.208 26.5);
+    --label: oklch(54.8% 0.080 75.4);
   }
 }
 
@@ -138,7 +145,7 @@ strong{ font-weight: 600; }
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 600;
-  color: var(--sand);
+  color: var(--label);
 }
 @media (min-width: 768px){ .eyebrow{ font-size: 13px; } }
 
@@ -964,7 +971,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .section-blue{ background: var(--teal); color: var(--cream); }
 .section-blue h2, .section-blue h3{ color: var(--cream); }
 .sec-head{ display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: var(--space-4); margin-block-end: var(--space-6); }
-.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--sand); font-weight: 500; margin-block-end: 0.5rem; }
+.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--label); font-weight: 500; margin-block-end: 0.5rem; }
 .more{ font-size: var(--text-sm); color: var(--ink); border-block-end: 1px solid var(--ink); padding-block-end: 2px; }
 .section-dark .more, .section-blue .more{ color: var(--cream); border-color: var(--cream); }
 .stats-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); }
@@ -992,7 +999,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .cat-card__count{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.16em;
-  color: var(--sand);
+  color: var(--label);
 }
 .cat-card h3{ margin: 0; }
 .cat-card p{ color: var(--stone); font-size: var(--text-sm); }
@@ -1017,7 +1024,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .mb-card__firm{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--sand);
+  color: var(--label);
 }
 .mb-card__note{ color: var(--stone); font-size: var(--text-sm); margin-block-start: 0.4rem; }
 .mb-card__links{
@@ -1049,7 +1056,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .pcard .ph img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
 .pcard .body{ padding: var(--space-4); }
 .pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--remax-red); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
-.pcard .loc{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
+.pcard .loc{ color: var(--label); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .pcard .addr{ font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; margin-block: 0.4rem 0.6rem; color: var(--ink); }
 .pcard .price{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--bronze); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
 .pcard .meta{ margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-block-start: 1px solid var(--hairline); display: flex; gap: 1rem; color: var(--stone); font-size: var(--text-sm); }
@@ -1295,15 +1302,16 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .desc-wrap{ position: relative; }
 .desc-wrap[data-collapsible] .desc-wrap__body{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  max-block-size: 8.5rem;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
 }
 .desc-wrap.expanded .desc-wrap__body{
-  display: block;
-  -webkit-line-clamp: unset;
+  max-block-size: none;
   overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 .desc-wrap__toggle{
   margin-block-start: 0.75rem;
@@ -1323,6 +1331,61 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   border-block: 1px solid var(--hairline);
 }
 .prop-metric{ display: flex; flex-direction: column; gap: 0.35rem; }
+.faits{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.25rem clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--hairline);
+}
+.fait{ display: flex; flex-direction: column; gap: 0.35rem; min-inline-size: 0; }
+.fait__v{
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  color: var(--ink);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+/* « Creusée, chauffée » ne peut pas s'afficher au corps d'un nombre. */
+.fait__v--texte{
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.35;
+  padding-block-start: 0.35rem;
+}
+.fait__l{
+  font: 500 12px 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stone);
+}
+/* Description Centris : intertitres et listes reconstruits. */
+.prop-info__desc p + p{ margin-block-start: 0.9rem; }
+.desc-h{
+  font: 600 0.82rem 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--label);
+  margin-block: 1.8rem 0.7rem;
+}
+.prop-info__desc > .desc-h:first-child{ margin-block-start: 0; }
+.desc-liste{
+  list-style: none;
+  margin-block: 0.7rem;
+  display: grid;
+  gap: 0.45rem;
+}
+.desc-liste li{
+  position: relative;
+  padding-inline-start: 1.1rem;
+}
+.desc-liste li::before{
+  content: '';
+  position: absolute; inset-block-start: 0.62em; inset-inline-start: 0;
+  inline-size: 5px; block-size: 5px; border-radius: 50%;
+  background: var(--label);
+}
 .prop-metric__n{
   font-family: 'Montserrat', system-ui, sans-serif;
   font-weight: 700;
@@ -1358,7 +1421,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
 }
 .prop-price-band__val{
   font-family: 'Montserrat', system-ui, sans-serif;
@@ -1385,139 +1448,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
   margin-block-end: 1rem;
   display: block;
 }
-.amenities{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-3);
-}
-.amenities[data-more] > .amenity--extra{ display: none; }
-.amenities[data-more][open] > .amenity--extra{ display: flex; }
-.amenity{
-  display: flex; align-items: center; gap: 0.65rem;
-  padding-block: 0.4rem;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-}
-.amenity svg{ inline-size: 22px; block-size: 22px; flex-shrink: 0; color: var(--ink); }
-.amenities-more-btn{
-  margin-block-start: 1rem;
-  background: transparent;
-  border: 1px solid var(--hairline);
-  padding: 0.55rem 1.2rem;
-  border-radius: 999px;
-  font: 500 0.85rem 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background-color 240ms var(--ease-out);
-}
-.amenities-more-btn:hover{ background: var(--vellum); }
-.room-table{
-  inline-size: 100%;
-  border-collapse: collapse;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-}
-.room-table thead th{
-  text-align: start;
-  font: 500 11px 'Montserrat', system-ui, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--stone);
-  padding: 0.65rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-}
-.room-table tbody td{
-  padding: 0.8rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-  color: var(--ink);
-}
-.room-table tbody tr{ transition: background-color 160ms var(--ease-out); }
-.room-table tbody tr:hover{ background: var(--cream); }
-@media (max-width: 640px){
-  .room-table thead{ display: none; }
-  .room-table, .room-table tbody, .room-table tr, .room-table td{ display: block; inline-size: 100%; }
-  .room-table tr{ padding-block: 0.75rem; border-block-end: 1px solid var(--hairline); }
-  .room-table td{ padding: 0.25rem 0; border: 0; }
-  .room-table td::before{
-    content: attr(data-l);
-    display: inline-block;
-    inline-size: 7rem;
-    font-weight: 500;
-    color: var(--stone);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-}
-.broker-card{
-  background: var(--vellum);
-  border-radius: 14px;
-  padding: 1.5rem 1.75rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 1.25rem;
-  box-shadow:
-    0 1px 2px oklch(30% 0.05 258 / 0.06),
-    0 4px 14px oklch(30% 0.05 258 / 0.08);
-}
-.broker-card__avatars{ display: flex; align-items: center; }
-.broker-card__avatars img{
-  inline-size: 56px; block-size: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--vellum);
-  box-shadow: 0 2px 8px oklch(30% 0.05 258 / 0.18);
-}
-.broker-card__avatars img + img{ margin-inline-start: -22px; }
-.broker-card__body{ display: flex; flex-direction: column; gap: 0.25rem; min-inline-size: 0; }
-.broker-card__name{
-  font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 20px;
-  color: var(--ink);
-}
-.broker-card__sub{
-  font: 400 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__team{
-  font: 500 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__cta{
-  background: var(--navy);
-  color: var(--cream);
-  padding: 0.7rem 1.3rem;
-  border-radius: 999px;
-  font: 500 0.9rem 'Montserrat', system-ui, sans-serif;
-  justify-self: end;
-  white-space: nowrap;
-  transition: transform 240ms var(--ease-out);
-}
-.broker-card__cta:hover{ transform: translateY(-1px); color: var(--cream); }
-@media (max-width: 560px){
-  .broker-card{ grid-template-columns: auto 1fr; }
-  .broker-card__cta{ grid-column: 1 / -1; justify-self: stretch; text-align: center; }
-}
-/* --- Formulaires (global) --- */
-.contact-form{display:grid;gap:1rem}
-.f-fields{display:grid;gap:1.4rem}
-.contact-form label{display:grid;gap:.5rem;font-size:.85rem;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
-.contact-form input,.contact-form textarea,.contact-form select{font-family:inherit;font-size:1rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);transition:border-color .3s var(--ease),background .3s var(--ease);font-weight:400}
-.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{outline:0;border-color:var(--blue);background:#fff}
-.contact-form textarea{resize:vertical;min-height:120px;font-family:inherit}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 1rem}
-@media(max-width:520px){.f-row{grid-template-columns:1fr}}
-.f-submit{margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
-.f-submit:hover{background:var(--blue);transform:translateY(-2px)}
-.f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
-.f-ok{text-align:center;padding:2rem 1rem}
-.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
-.f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
-.f-ok p{color:var(--ink-2)}
 .prop-similar-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);

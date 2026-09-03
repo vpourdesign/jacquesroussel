@@ -243,6 +243,16 @@ const ROOM_LEVEL = {
   'RC':'Rez-de-chaussée', 'SS':'Sous-sol', 'SS1':'Sous-sol 1', 'SS2':'Sous-sol 2',
   'GR':'Grenier', 'MEZ':'Mezzanine'
 };
+// « 0 » ne figure pas dans ROOM_LEVEL : Centris s'en sert pour le sous-sol
+// quand la fiche a plusieurs niveaux, et pour l'unique étage d'un
+// appartement quand elle n'en a qu'un. Le tableau affichait donc « 0 » tel
+// quel. On tranche avec le même critère que faitsSaillants().
+function nomNiveau(code, surPlusieursNiveaux) {
+  const c = String(code || '').toUpperCase();
+  if (ROOM_LEVEL[c]) return ROOM_LEVEL[c];
+  if (c === '0') return surPlusieursNiveaux ? 'Sous-sol' : '—';
+  return c || '—';
+}
 // Revêtement pièce
 const ROOM_REV = {
   PFLO:'Plancher flottant', CERAM:'Céramique', BOIS:'Bois', BOIF:'Bois franc',
@@ -503,7 +513,19 @@ function ingestFromCentris(membres) {
 
   function groupText(rows) {
     const o={}; for(const r of rows){const m=r[0],l=r[2],t=r[6]||''; if(!m)continue; const k=m+'|'+l;(o[k]??=[]).push({s:+r[1],n:+r[3],t});}
-    for(const k of Object.keys(o)){o[k].sort((a,b)=>(a.s-b.s)||(a.n-b.n)); o[k]=o[k].map(x=>x.t).join(' ').replace(/\s+/g,' ').trim();}
+    // On ne recolle plus les morceaux en écrasant tout l'espace blanc : le
+    // `.replace(/\s+/g,' ')` d'avant supprimait les sauts de ligne de Centris,
+    // et la description arrivait sur le site en un seul pavé. On normalise les
+    // espaces et les tabulations, on garde les retours à la ligne.
+    for(const k of Object.keys(o)){
+      o[k].sort((a,b)=>(a.s-b.s)||(a.n-b.n));
+      o[k]=o[k].map(x=>x.t).join(' ')
+        .replace(/\r\n?/g,'\n')
+        .replace(/[^\S\n]+/g,' ')
+        .replace(/ *\n */g,'\n')
+        .replace(/\n{3,}/g,'\n\n')
+        .trim();
+    }
     return o;
   }
   const addMap = groupText(addenda);
@@ -937,6 +959,12 @@ const CSS = `
   /* Rouge RE/MAX — réservé aux pastilles d'état (« Nouveau »), jamais au texte
      courant ni aux liens : DESIGN.md interdit le rouge partout ailleurs. */
   --remax-red:#DC1C2E;
+  /* Étiquettes en petites capitales (« PRIX DEMANDÉ », « CARACTÉRISTIQUES »).
+     --sand ne donnait que 1,76:1 sur le crème : illisible à 11 px. --label
+     monte à 4,55:1, le seuil WCAG AA, en restant dans le même bronze chaud.
+     Réservé aux fonds clairs — sur le pied de page et les héros sombres,
+     les règles gardent --sand, qui y est parfaitement lisible. */
+  --label:#8C6A38;
   /* Aliases pour les pages de contenu (vendre / acheter / guides) */
   --ink-2:var(--stone);
   --blue:var(--teal);
@@ -999,6 +1027,7 @@ const CSS = `
     --sand: oklch(78% 0.04 75);
     --bronze: oklch(62% 0.08 70);
     --remax-red: oklch(55.4% 0.208 26.5);
+    --label: oklch(54.8% 0.080 75.4);
   }
 }
 
@@ -1061,7 +1090,7 @@ strong{ font-weight: 600; }
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 600;
-  color: var(--sand);
+  color: var(--label);
 }
 @media (min-width: 768px){ .eyebrow{ font-size: 13px; } }
 
@@ -1887,7 +1916,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .section-blue{ background: var(--teal); color: var(--cream); }
 .section-blue h2, .section-blue h3{ color: var(--cream); }
 .sec-head{ display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: var(--space-4); margin-block-end: var(--space-6); }
-.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--sand); font-weight: 500; margin-block-end: 0.5rem; }
+.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--label); font-weight: 500; margin-block-end: 0.5rem; }
 .more{ font-size: var(--text-sm); color: var(--ink); border-block-end: 1px solid var(--ink); padding-block-end: 2px; }
 .section-dark .more, .section-blue .more{ color: var(--cream); border-color: var(--cream); }
 .stats-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); }
@@ -1915,7 +1944,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .cat-card__count{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.16em;
-  color: var(--sand);
+  color: var(--label);
 }
 .cat-card h3{ margin: 0; }
 .cat-card p{ color: var(--stone); font-size: var(--text-sm); }
@@ -1940,7 +1969,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .mb-card__firm{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--sand);
+  color: var(--label);
 }
 .mb-card__note{ color: var(--stone); font-size: var(--text-sm); margin-block-start: 0.4rem; }
 .mb-card__links{
@@ -1972,7 +2001,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .pcard .ph img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
 .pcard .body{ padding: var(--space-4); }
 .pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--remax-red); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
-.pcard .loc{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
+.pcard .loc{ color: var(--label); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .pcard .addr{ font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; margin-block: 0.4rem 0.6rem; color: var(--ink); }
 .pcard .price{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--bronze); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
 .pcard .meta{ margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-block-start: 1px solid var(--hairline); display: flex; gap: 1rem; color: var(--stone); font-size: var(--text-sm); }
@@ -2218,15 +2247,16 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .desc-wrap{ position: relative; }
 .desc-wrap[data-collapsible] .desc-wrap__body{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  max-block-size: 8.5rem;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
 }
 .desc-wrap.expanded .desc-wrap__body{
-  display: block;
-  -webkit-line-clamp: unset;
+  max-block-size: none;
   overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 .desc-wrap__toggle{
   margin-block-start: 0.75rem;
@@ -2246,6 +2276,61 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   border-block: 1px solid var(--hairline);
 }
 .prop-metric{ display: flex; flex-direction: column; gap: 0.35rem; }
+.faits{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.25rem clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--hairline);
+}
+.fait{ display: flex; flex-direction: column; gap: 0.35rem; min-inline-size: 0; }
+.fait__v{
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  color: var(--ink);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+/* « Creusée, chauffée » ne peut pas s'afficher au corps d'un nombre. */
+.fait__v--texte{
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.35;
+  padding-block-start: 0.35rem;
+}
+.fait__l{
+  font: 500 12px 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stone);
+}
+/* Description Centris : intertitres et listes reconstruits. */
+.prop-info__desc p + p{ margin-block-start: 0.9rem; }
+.desc-h{
+  font: 600 0.82rem 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--label);
+  margin-block: 1.8rem 0.7rem;
+}
+.prop-info__desc > .desc-h:first-child{ margin-block-start: 0; }
+.desc-liste{
+  list-style: none;
+  margin-block: 0.7rem;
+  display: grid;
+  gap: 0.45rem;
+}
+.desc-liste li{
+  position: relative;
+  padding-inline-start: 1.1rem;
+}
+.desc-liste li::before{
+  content: '';
+  position: absolute; inset-block-start: 0.62em; inset-inline-start: 0;
+  inline-size: 5px; block-size: 5px; border-radius: 50%;
+  background: var(--label);
+}
 .prop-metric__n{
   font-family: 'Montserrat', system-ui, sans-serif;
   font-weight: 700;
@@ -2281,7 +2366,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
 }
 .prop-price-band__val{
   font-family: 'Montserrat', system-ui, sans-serif;
@@ -2308,139 +2393,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
   margin-block-end: 1rem;
   display: block;
 }
-.amenities{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-3);
-}
-.amenities[data-more] > .amenity--extra{ display: none; }
-.amenities[data-more][open] > .amenity--extra{ display: flex; }
-.amenity{
-  display: flex; align-items: center; gap: 0.65rem;
-  padding-block: 0.4rem;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-}
-.amenity svg{ inline-size: 22px; block-size: 22px; flex-shrink: 0; color: var(--ink); }
-.amenities-more-btn{
-  margin-block-start: 1rem;
-  background: transparent;
-  border: 1px solid var(--hairline);
-  padding: 0.55rem 1.2rem;
-  border-radius: 999px;
-  font: 500 0.85rem 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background-color 240ms var(--ease-out);
-}
-.amenities-more-btn:hover{ background: var(--vellum); }
-.room-table{
-  inline-size: 100%;
-  border-collapse: collapse;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-}
-.room-table thead th{
-  text-align: start;
-  font: 500 11px 'Montserrat', system-ui, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--stone);
-  padding: 0.65rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-}
-.room-table tbody td{
-  padding: 0.8rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-  color: var(--ink);
-}
-.room-table tbody tr{ transition: background-color 160ms var(--ease-out); }
-.room-table tbody tr:hover{ background: var(--cream); }
-@media (max-width: 640px){
-  .room-table thead{ display: none; }
-  .room-table, .room-table tbody, .room-table tr, .room-table td{ display: block; inline-size: 100%; }
-  .room-table tr{ padding-block: 0.75rem; border-block-end: 1px solid var(--hairline); }
-  .room-table td{ padding: 0.25rem 0; border: 0; }
-  .room-table td::before{
-    content: attr(data-l);
-    display: inline-block;
-    inline-size: 7rem;
-    font-weight: 500;
-    color: var(--stone);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-}
-.broker-card{
-  background: var(--vellum);
-  border-radius: 14px;
-  padding: 1.5rem 1.75rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 1.25rem;
-  box-shadow:
-    0 1px 2px oklch(30% 0.05 258 / 0.06),
-    0 4px 14px oklch(30% 0.05 258 / 0.08);
-}
-.broker-card__avatars{ display: flex; align-items: center; }
-.broker-card__avatars img{
-  inline-size: 56px; block-size: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--vellum);
-  box-shadow: 0 2px 8px oklch(30% 0.05 258 / 0.18);
-}
-.broker-card__avatars img + img{ margin-inline-start: -22px; }
-.broker-card__body{ display: flex; flex-direction: column; gap: 0.25rem; min-inline-size: 0; }
-.broker-card__name{
-  font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 20px;
-  color: var(--ink);
-}
-.broker-card__sub{
-  font: 400 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__team{
-  font: 500 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__cta{
-  background: var(--navy);
-  color: var(--cream);
-  padding: 0.7rem 1.3rem;
-  border-radius: 999px;
-  font: 500 0.9rem 'Montserrat', system-ui, sans-serif;
-  justify-self: end;
-  white-space: nowrap;
-  transition: transform 240ms var(--ease-out);
-}
-.broker-card__cta:hover{ transform: translateY(-1px); color: var(--cream); }
-@media (max-width: 560px){
-  .broker-card{ grid-template-columns: auto 1fr; }
-  .broker-card__cta{ grid-column: 1 / -1; justify-self: stretch; text-align: center; }
-}
-/* --- Formulaires (global) --- */
-.contact-form{display:grid;gap:1rem}
-.f-fields{display:grid;gap:1.4rem}
-.contact-form label{display:grid;gap:.5rem;font-size:.85rem;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
-.contact-form input,.contact-form textarea,.contact-form select{font-family:inherit;font-size:1rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);transition:border-color .3s var(--ease),background .3s var(--ease);font-weight:400}
-.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{outline:0;border-color:var(--blue);background:#fff}
-.contact-form textarea{resize:vertical;min-height:120px;font-family:inherit}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 1rem}
-@media(max-width:520px){.f-row{grid-template-columns:1fr}}
-.f-submit{margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
-.f-submit:hover{background:var(--blue);transform:translateY(-2px)}
-.f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
-.f-ok{text-align:center;padding:2rem 1rem}
-.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
-.f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
-.f-ok p{color:var(--ink-2)}
 .prop-similar-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3580,18 +3536,6 @@ const JS = `
         });
       });
 
-      // Amenities expand
-      propPage.querySelectorAll('[data-amenities-toggle]').forEach((btn) => {
-        const target = propPage.querySelector(btn.dataset.amenitiesToggle);
-        btn.addEventListener('click', () => {
-          if (!target) return;
-          const isOpen = target.hasAttribute('open');
-          if (isOpen) target.removeAttribute('open');
-          else target.setAttribute('open', '');
-          btn.textContent = isOpen ? btn.dataset.labelMore : btn.dataset.labelLess;
-        });
-      });
-
       // Mobile map modal
       const mapModal = document.querySelector('[data-map-modal]');
       let mapModalInited = false;
@@ -4301,29 +4245,205 @@ function iconForFeature(code){
   return ICON.check;
 }
 
+// -- Mise en forme des descriptions Centris ----------------------------
+// Centris structure ses descriptions avec des intertitres en capitales et
+// des listes a puces. Tout arrivait ici en un seul pave : les morceaux du
+// fichier d'addenda etaient recolles en ecrasant l'espace blanc (corrige
+// dans groupText, mais seul un nouvel import Centris en profitera) et rien
+// ne retablissait la structure au rendu. On la reconstruit donc a partir
+// des seuls indices que le texte plat porte encore.
+const MAJUSCULES = "A-Z\\u00C0\\u00C2\\u00C4\\u00C9\\u00C8\\u00CA\\u00CB\\u00CE\\u00CF\\u00D4\\u00D6\\u00D9\\u00DB\\u00DC\\u00C7";
+const MOTS_LIAISON = new Set(['ET','DE','DES','DU','LA','LE','LES','EN','AU','AUX','À','POUR','PAR','SUR','AVEC','SANS','DANS','OU']);
+
+const echapper = t => String(t == null ? '' : t)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// Un intertitre : que des capitales, assez long, et pas un simple sigle.
+function estIntertitre(ligne) {
+  const l = ligne.trim().replace(/\s*:\s*$/, '');
+  if (!l || l.length > 60) return false;
+  if (/[a-zà-ÿ]/.test(l)) return false;
+  const lettres = l.replace(/[^A-Za-zÀ-ÿ]/g, '').length;
+  if (lettres < 6) return false;
+  const mots = l.split(/\s+/);
+  return mots.length >= 2 ? mots.some(w => w.length >= 4) : mots[0].length >= 8;
+}
+
+// Decoupe un texte en blocs { type, contenu }.
+function structurerDescription(texte) {
+  let t = String(texte || '').replace(/\r\n?/g, '\n').trim();
+  if (!t) return [];
+
+  // Texte deja ponctue de retours a la ligne (import Centris recent) : on
+  // respecte la mise en forme du courtier plutot que de la deviner.
+  if (!/\n/.test(t)) {
+    // Jamais juste apres une puce, et suivi d'une majuscule ou d'un chiffre :
+    // « Le VENDEUR connait » et « - TERRAIN 1 » sont de l'emphase, pas des
+    // titres, et doivent rester dans le fil du texte.
+    const reTitre = new RegExp(
+      '(?<![-–])\\s' +
+      '((?:[' + MAJUSCULES + '][' + MAJUSCULES + "0-9'’+-]*)(?:\\s+[" + MAJUSCULES + '0-9\\u00C0][' + MAJUSCULES + "0-9'’+-]*)*)" +
+      '(?=\\s+(?:[' + MAJUSCULES + '0-9(«"-]))', 'g');
+    t = (' ' + t).replace(reTitre, (m, brut) => {
+      let mots = brut.trim().split(/\s+/);
+      while (mots.length > 1 && MOTS_LIAISON.has(mots[mots.length - 1])) mots.pop();
+      const titre = mots.join(' ');
+      return estIntertitre(titre) ? '\n\n' + titre + '\n' + brut.slice(titre.length) : m;
+    });
+    // Les « - » de Centris separent des elements de liste.
+    t = t.replace(/\s+[-–]\s+/g, '\n- ');
+  }
+
+  const blocs = [];
+  for (const ligne of t.split('\n')) {
+    const l = ligne.trim();
+    if (!l) continue;
+    const puce = l.match(/^[-–•]\s*(.+)$/);
+    if (puce) {
+      const dernier = blocs[blocs.length - 1];
+      if (dernier && dernier.type === 'liste') dernier.contenu.push(puce[1]);
+      else blocs.push({ type: 'liste', contenu: [puce[1]] });
+    } else if (estIntertitre(l)) {
+      blocs.push({ type: 'titre', contenu: l.replace(/\s*:\s*$/, '') });
+    } else {
+      blocs.push({ type: 'paragraphe', contenu: l });
+    }
+  }
+  return blocs;
+}
+
+function descriptionHtml(texte) {
+  return structurerDescription(texte).map(b => {
+    if (b.type === 'titre') return '<h3 class="desc-h">' + echapper(b.contenu) + '</h3>';
+    if (b.type === 'liste') return '<ul class="desc-liste">' + b.contenu.map(i => '<li>' + echapper(i) + '</li>').join('') + '</ul>';
+    return '<p>' + echapper(b.contenu) + '</p>';
+  }).join('');
+}
+
+// ── Les quatre repères d'une fiche ────────────────────────────────────
+// La liste « Caractéristiques » déversait les codes bruts de Centris — ASP,
+// BALC, CREU, INTG, CEGP — parce que le dictionnaire de décodage ne les
+// couvre pas tous. Illisible. On garde plutôt les quatre premiers repères
+// réellement renseignés, dans l'ordre de priorité fixé par Alex.
+const NIVEAUX_SOUS_SOL = new Set(['0', 'SS', 'SS1', 'SS2']);
+
+// Ordre d'énumération volontaire : la taille d'abord, l'emplacement ensuite,
+// le confort en dernier. « Double, attenant, chauffé » se lit mieux que
+// l'ordre où Centris livre les codes (« chauffé, attenant, double »).
+const VAL_GARAGE = [
+  ['DOUB','Double'], ['TRIP','Triple'], ['QUAD','Quadruple'], ['SIMP','Simple'],
+  ['ATT','Attenant'], ['INTG','Intégré'], ['INT','Intégré'], ['DET','Détaché'],
+  ['CHAU','Chauffé']
+];
+const VAL_PISCINE = [
+  ['CREU','Creusée'], ['CR','Creusée'], ['HT','Hors terre'], ['INT','Intérieure'],
+  ['CHAU','Chauffée'], ['SEL','Au sel'], ['NORM','Standard']
+];
+const VAL_ZONAGE = [
+  ['RES','Résidentiel'], ['MULT','Multifamilial'], ['COMM','Commercial'],
+  ['IND','Industriel'], ['AGR','Agricole'], ['FORE','Forestier'], ['VILL','Villégiature']
+];
+const VAL_TOPO = [['PLAT','Plat'], ['ACC','Accidenté'], ['PENT','En pente']];
+
+function faitsSaillants(p) {
+  const rooms = p.rooms || [];
+  const valeurs = code => new Set((p.features || []).filter(f => f.code === code).map(f => f.value));
+
+  // Énumère les valeurs connues d'une caractéristique, dans l'ordre voulu et
+  // sans répéter un mot que deux codes Centris désignent (INT et INTG).
+  const libelle = (code, ordre) => {
+    const dispo = valeurs(code);
+    const mots = [];
+    for (const [cle, mot] of ordre) if (dispo.has(cle) && !mots.includes(mot)) mots.push(mot);
+    if (!mots.length) return '';
+    return mots[0] + (mots.length > 1 ? ', ' + mots.slice(1).join(', ').toLowerCase() : '');
+  };
+
+  // Le niveau « 0 » ne désigne un sous-sol que s'il coexiste avec un autre
+  // niveau. Dans l'appartement du 14 Rue Louis-Jolliet, les huit pièces sont
+  // au niveau « 0 » : c'est l'étage du logement, pas une cave — et un
+  // « 0 + 2 chambres » n'aurait aucun sens.
+  const niveaux = new Set(rooms.map(r => String(r.level || '').toUpperCase()));
+  const surPlusieursNiveaux = niveaux.size > 1;
+  const auSousSol = r => surPlusieursNiveaux && NIVEAUX_SOUS_SOL.has(String(r.level || '').toUpperCase());
+  const compter = (codes, filtre) =>
+    rooms.filter(r => codes.includes(r.code) && (filtre ? filtre(r) : true)).length;
+
+  const faits = [];
+  const ajouter = (valeur, etiquette, texte) => {
+    if (valeur) faits.push({ valeur, etiquette, texte: !!texte });
+  };
+
+  // 1. Année de construction
+  const annee = String(p.yearBuilt || '').trim();
+  if (/^\d{4}$/.test(annee)) ajouter(annee, 'Construction');
+
+  // Pour un plex, le nombre de logements est le chiffre qu'on cherche en
+  // premier — l'équivalent des chambres pour une maison. Seule entorse à
+  // l'ordre demandé, et seulement pour ce type de propriété.
+  const plex = String(p.typeCode || '').match(/^M\/(\d)X$/);
+  if (plex) ajouter(plex[1], Number(plex[1]) > 1 ? 'Logements' : 'Logement');
+
+  // 2. Chambres, au format Centris « 3 + 1 » : hors sous-sol, puis au sous-sol.
+  const chHaut = compter(['CAC','CCP','CC2'], r => !auSousSol(r));
+  const chBas = compter(['CAC','CCP','CC2'], auSousSol);
+  const chTotal = chHaut + chBas;
+  if (chTotal) {
+    ajouter(chHaut && chBas ? chHaut + ' + ' + chBas : String(chTotal),
+            chTotal > 1 ? 'Chambres' : 'Chambre');
+  }
+
+  // 3. Salles de bain (baignoire ou douche), 4. salles d'eau (toilette seule).
+  const sdb = compter(['SDB']);
+  if (sdb) ajouter(String(sdb), sdb > 1 ? 'Salles de bain' : 'Salle de bain');
+  const sde = compter(['SDE','S-E']);
+  if (sde) ajouter(String(sde), sde > 1 ? "Salles d'eau" : "Salle d'eau");
+
+  // 5. Garage, 6. piscine avec ce qui la caractérise, 7. superficie du terrain.
+  ajouter(libelle('GARA', VAL_GARAGE), 'Garage', true);
+  ajouter(libelle('PISC', VAL_PISCINE), 'Piscine', true);
+  ajouter(fmtArea(p.areaTerrain), 'Terrain');
+
+  // Terrains vacants et plex n'ont ni année, ni pièces, ni piscine : la liste
+  // ci-dessus leur donne une case ou deux. On complète avec ce qui compte
+  // vraiment pour eux, jusqu'à quatre cases — jamais au-delà.
+  if (faits.length < 4) {
+    const eau = valeurs('EAU'), egout = valeurs('SYEG');
+    const services = [
+      eau.has('AMU') ? 'Aqueduc' : '',
+      egout.has('EGMU') ? 'Égout' : ''
+    ].filter(Boolean);
+    const aucunService = eau.has('AUCN') && egout.has('AUCN');
+    const complements = [
+      [libelle('ZONG', VAL_ZONAGE), 'Zonage', true],
+      [services.length ? services.join(' et ').replace(' et Égout', ' et égout')
+        : (aucunService ? 'Aucun' : ''), 'Services', true],
+      [libelle('TOPO', VAL_TOPO), 'Topographie', true]
+    ];
+    for (const [v, l, t] of complements) {
+      if (faits.length >= 4) break;
+      ajouter(v, l, t);
+    }
+  }
+
+  // Quatre cases visées ; moins si la fiche Centris n'en renseigne pas plus.
+  return faits.slice(0, 4);
+}
+
 function detailPage(p) {
   const total = p.photos.length;
   const mosaicPhotos = p.photos.slice(0, 4);
   // Beds (chambres) — codes starting with C, excluding CR (cuisine? avoid ambiguity)
   const beds = (p.rooms || []).filter(r => ['CAC','CCP','CC2'].includes(r.code)).length;
   const baths = (p.rooms || []).filter(r => r.code === 'SDB' || r.code === 'SDE').length;
+  const faits = faitsSaillants(p);
   const yrTxt = (p.yearBuilt && String(p.yearBuilt).trim() && String(p.yearBuilt) !== '0') ? ` · Construite en ${p.yearBuilt}` : '';
-
-  // Amenities — one item per decoded feature value
-  const amenities = [];
-  for (const f of (p.features || [])) {
-    const decoded = decodeFeature(f);
-    if (!decoded) continue;
-    amenities.push({ icon: iconForFeature(f.code), label: `${decoded.name} : ${decoded.value}` });
-  }
-  const amenitiesShown = amenities.slice(0, 12);
-  const amenitiesExtra = amenities.slice(12);
 
   const photoUrls = p.photos.map(ph => ph.url);
   const hasGeo = isFinite(p.lat) && isFinite(p.lon) && p.lat !== null && p.lon !== null;
 
   // Description — fall back to remFr if descFr is empty
-  const desc = (p.descFr && p.descFr.trim()) ? p.descFr : '';
+  const desc = (p.descFr && p.descFr.trim()) ? descriptionHtml(p.descFr) : '';
 
   // Propriétés similaires — voir les barèmes de SIMILAR plus haut.
   const sim = similarProperties(p);
@@ -4436,23 +4556,6 @@ function detailPage(p) {
       </div>
     ` : ''}
 
-    <div class="prop-info__metrics">
-      <div class="prop-metric">
-        <div class="prop-metric__n">${beds || '—'}</div>
-        <div class="prop-metric__l">Chambres</div>
-      </div>
-      <div class="prop-metric__sep" aria-hidden="true"></div>
-      <div class="prop-metric">
-        <div class="prop-metric__n">${baths || '—'}</div>
-        <div class="prop-metric__l">Salles de bain</div>
-      </div>
-      <div class="prop-metric__sep" aria-hidden="true"></div>
-      <div class="prop-metric">
-        <div class="prop-metric__n">${fmtArea(p.areaTerrain) || '—'}</div>
-        <div class="prop-metric__l">Terrain</div>
-      </div>
-    </div>
-
     <div class="prop-price-band">
       <div class="prop-price-band__main">
         <div class="prop-price-band__eye">Prix demandé</div>
@@ -4461,14 +4564,15 @@ function detailPage(p) {
       <a class="prop-price-band__cta" href="${visiteMailto}">Visiter cette propriété</a>
     </div>
 
-    ${amenities.length ? `
+    ${faits.length ? `
     <div class="prop-section">
       <span class="prop-section__eye">Caractéristiques</span>
-      <div class="amenities" ${amenitiesExtra.length ? 'data-more' : ''} id="amenities-${p.mls}">
-        ${amenitiesShown.map(a => `<div class="amenity">${a.icon}<span>${a.label}</span></div>`).join('')}
-        ${amenitiesExtra.map(a => `<div class="amenity amenity--extra">${a.icon}<span>${a.label}</span></div>`).join('')}
+      <div class="faits">
+        ${faits.map(f => `<div class="fait">
+          <div class="fait__v${f.texte ? ' fait__v--texte' : ''}">${attrEsc(f.valeur)}</div>
+          <div class="fait__l">${attrEsc(f.etiquette)}</div>
+        </div>`).join('')}
       </div>
-      ${amenitiesExtra.length ? `<button type="button" class="amenities-more-btn" data-amenities-toggle="#amenities-${p.mls}" data-label-more="Voir les ${amenities.length} caractéristiques" data-label-less="Réduire">Voir les ${amenities.length} caractéristiques</button>` : ''}
     </div>
     ` : ''}
 
@@ -4479,7 +4583,7 @@ function detailPage(p) {
         <thead><tr><th>Pièce</th><th>Niveau</th><th>Dimensions</th><th>Revêtement</th></tr></thead>
         <tbody>${p.rooms.slice(0,20).map(r=>{
           const name = ROOM_NAME[r.code] || r.code || '—';
-          const level = ROOM_LEVEL[r.level] || r.level || '—';
+          const level = nomNiveau(r.level, new Set(p.rooms.map(x => String(x.level || '').toUpperCase())).size > 1);
           const dim = fmtDim(r.dim) || '—';
           const rev = ROOM_REV[r.rev] || r.rev || '—';
           return `<tr><td data-l="Pièce">${name}</td><td data-l="Niveau">${level}</td><td data-l="Dim.">${dim}</td><td data-l="Revêtement">${rev}</td></tr>`;
@@ -4491,7 +4595,7 @@ function detailPage(p) {
     ${p.remFr ? `
     <div class="prop-section">
       <span class="prop-section__eye">Remarques du courtier</span>
-      <div class="prop-info__desc" style="max-inline-size:65ch;">${p.remFr}</div>
+      <div class="prop-info__desc" style="max-inline-size:65ch;">${descriptionHtml(p.remFr)}</div>
     </div>
     ` : ''}
 
