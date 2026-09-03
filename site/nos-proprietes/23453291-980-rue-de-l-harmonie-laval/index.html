@@ -65,15 +65,26 @@
   <div class="prop-media">
     <div class="prop-media__overlay">
       <div class="prop-media__icons">
-        <button type="button" class="icon-btn" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-        <button type="button" class="icon-btn" aria-label="Partager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <div class="share" data-share-root>
+          <button type="button" class="icon-btn" data-share
+            data-share-title="Unifamiliale à vendre — 980 Rue de l'Harmonie, Laval"
+            data-share-text="Unifamiliale à vendre au 980 Rue de l'Harmonie, Laval — 614 999 $. MLS 23453291."
+            data-share-url="https://jacquesroussel.com/nos-proprietes/23453291-980-rue-de-l-harmonie-laval/"
+            aria-label="Partager cette propriété" aria-expanded="false" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <div class="share__menu" data-share-menu hidden role="menu">
+            <a class="share__item" role="menuitem" href="mailto:?subject=Unifamiliale%20%C3%A0%20vendre%20%E2%80%94%20980%20Rue%20de%20l'Harmonie%2C%20Laval&amp;body=Unifamiliale%20%C3%A0%20vendre%20au%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20%E2%80%94%20614%C2%A0999%20%24.%20MLS%2023453291.%0D%0A%0D%0Ahttps%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F">Par courriel</a>
+            <a class="share__item" role="menuitem" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F" target="_blank" rel="noopener">Facebook</a>
+            <a class="share__item" role="menuitem" href="https://wa.me/?text=Unifamiliale%20%C3%A0%20vendre%20au%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20%E2%80%94%20614%C2%A0999%20%24.%20MLS%2023453291.%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" class="share__item" role="menuitem" data-share-copy>Copier le lien</button>
+          </div>
+        </div>
       </div>
       <div class="prop-toggle" data-prop-toggle data-mode="photos" role="tablist" aria-label="Vue média">
         <span class="prop-toggle__pill" aria-hidden="true"></span>
         <button type="button" data-mode="photos" aria-pressed="true" role="tab">Photos</button>
         <button type="button" data-mode="map" aria-pressed="false" role="tab">Carte</button>
       </div>
-      <a class="prop-media__cta" href="/rendez-vous/?mls=23453291">Visiter</a>
+      <a class="prop-media__cta" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(MLS%2023453291)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(614%C2%A0999%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F">Visiter</a>
     </div>
 
     <div class="prop-media__pane" id="media-pane" aria-hidden="false">
@@ -133,7 +144,7 @@
         <div class="prop-price-band__eye">Prix demandé</div>
         <div class="prop-price-band__val">614 999 $</div>
       </div>
-      <a class="prop-price-band__cta" href="/rendez-vous/?mls=23453291">Visiter cette propriété</a>
+      <a class="prop-price-band__cta" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(MLS%2023453291)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(614%C2%A0999%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F">Visiter cette propriété</a>
     </div>
 
     
@@ -182,30 +193,30 @@
     
     <div class="prop-section">
       <span class="prop-section__eye">Propriétés similaires</span>
-      <div class="prop-similar-grid"><article class="prop-card" data-type="terrain" data-city="laval">
-    <a href="/nos-proprietes/12206682-rue-d-amay-laval/" aria-label="Rue d'Amay, Laval · 67 500 $">
+      <div class="prop-similar-grid"><article class="prop-card" data-type="unifamiliale" data-city="saint-hippolyte">
+    <a href="/nos-proprietes/18834457-56-rue-annik-saint-hippolyte/" aria-label="56 Rue Annik, Saint-Hippolyte · 559 900 $">
       <div class="prop-card__media">
-        
-        <img loading="lazy" src="https://mediaserver.centris.ca/media.ashx?id=ADDE24EDEE35236DD98C4E8D10&t=pi&f=I" alt="Rue d'Amay, Laval">
+        <span class="prop-card__badge">Nouveau</span>
+        <img loading="lazy" src="https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4543CCD116AC1FD11&t=pi&f=I" alt="56 Rue Annik, Saint-Hippolyte">
       </div>
       <div class="prop-card__body">
-        <span class="prop-card__city">Laval</span>
-        <div class="prop-card__price">67 500 $</div>
-        <div class="prop-card__addr">Rue d'Amay</div>
-        <div class="prop-card__meta"><span>465 m²</span></div>
+        <span class="prop-card__city">Saint-Hippolyte</span>
+        <div class="prop-card__price">559 900 $</div>
+        <div class="prop-card__addr">56 Rue Annik</div>
+        <div class="prop-card__meta"><span>3 ch.</span><span>2 sdb.</span><span>4 049 m²</span></div>
       </div>
     </a>
-  </article><article class="prop-card" data-type="condo" data-city="laval">
-    <a href="/nos-proprietes/14475622-3825-boul-levesque-o-app-15-laval/" aria-label="3825 Boul. Lévesque O., app. 15, Laval · 259 900 $">
+  </article><article class="prop-card" data-type="unifamiliale" data-city="lachute">
+    <a href="/nos-proprietes/16429428-38-rue-mallette-lachute/" aria-label="38 Rue Mallette, Lachute · 314 900 $">
       <div class="prop-card__media">
-        
-        <img loading="lazy" src="https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA1C3474DD3751AAD1E&t=pi&f=I" alt="3825 Boul. Lévesque O., app. 15, Laval">
+        <span class="prop-card__badge">Nouveau</span>
+        <img loading="lazy" src="https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA43C157DD68910CD1D&t=pi&f=I" alt="38 Rue Mallette, Lachute">
       </div>
       <div class="prop-card__body">
-        <span class="prop-card__city">Laval</span>
-        <div class="prop-card__price">259 900 $</div>
-        <div class="prop-card__addr">3825 Boul. Lévesque O., app. 15</div>
-        <div class="prop-card__meta"><span>1 ch.</span><span>1 sdb.</span></div>
+        <span class="prop-card__city">Lachute</span>
+        <div class="prop-card__price">314 900 $</div>
+        <div class="prop-card__addr">38 Rue Mallette</div>
+        <div class="prop-card__meta"><span>2 ch.</span><span>1 sdb.</span><span>490 m²</span></div>
       </div>
     </a>
   </article></div>
@@ -216,7 +227,7 @@
 
 <aside class="bottom-bar" data-prop-bar>
   <button type="button" class="bottom-bar__btn" data-open-map-modal>Carte</button>
-  <a class="bottom-bar__btn bottom-bar__btn--primary" href="/rendez-vous/?mls=23453291">Visiter</a>
+  <a class="bottom-bar__btn bottom-bar__btn--primary" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(MLS%2023453291)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20980%20Rue%20de%20l'Harmonie%2C%20Laval%20(614%C2%A0999%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F23453291-980-rue-de-l-harmonie-laval%2F">Visiter</a>
 </aside>
 
 <div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Galerie de photos">

@@ -65,15 +65,26 @@
   <div class="prop-media">
     <div class="prop-media__overlay">
       <div class="prop-media__icons">
-        <button type="button" class="icon-btn" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-        <button type="button" class="icon-btn" aria-label="Partager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        <div class="share" data-share-root>
+          <button type="button" class="icon-btn" data-share
+            data-share-title="Commercial à vendre — 103 Rue St-Louis, Saint-Eustache"
+            data-share-text="Commercial à vendre au 103 Rue St-Louis, Saint-Eustache — 1 999 900 $. MLS 21987607."
+            data-share-url="https://jacquesroussel.com/nos-proprietes/21987607-103-rue-st-louis-saint-eustache/"
+            aria-label="Partager cette propriété" aria-expanded="false" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <div class="share__menu" data-share-menu hidden role="menu">
+            <a class="share__item" role="menuitem" href="mailto:?subject=Commercial%20%C3%A0%20vendre%20%E2%80%94%20103%20Rue%20St-Louis%2C%20Saint-Eustache&amp;body=Commercial%20%C3%A0%20vendre%20au%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20%E2%80%94%201%C2%A0999%C2%A0900%20%24.%20MLS%2021987607.%0D%0A%0D%0Ahttps%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F">Par courriel</a>
+            <a class="share__item" role="menuitem" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F" target="_blank" rel="noopener">Facebook</a>
+            <a class="share__item" role="menuitem" href="https://wa.me/?text=Commercial%20%C3%A0%20vendre%20au%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20%E2%80%94%201%C2%A0999%C2%A0900%20%24.%20MLS%2021987607.%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" class="share__item" role="menuitem" data-share-copy>Copier le lien</button>
+          </div>
+        </div>
       </div>
       <div class="prop-toggle" data-prop-toggle data-mode="photos" role="tablist" aria-label="Vue média">
         <span class="prop-toggle__pill" aria-hidden="true"></span>
         <button type="button" data-mode="photos" aria-pressed="true" role="tab">Photos</button>
         <button type="button" data-mode="map" aria-pressed="false" role="tab">Carte</button>
       </div>
-      <a class="prop-media__cta" href="/rendez-vous/?mls=21987607">Visiter</a>
+      <a class="prop-media__cta" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(MLS%2021987607)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(1%C2%A0999%C2%A0900%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F">Visiter</a>
     </div>
 
     <div class="prop-media__pane" id="media-pane" aria-hidden="false">
@@ -133,7 +144,7 @@
         <div class="prop-price-band__eye">Prix demandé</div>
         <div class="prop-price-band__val">1 999 900 $</div>
       </div>
-      <a class="prop-price-band__cta" href="/rendez-vous/?mls=21987607">Visiter cette propriété</a>
+      <a class="prop-price-band__cta" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(MLS%2021987607)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(1%C2%A0999%C2%A0900%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F">Visiter cette propriété</a>
     </div>
 
     
@@ -187,19 +198,6 @@
         <div class="prop-card__meta"><span>1 170 m²</span></div>
       </div>
     </a>
-  </article><article class="prop-card" data-type="multilogements" data-city="saint-eustache">
-    <a href="/nos-proprietes/21982022-97-97a-rue-st-louis-saint-eustache/" aria-label="97-97A Rue St-Louis, Saint-Eustache · 524 900 $">
-      <div class="prop-card__media">
-        
-        <img loading="lazy" src="https://mediaserver.centris.ca/media.ashx?id=ADDE24EDE5E5525D1C6A9CAD1A&t=pi&f=I" alt="97-97A Rue St-Louis, Saint-Eustache">
-      </div>
-      <div class="prop-card__body">
-        <span class="prop-card__city">Saint-Eustache</span>
-        <div class="prop-card__price">524 900 $</div>
-        <div class="prop-card__addr">97-97A Rue St-Louis</div>
-        <div class="prop-card__meta"><span>431 m²</span></div>
-      </div>
-    </a>
   </article></div>
     </div>
     
@@ -208,7 +206,7 @@
 
 <aside class="bottom-bar" data-prop-bar>
   <button type="button" class="bottom-bar__btn" data-open-map-modal>Carte</button>
-  <a class="bottom-bar__btn bottom-bar__btn--primary" href="/rendez-vous/?mls=21987607">Visiter</a>
+  <a class="bottom-bar__btn bottom-bar__btn--primary" href="mailto:alexandre.roussel@remax-quebec.com?subject=Demande%20de%20visite%20%E2%80%94%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(MLS%2021987607)&body=Bonjour%2C%0D%0A%0D%0AJ'aimerais%20beaucoup%20visiter%20la%20propri%C3%A9t%C3%A9%20situ%C3%A9e%20au%20103%20Rue%20St-Louis%2C%20Saint-Eustache%20(1%C2%A0999%C2%A0900%20%24).%0D%0AEst-ce%20possible%20de%20me%20recontacter%20pour%20convenir%20d'un%20moment%20%3F%0D%0A%0D%0AMes%20disponibilit%C3%A9s%20%3A%20%0D%0AMon%20num%C3%A9ro%20de%20t%C3%A9l%C3%A9phone%20%3A%20%0D%0A%0D%0AMerci%20!%0D%0A%0D%0AFiche%20%3A%20https%3A%2F%2Fjacquesroussel.com%2Fnos-proprietes%2F21987607-103-rue-st-louis-saint-eustache%2F">Visiter</a>
 </aside>
 
 <div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Galerie de photos">

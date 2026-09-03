@@ -111,6 +111,16 @@ const AGENCY = {
 // Verrou de conformité : la montgolfière ne peut jamais paraître sans le
 // logotype RE/MAX (guide, p. 4). Les deux sont dans un seul fichier verrouillé
 // — ne pas le recadrer, le recolorer ni le redimensionner de façon non uniforme.
+// Ligne directe affichée sur /contact/ et /rendez-vous/ : le numéro personnel
+// du courtier qui répond, et non la ligne principale de l'agence (AGENCY.phone).
+// AGENCY.phone reste affiché au pied de page et dans les données structurées,
+// comme l'exige le guide RE/MAX — ne pas confondre les deux.
+const CONTACT = {
+  phone: '514.805.6953',
+  tel: '+15148056953',
+  email: 'alexandre.roussel@remax-quebec.com'
+};
+
 const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
 
 // Google Calendar Appointment Schedule — l'URL longue de la page de réservation
@@ -924,6 +934,9 @@ const CSS = `
   --navy:#13202E;
   --sand:#CDB89A;
   --bronze:#B58A4F;
+  /* Rouge RE/MAX — réservé aux pastilles d'état (« Nouveau »), jamais au texte
+     courant ni aux liens : DESIGN.md interdit le rouge partout ailleurs. */
+  --remax-red:#DC1C2E;
   /* Aliases pour les pages de contenu (vendre / acheter / guides) */
   --ink-2:var(--stone);
   --blue:var(--teal);
@@ -985,6 +998,7 @@ const CSS = `
     --navy: oklch(22% 0.04 240);
     --sand: oklch(78% 0.04 75);
     --bronze: oklch(62% 0.08 70);
+    --remax-red: oklch(55.4% 0.208 26.5);
   }
 }
 
@@ -1647,8 +1661,8 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .prop-card:hover .prop-card__media::after{ opacity: 0.88; }
 .prop-card__badge{
   position: absolute; top: 14px; inset-inline-start: 14px;
-  background: var(--sand);
-  color: var(--ink);
+  background: var(--remax-red);
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -1957,7 +1971,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .pcard .ph{ aspect-ratio: 3/2; overflow: hidden; position: relative; background: var(--hairline); }
 .pcard .ph img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
 .pcard .body{ padding: var(--space-4); }
-.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--sand); color: var(--ink); padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
+.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--remax-red); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
 .pcard .loc{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .pcard .addr{ font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; margin-block: 0.4rem 0.6rem; color: var(--ink); }
 .pcard .price{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--bronze); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
@@ -2012,6 +2026,20 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .prop-media__overlay > *{ pointer-events: auto; }
 .prop-media__icons{ display: flex; gap: 0.5rem; }
+.share{ position: relative; }
+.share__menu{
+  position: absolute; inset-block-start: calc(100% + 8px); inset-inline-start: 0;
+  min-inline-size: 190px; padding: 0.4rem;
+  background: var(--vellum); border: 1px solid var(--hairline);
+  border-radius: 14px; box-shadow: var(--shadow-card); z-index: 20;
+}
+.share__item{
+  display: block; inline-size: 100%; text-align: start;
+  padding: 0.6rem 0.8rem; border: 0; border-radius: 9px; background: none;
+  font: 500 0.9rem 'Montserrat', sans-serif; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+}
+.share__item:hover{ background: var(--cream); color: var(--ink); }
 .icon-btn{
   inline-size: 40px; block-size: 40px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -2025,6 +2053,18 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: transform 240ms var(--ease-out), background-color 240ms var(--ease-out);
 }
 .icon-btn:hover{ transform: scale(1.06); background: var(--vellum); }
+.share-toast{
+  position: fixed; inset-block-end: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  inset-inline: 0; margin-inline: auto; inline-size: max-content; max-inline-size: 86vw;
+  background: var(--ink); color: var(--cream);
+  font: 500 0.9rem 'Montserrat', sans-serif; letter-spacing: 0.01em;
+  padding: 0.7rem 1.2rem; border-radius: 999px; box-shadow: var(--shadow-card);
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+  z-index: 9999;
+}
+.share-toast.is-on{ opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce){ .share-toast{ transition-duration: 1ms; } }
 .icon-btn svg{ inline-size: 18px; block-size: 18px; }
 .prop-toggle{
   position: relative;
@@ -3361,8 +3401,14 @@ const JS = `
         if (!el || el._inited) return;
         el._inited = true;
         const map = window.L.map(el, { zoomControl: true, scrollWheelZoom: false }).setView([lat, lon], 15);
-        window.L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        // Fond de carte OpenStreetMap : le seul vraiment sans clé aujourd'hui.
+        // Stadia Maps exige une authentification sur tout domaine public (d'où
+        // les tuiles « 401 Invalid Authentication »), et CARTO tamponne
+        // désormais ses tuiles gratuites d'un « API KEY REQUIRED ». Pour
+        // retrouver le rendu épuré d'avant, il faut une clé Stadia gratuite :
+        // voir NOTES.md.
+        window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           maxZoom: 19
         }).addTo(map);
         const pinHtml = '<div class="prop-pin"><svg viewBox="0 0 24 24" width="36" height="36" fill="#2c4160" stroke="#FBF8F2" stroke-width="1.5"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="#FBF8F2" stroke="none"/></svg></div>';
@@ -3390,6 +3436,86 @@ const JS = `
             setTimeout(() => leafletMap.invalidateSize(), 60);
           }
         }));
+      }
+
+      // Partage. Sur téléphone, navigator.share ouvre la feuille de partage
+      // du système : Messages, courriel, WhatsApp, Facebook, AirDrop… c'est
+      // l'appareil qui décide de la liste, pas nous. Sur ordinateur, où l'API
+      // n'existe pas (Chrome et Firefox de bureau), on copie l'adresse dans le
+      // presse-papiers et on le dit, sinon le clic reste sans effet visible —
+      // c'est exactement ce qui se passait avant.
+      const shareBtn = propPage.querySelector('[data-share]');
+      if (shareBtn) {
+        const toast = (msg) => {
+          let t = document.querySelector('.share-toast');
+          if (!t) { t = document.createElement('div'); t.className = 'share-toast'; document.body.appendChild(t); }
+          t.textContent = msg;
+          t.classList.add('is-on');
+          clearTimeout(t._timer);
+          t._timer = setTimeout(() => t.classList.remove('is-on'), 2400);
+        };
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'a pas le focus (onglet en arrière-plan, fenêtre inactive).
+        // La vieille execCommand n'a pas cette exigence : elle sauve le clic.
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'est pas visible ou n'a pas le focus. La vieille
+        // execCommand a les mêmes limites : si les deux échouent, on le dit
+        // plutôt que de laisser le clic sans effet, comme avant.
+        const copier = async (texte) => {
+          try { await navigator.clipboard.writeText(texte); return true; } catch (e) {}
+          const zone = document.createElement('textarea');
+          zone.value = texte;
+          zone.setAttribute('readonly', '');
+          zone.style.cssText = 'position:fixed;inset-block-start:-9999px;opacity:0';
+          document.body.appendChild(zone);
+          zone.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          zone.remove();
+          return ok;
+        };
+
+        const menu = propPage.querySelector('[data-share-menu]');
+        const ouvrirMenu = (ouvert) => {
+          if (!menu) return;
+          menu.hidden = !ouvert;
+          shareBtn.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+        };
+
+        shareBtn.addEventListener('click', async (ev) => {
+          ev.stopPropagation();
+          const data = {
+            title: shareBtn.dataset.shareTitle || document.title,
+            text: shareBtn.dataset.shareText || '',
+            url: shareBtn.dataset.shareUrl || location.href
+          };
+          // Téléphones et tablettes : la feuille de partage du systeme donne
+          // accès à tout ce qui est installé (Messages, courriel, WhatsApp,
+          // Facebook, AirDrop...). C'est l'appareil qui compose la liste.
+          if (navigator.share) {
+            try { await navigator.share(data); return; }
+            catch (err) {
+              // Feuille fermée par la personne : ne rien afficher.
+              if (err && err.name === 'AbortError') return;
+            }
+          }
+          // Ordinateur : notre propre menu, options fixes et prévisibles.
+          ouvrirMenu(menu ? menu.hidden : false);
+        });
+
+        menu?.querySelector('[data-share-copy]')?.addEventListener('click', async () => {
+          const url = shareBtn.dataset.shareUrl || location.href;
+          toast(await copier(url) ? 'Lien copié' : 'Copie impossible');
+          ouvrirMenu(false);
+        });
+
+        menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => ouvrirMenu(false)));
+        document.addEventListener('click', (ev) => {
+          if (menu && !menu.hidden && !ev.target.closest('[data-share-root]')) ouvrirMenu(false);
+        });
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && menu && !menu.hidden) { ouvrirMenu(false); shareBtn.focus(); }
+        });
       }
 
       // Lightbox
@@ -3785,6 +3911,9 @@ const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
 
 // --- Utility formatters ---
 const fmtPrice = p => p ? `${p.toLocaleString('fr-CA')} $` : 'Prix sur demande';
+// Échappement pour une valeur placée entre guillemets dans un attribut HTML.
+const attrEsc = v => String(v ?? '')
+  .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const fmtNum = n => (n||0).toLocaleString('fr-CA');
 
 // La superficie de terrain arrive brute de Centris : « 1170.40 MC », « 17234.09 PC ».
@@ -4082,11 +4211,65 @@ writePage('nos-proprietes/index.html', layout({
 }));
 
 // --- PROPERTY DETAIL PAGES ---
-function similarProperties(p){ return properties.filter(x=>x.mls!==p.mls && x.city===p.city).slice(0,3); }
+// « Propriétés similaires » — barèmes explicites. L'ancienne règle (« même
+// ville », complétée par les premières inscriptions venues quand il en manquait)
+// affichait un terrain commercial de 8 M$ sous une unifamiliale de 560 000 $.
+// Trois critères, tous obligatoires. Aucun candidat conforme → la section
+// disparaît, plutôt que de meubler avec n'importe quoi.
+const SIMILAR = {
+  memeType: true,      // une unifamiliale n'est comparée qu'à une unifamiliale
+  ecartPrix: 0.35,     // ±35 % du prix affiché
+  rayonKm: 40,         // à vol d'oiseau autour de la propriété
+  ecartPrixElargi: 0.60, // 2e passe si la 1re ne remplit pas les cases
+  nombre: 2            // cases affichées sur la fiche
+};
+
+// Distance à vol d'oiseau en km (haversine). null si une coordonnée manque.
+function distanceKm(a, b) {
+  if (![a.lat, a.lon, b.lat, b.lon].every(v => typeof v === 'number' && isFinite(v))) return null;
+  const R = 6371, rad = d => d * Math.PI / 180;
+  const dLat = rad(b.lat - a.lat), dLon = rad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2
+    + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function similarProperties(p) {
+  if (!p.price) return [];
+  const bassin = properties.filter(x =>
+    x.mls !== p.mls && x.price > 0 && (!SIMILAR.memeType || x.typeLabel === p.typeLabel));
+
+  const trier = (ecartMax, rayonMax) => bassin
+    .map(x => {
+      const ecart = Math.abs(x.price - p.price) / p.price;
+      if (ecart > ecartMax) return null;
+      const km = distanceKm(p, x);
+      if (rayonMax !== null) {
+        // Sans coordonnées Centris, on se rabat sur la ville : mieux vaut ça
+        // que d'écarter à tort une inscription voisine.
+        if (km === null ? x.city !== p.city : km > rayonMax) return null;
+      }
+      // Le prix pèse deux fois plus que la distance : un acheteur compare
+      // d'abord ce qui entre dans son budget.
+      return { x, score: ecart * 2 + (km === null ? 0.5 : km / 100) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.score - b.score)
+    .map(r => r.x);
+
+  const retenues = trier(SIMILAR.ecartPrix, SIMILAR.rayonKm);
+  if (retenues.length < SIMILAR.nombre) {
+    // 2e passe : fourchette de prix élargie et rayon levé. Le type, lui, ne
+    // bouge jamais — c'est ce qui rendait les suggestions absurdes.
+    for (const x of trier(SIMILAR.ecartPrixElargi, null)) {
+      if (!retenues.includes(x)) retenues.push(x);
+    }
+  }
+  return retenues.slice(0, SIMILAR.nombre);
+}
 
 // Lucide-style inline SVGs (stroke 1.5) used in the property detail page
 const ICON = {
-  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
   share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
@@ -4142,12 +4325,37 @@ function detailPage(p) {
   // Description — fall back to remFr if descFr is empty
   const desc = (p.descFr && p.descFr.trim()) ? p.descFr : '';
 
-  // Similar — fill with other recent props if fewer than 3 same-city
-  let sim = similarProperties(p);
-  if (sim.length < 3) {
-    const fill = properties.filter(x => x.mls !== p.mls && !sim.includes(x)).slice(0, 3 - sim.length);
-    sim = sim.concat(fill);
-  }
+  // Propriétés similaires — voir les barèmes de SIMILAR plus haut.
+  const sim = similarProperties(p);
+
+  const ficheUrl = `https://jacquesroussel.com/nos-proprietes/${p.slug}/`;
+  const partageTitre = `${p.typeLabel} à vendre — ${p.street}, ${p.city}`;
+  const partageTexte = `${p.typeLabel} à vendre au ${p.street}, ${p.city} — ${fmtPrice(p.price)}. MLS ${p.mls}.`;
+  // Options de partage sur ordinateur, où la feuille système n'existe pas.
+  // Sur téléphone, navigator.share les remplace toutes par la feuille native.
+  const partageMailto = `mailto:?subject=${encodeURIComponent(partageTitre)}&body=${encodeURIComponent(`${partageTexte}\r\n\r\n${ficheUrl}`)}`;
+  const partageFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ficheUrl)}`;
+  const partageWhatsapp = `https://wa.me/?text=${encodeURIComponent(`${partageTexte} ${ficheUrl}`)}`;
+
+  // Bouton « Visiter » : ouvre le logiciel de courriel avec un message déjà
+  // rédigé, que la personne n'a plus qu'à envoyer. On ne renvoie plus vers
+  // l'agenda : réserver un créneau avant même d'avoir vu la propriété demandait
+  // un engagement de trop, et FORM_ENDPOINT est encore vide de toute façon.
+  const visiteSujet = `Demande de visite — ${p.street}, ${p.city} (MLS ${p.mls})`;
+  const visiteCorps = [
+    'Bonjour,',
+    '',
+    `J'aimerais beaucoup visiter la propriété située au ${p.street}, ${p.city}${p.price ? ` (${fmtPrice(p.price)})` : ''}.`,
+    'Est-ce possible de me recontacter pour convenir d\'un moment ?',
+    '',
+    'Mes disponibilités : ',
+    'Mon numéro de téléphone : ',
+    '',
+    'Merci !',
+    '',
+    `Fiche : ${ficheUrl}`
+  ].join('\r\n');
+  const visiteMailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(visiteSujet)}&body=${encodeURIComponent(visiteCorps)}`;
 
   const jsonld = JSON.stringify({
     "@context":"https://schema.org","@type":"RealEstateListing",
@@ -4171,15 +4379,26 @@ function detailPage(p) {
   <div class="prop-media">
     <div class="prop-media__overlay">
       <div class="prop-media__icons">
-        <button type="button" class="icon-btn" aria-label="Ajouter aux favoris">${ICON.heart}</button>
-        <button type="button" class="icon-btn" aria-label="Partager">${ICON.share}</button>
+        <div class="share" data-share-root>
+          <button type="button" class="icon-btn" data-share
+            data-share-title="${attrEsc(partageTitre)}"
+            data-share-text="${attrEsc(partageTexte)}"
+            data-share-url="${attrEsc(ficheUrl)}"
+            aria-label="Partager cette propriété" aria-expanded="false" aria-haspopup="true">${ICON.share}</button>
+          <div class="share__menu" data-share-menu hidden role="menu">
+            <a class="share__item" role="menuitem" href="${attrEsc(partageMailto)}">Par courriel</a>
+            <a class="share__item" role="menuitem" href="${attrEsc(partageFacebook)}" target="_blank" rel="noopener">Facebook</a>
+            <a class="share__item" role="menuitem" href="${attrEsc(partageWhatsapp)}" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" class="share__item" role="menuitem" data-share-copy>Copier le lien</button>
+          </div>
+        </div>
       </div>
       <div class="prop-toggle" data-prop-toggle data-mode="photos" role="tablist" aria-label="Vue média">
         <span class="prop-toggle__pill" aria-hidden="true"></span>
         <button type="button" data-mode="photos" aria-pressed="true" role="tab">Photos</button>
         <button type="button" data-mode="map" aria-pressed="false" role="tab"${hasGeo ? '' : ' aria-disabled="true"'}>Carte</button>
       </div>
-      <a class="prop-media__cta" href="/rendez-vous/?mls=${p.mls}">Visiter</a>
+      <a class="prop-media__cta" href="${visiteMailto}">Visiter</a>
     </div>
 
     <div class="prop-media__pane" id="media-pane" aria-hidden="false">
@@ -4239,7 +4458,7 @@ function detailPage(p) {
         <div class="prop-price-band__eye">Prix demandé</div>
         <div class="prop-price-band__val">${fmtPrice(p.price)}</div>
       </div>
-      <a class="prop-price-band__cta" href="/rendez-vous/?mls=${p.mls}">Visiter cette propriété</a>
+      <a class="prop-price-band__cta" href="${visiteMailto}">Visiter cette propriété</a>
     </div>
 
     ${amenities.length ? `
@@ -4294,7 +4513,7 @@ function detailPage(p) {
     ${sim.length ? `
     <div class="prop-section">
       <span class="prop-section__eye">Propriétés similaires</span>
-      <div class="prop-similar-grid">${sim.slice(0,2).map(propertyCard).join('')}</div>
+      <div class="prop-similar-grid">${sim.map(propertyCard).join('')}</div>
     </div>
     ` : ''}
   </div>
@@ -4302,7 +4521,7 @@ function detailPage(p) {
 
 <aside class="bottom-bar" data-prop-bar>
   ${hasGeo ? '<button type="button" class="bottom-bar__btn" data-open-map-modal>Carte</button>' : ''}
-  <a class="bottom-bar__btn bottom-bar__btn--primary" href="/rendez-vous/?mls=${p.mls}">Visiter</a>
+  <a class="bottom-bar__btn bottom-bar__btn--primary" href="${visiteMailto}">Visiter</a>
 </aside>
 
 <div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Galerie de photos">
@@ -6634,14 +6853,14 @@ ${marketHighlightsHtml('saint-eustache')}
 
 writePage('contact/index.html', layout({
   title:'Contact — Équipe Jacques-Roussel, courtier immobilier',
-  description:'Contactez Équipe Jacques-Roussel : 450.430.5555 · info@jacquesroussel.com · RE/MAX CRYSTAL Sainte-Thérèse.',
+  description:`Contactez Équipe Jacques-Roussel : ${CONTACT.phone} · ${CONTACT.email} · RE/MAX CRYSTAL Sainte-Thérèse.`,
   canonical:'https://jacquesroussel.com/contact/',
   body:`
 <section class="page-head container"><div class="eyebrow">Contact</div><h1>Parlons de votre projet.</h1><p class="lead">Appelez, écrivez ou prenez rendez-vous en ligne. On vous répond en moins de 24 h.</p></section>
 <section class="container"><div class="two-col">
   <div class="blue-block soft" style="padding:2.5rem">
-    <h3>Téléphone</h3><p style="font-size:1.6rem;color:var(--blue);font-weight:700;margin:.5rem 0 1.5rem">450.430.5555</p>
-    <h3>Courriel</h3><p style="margin:.5rem 0 1.5rem"><a href="mailto:info@jacquesroussel.com">info@jacquesroussel.com</a></p>
+    <h3>Téléphone</h3><p style="font-size:1.6rem;color:var(--blue);font-weight:700;margin:.5rem 0 1.5rem"><a href="tel:${CONTACT.tel}" style="color:inherit">${CONTACT.phone}</a></p>
+    <h3>Courriel</h3><p style="margin:.5rem 0 1.5rem"><a href="mailto:${CONTACT.email}">${CONTACT.email}</a></p>
     <h3>Bureau</h3><p>RE/MAX CRYSTAL<br>Sainte-Thérèse, QC</p>
   </div>
   <form class="contact-form" style="background:#fff;padding:clamp(1.8rem,4vw,2.5rem);border:1px solid var(--line);border-radius:var(--radius-lg)">
@@ -6686,7 +6905,7 @@ const gcalEmbed = GCAL_APPOINTMENT_URL.includes('REMPLACE_MOI')
        <div>
          <h3 style="margin-bottom:.5rem">Agenda en configuration</h3>
          <p style="color:var(--ink-2);max-width:42ch;margin:0 auto 1.5rem">L'agenda sera activé dès que l'équipe aura partagé son lien Google Calendar Appointment Schedule.</p>
-         <a class="btn" href="tel:4504305555" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">📞 450.430.5555</a>
+         <a class="btn" href="tel:${CONTACT.tel}" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">📞 ${CONTACT.phone}</a>
        </div>
      </div>`
   : GCAL_APPOINTMENT_URL.includes('calendar.app.google')
@@ -6752,7 +6971,7 @@ writePage('rendez-vous/index.html', layout({
           <li>Recherche sur mesure pour les acheteurs.</li>
         </ul>
         <h3 style="margin-top:1.5rem">Préférez le téléphone ?</h3>
-        <p style="font-size:1.2rem;color:var(--blue);margin:.3rem 0 0"><a href="tel:4504305555" style="color:inherit">450.430.5555</a></p>
+        <p style="font-size:1.2rem;color:var(--blue);margin:.3rem 0 0"><a href="tel:${CONTACT.tel}" style="color:inherit">${CONTACT.phone}</a></p>
       </div>
     </aside>
   </div>
@@ -6765,8 +6984,8 @@ writePage('rendez-vous/index.html', layout({
         <h2 style="max-width:18ch">Vous avez des questions ? Écrivez-nous.</h2>
         <p style="color:var(--ink-2);margin-top:1.2rem;max-width:42ch;font-size:1.02rem;line-height:1.7">Pas prêt à réserver un créneau ? Envoyez-nous votre question directement. On vous répond personnellement en moins de 24 h, jours ouvrables.</p>
         <div style="margin-top:1.8rem;display:grid;gap:.6rem;font-size:.95rem;color:var(--ink-2)">
-          <div>📞 <a href="tel:4504305555" style="color:var(--blue)">450.430.5555</a></div>
-          <div>✉ <a href="mailto:info@jacquesroussel.com" style="color:var(--blue)">info@jacquesroussel.com</a></div>
+          <div>📞 <a href="tel:${CONTACT.tel}" style="color:var(--blue)">${CONTACT.phone}</a></div>
+          <div>✉ <a href="mailto:${CONTACT.email}" style="color:var(--blue)">${CONTACT.email}</a></div>
         </div>
       </div>
       <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.f-ok').hidden=false; this.querySelector('.f-fields').hidden=true;">

@@ -11,6 +11,9 @@
   --navy:#13202E;
   --sand:#CDB89A;
   --bronze:#B58A4F;
+  /* Rouge RE/MAX — réservé aux pastilles d'état (« Nouveau »), jamais au texte
+     courant ni aux liens : DESIGN.md interdit le rouge partout ailleurs. */
+  --remax-red:#DC1C2E;
   /* Aliases pour les pages de contenu (vendre / acheter / guides) */
   --ink-2:var(--stone);
   --blue:var(--teal);
@@ -72,6 +75,7 @@
     --navy: oklch(22% 0.04 240);
     --sand: oklch(78% 0.04 75);
     --bronze: oklch(62% 0.08 70);
+    --remax-red: oklch(55.4% 0.208 26.5);
   }
 }
 
@@ -734,8 +738,8 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .prop-card:hover .prop-card__media::after{ opacity: 0.88; }
 .prop-card__badge{
   position: absolute; top: 14px; inset-inline-start: 14px;
-  background: var(--sand);
-  color: var(--ink);
+  background: var(--remax-red);
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -1044,7 +1048,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .pcard .ph{ aspect-ratio: 3/2; overflow: hidden; position: relative; background: var(--hairline); }
 .pcard .ph img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
 .pcard .body{ padding: var(--space-4); }
-.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--sand); color: var(--ink); padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
+.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--remax-red); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
 .pcard .loc{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .pcard .addr{ font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; margin-block: 0.4rem 0.6rem; color: var(--ink); }
 .pcard .price{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--bronze); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
@@ -1099,6 +1103,20 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .prop-media__overlay > *{ pointer-events: auto; }
 .prop-media__icons{ display: flex; gap: 0.5rem; }
+.share{ position: relative; }
+.share__menu{
+  position: absolute; inset-block-start: calc(100% + 8px); inset-inline-start: 0;
+  min-inline-size: 190px; padding: 0.4rem;
+  background: var(--vellum); border: 1px solid var(--hairline);
+  border-radius: 14px; box-shadow: var(--shadow-card); z-index: 20;
+}
+.share__item{
+  display: block; inline-size: 100%; text-align: start;
+  padding: 0.6rem 0.8rem; border: 0; border-radius: 9px; background: none;
+  font: 500 0.9rem 'Montserrat', sans-serif; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+}
+.share__item:hover{ background: var(--cream); color: var(--ink); }
 .icon-btn{
   inline-size: 40px; block-size: 40px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -1112,6 +1130,18 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: transform 240ms var(--ease-out), background-color 240ms var(--ease-out);
 }
 .icon-btn:hover{ transform: scale(1.06); background: var(--vellum); }
+.share-toast{
+  position: fixed; inset-block-end: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  inset-inline: 0; margin-inline: auto; inline-size: max-content; max-inline-size: 86vw;
+  background: var(--ink); color: var(--cream);
+  font: 500 0.9rem 'Montserrat', sans-serif; letter-spacing: 0.01em;
+  padding: 0.7rem 1.2rem; border-radius: 999px; box-shadow: var(--shadow-card);
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+  z-index: 9999;
+}
+.share-toast.is-on{ opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce){ .share-toast{ transition-duration: 1ms; } }
 .icon-btn svg{ inline-size: 18px; block-size: 18px; }
 .prop-toggle{
   position: relative;

@@ -158,8 +158,14 @@
         if (!el || el._inited) return;
         el._inited = true;
         const map = window.L.map(el, { zoomControl: true, scrollWheelZoom: false }).setView([lat, lon], 15);
-        window.L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        // Fond de carte OpenStreetMap : le seul vraiment sans clé aujourd'hui.
+        // Stadia Maps exige une authentification sur tout domaine public (d'où
+        // les tuiles « 401 Invalid Authentication »), et CARTO tamponne
+        // désormais ses tuiles gratuites d'un « API KEY REQUIRED ». Pour
+        // retrouver le rendu épuré d'avant, il faut une clé Stadia gratuite :
+        // voir NOTES.md.
+        window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           maxZoom: 19
         }).addTo(map);
         const pinHtml = '<div class="prop-pin"><svg viewBox="0 0 24 24" width="36" height="36" fill="#2c4160" stroke="#FBF8F2" stroke-width="1.5"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="#FBF8F2" stroke="none"/></svg></div>';
@@ -187,6 +193,86 @@
             setTimeout(() => leafletMap.invalidateSize(), 60);
           }
         }));
+      }
+
+      // Partage. Sur téléphone, navigator.share ouvre la feuille de partage
+      // du système : Messages, courriel, WhatsApp, Facebook, AirDrop… c'est
+      // l'appareil qui décide de la liste, pas nous. Sur ordinateur, où l'API
+      // n'existe pas (Chrome et Firefox de bureau), on copie l'adresse dans le
+      // presse-papiers et on le dit, sinon le clic reste sans effet visible —
+      // c'est exactement ce qui se passait avant.
+      const shareBtn = propPage.querySelector('[data-share]');
+      if (shareBtn) {
+        const toast = (msg) => {
+          let t = document.querySelector('.share-toast');
+          if (!t) { t = document.createElement('div'); t.className = 'share-toast'; document.body.appendChild(t); }
+          t.textContent = msg;
+          t.classList.add('is-on');
+          clearTimeout(t._timer);
+          t._timer = setTimeout(() => t.classList.remove('is-on'), 2400);
+        };
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'a pas le focus (onglet en arrière-plan, fenêtre inactive).
+        // La vieille execCommand n'a pas cette exigence : elle sauve le clic.
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'est pas visible ou n'a pas le focus. La vieille
+        // execCommand a les mêmes limites : si les deux échouent, on le dit
+        // plutôt que de laisser le clic sans effet, comme avant.
+        const copier = async (texte) => {
+          try { await navigator.clipboard.writeText(texte); return true; } catch (e) {}
+          const zone = document.createElement('textarea');
+          zone.value = texte;
+          zone.setAttribute('readonly', '');
+          zone.style.cssText = 'position:fixed;inset-block-start:-9999px;opacity:0';
+          document.body.appendChild(zone);
+          zone.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          zone.remove();
+          return ok;
+        };
+
+        const menu = propPage.querySelector('[data-share-menu]');
+        const ouvrirMenu = (ouvert) => {
+          if (!menu) return;
+          menu.hidden = !ouvert;
+          shareBtn.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+        };
+
+        shareBtn.addEventListener('click', async (ev) => {
+          ev.stopPropagation();
+          const data = {
+            title: shareBtn.dataset.shareTitle || document.title,
+            text: shareBtn.dataset.shareText || '',
+            url: shareBtn.dataset.shareUrl || location.href
+          };
+          // Téléphones et tablettes : la feuille de partage du systeme donne
+          // accès à tout ce qui est installé (Messages, courriel, WhatsApp,
+          // Facebook, AirDrop...). C'est l'appareil qui compose la liste.
+          if (navigator.share) {
+            try { await navigator.share(data); return; }
+            catch (err) {
+              // Feuille fermée par la personne : ne rien afficher.
+              if (err && err.name === 'AbortError') return;
+            }
+          }
+          // Ordinateur : notre propre menu, options fixes et prévisibles.
+          ouvrirMenu(menu ? menu.hidden : false);
+        });
+
+        menu?.querySelector('[data-share-copy]')?.addEventListener('click', async () => {
+          const url = shareBtn.dataset.shareUrl || location.href;
+          toast(await copier(url) ? 'Lien copié' : 'Copie impossible');
+          ouvrirMenu(false);
+        });
+
+        menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => ouvrirMenu(false)));
+        document.addEventListener('click', (ev) => {
+          if (menu && !menu.hidden && !ev.target.closest('[data-share-root]')) ouvrirMenu(false);
+        });
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && menu && !menu.hidden) { ouvrirMenu(false); shareBtn.focus(); }
+        });
       }
 
       // Lightbox
