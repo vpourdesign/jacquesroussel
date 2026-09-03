@@ -937,8 +937,9 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <meta name="twitter:description" content="${description}">
 <meta name="twitter:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
 <meta name="theme-color" content="#F7F5EE">
-<link rel="icon" type="image/png" href="/brand_assets/favicon.png">
-<link rel="apple-touch-icon" href="/brand_assets/favicon.png">
+<link rel="icon" href="/brand_assets/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/svg+xml" href="/brand_assets/jr-favicon.svg">
+<link rel="apple-touch-icon" href="/brand_assets/jr-favicon-192.png">
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
 <link href="https://fonts.bunny.net/css?family=montserrat:300,400,400i,500,600,700,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
@@ -951,8 +952,8 @@ ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
   <div class="site-header__inner">
     <div class="site-header__brands">
       <a class="wordmark" href="/" aria-label="Équipe Jacques-Roussel, accueil">
-        <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-blanc.png" alt="Équipe Jacques-Roussel" width="700" height="680" decoding="async">
-        <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/equipejrnoir.png" alt="" aria-hidden="true" width="700" height="680" decoding="async">
+        <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-compact-blanc.svg" alt="Équipe Jacques / Roussel" width="1088" height="273" decoding="async">
+        <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/jr-compact-marine.svg" alt="" aria-hidden="true" width="1088" height="273" decoding="async">
       </a>
       <img class="site-header__remax" src="${REMAX_LOCKUP}" alt="RE/MAX" width="1000" height="274" decoding="async">
     </div>
@@ -981,7 +982,7 @@ ${body}
   <div class="site-footer__grid">
     <div class="site-footer__col site-footer__col--brand">
       <div class="wordmark wordmark--footer">
-        <span class="wordmark__name">JACQUES &middot; ROUSSEL</span>
+        <img class="wordmark__logo-footer" src="/brand_assets/jr-horizontal-blanc.svg" alt="Équipe Jacques / Roussel" width="1141" height="232" decoding="async">
       </div>
       <p class="site-footer__tag">Vos courtiers d'expérience sur la Rive-Nord</p>
       <address class="site-footer__addr">
@@ -1315,7 +1316,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
    at the same scale; the white version's extra vertical padding just centers. */
-.wordmark__logo{ inline-size: clamp(46px, 4vw, 56px); block-size: auto; display: block; }
+.wordmark__logo{ block-size: clamp(30px, 3.2vw, 38px); inline-size: auto; display: block; }
 .wordmark__logo--light{ display: none; }
 .wordmark__logo--dark{ display: block; }
 /* Overlay (transparent) header → white logo */
@@ -1971,6 +1972,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .site-footer__col a{ color: var(--cream); font-size: var(--text-sm); opacity: 0.85; }
 .site-footer__col a:hover{ opacity: 1; color: var(--sand); }
 .wordmark--footer{ display: flex; flex-direction: column; align-items: flex-start; gap: 4px; line-height: 1.2; }
+.wordmark__logo-footer{ inline-size: clamp(190px, 20vw, 240px); block-size: auto; display: block; }
 .wordmark--footer .wordmark__name{ color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; letter-spacing: 0.04em; }
 .wordmark--footer .wordmark__sub{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .site-footer__tag{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.8); max-inline-size: 30ch; }

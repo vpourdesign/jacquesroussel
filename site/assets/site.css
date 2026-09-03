@@ -271,7 +271,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
    at the same scale; the white version's extra vertical padding just centers. */
-.wordmark__logo{ inline-size: clamp(46px, 4vw, 56px); block-size: auto; display: block; }
+.wordmark__logo{ block-size: clamp(30px, 3.2vw, 38px); inline-size: auto; display: block; }
 .wordmark__logo--light{ display: none; }
 .wordmark__logo--dark{ display: block; }
 /* Overlay (transparent) header → white logo */
@@ -927,6 +927,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .site-footer__col a{ color: var(--cream); font-size: var(--text-sm); opacity: 0.85; }
 .site-footer__col a:hover{ opacity: 1; color: var(--sand); }
 .wordmark--footer{ display: flex; flex-direction: column; align-items: flex-start; gap: 4px; line-height: 1.2; }
+.wordmark__logo-footer{ inline-size: clamp(190px, 20vw, 240px); block-size: auto; display: block; }
 .wordmark--footer .wordmark__name{ color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; letter-spacing: 0.04em; }
 .wordmark--footer .wordmark__sub{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .site-footer__tag{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.8); max-inline-size: 30ch; }
