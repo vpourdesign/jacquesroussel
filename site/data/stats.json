@@ -1,15 +1,15 @@
 {
   "total": 16,
-  "avgPrice": 1334644,
-  "totalValue": 21354299,
+  "avgPrice": 1318394,
+  "totalValue": 21094299,
   "byCity": {
     "Saint-Jérôme": 4,
     "Laval": 4,
+    "Sainte-Julienne": 2,
     "Saint-Eustache": 3,
     "Terrebonne": 1,
     "Lachute": 1,
-    "Saint-Hippolyte": 1,
-    "Sainte-Julienne": 2
+    "Saint-Hippolyte": 1
   },
   "byType": {
     "Terrain": 6,
