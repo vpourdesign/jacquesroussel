@@ -5,6 +5,14 @@ on:
     # 12:00 UTC = 8 h HAE / 7 h HNE. Même créneau que brunelle et juliegauthier.
     - cron: '0 12 * * *'
   workflow_dispatch:
+    inputs:
+      debug_mls:
+        description: >-
+          Numéro MLS à inspecter dans l'export Centris du jour. Le journal
+          affiche toutes les colonnes non vides de la ligne, ou indique que
+          Centris ne l'exporte plus. Laisser vide pour un build normal.
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -35,6 +43,9 @@ jobs:
           # Autorise build.mjs à réingérer le zip fraîchement téléchargé.
           # Sans ça, il se rabat sur site/data/*.json (voir build.mjs).
           CENTRIS_INGEST: "1"
+          # Renseigné seulement quand on lance le workflow à la main pour
+          # inspecter une inscription précise.
+          CENTRIS_DEBUG_MLS: ${{ github.event.inputs.debug_mls }}
         run: |
           # On ne supprime que les fiches de propriétés et les données Centris.
           # site/data/market.json vient de Centris statistiques (rafraîchi par un

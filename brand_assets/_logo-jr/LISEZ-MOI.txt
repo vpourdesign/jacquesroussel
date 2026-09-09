@@ -1,0 +1,67 @@
+LOGO ÉQUIPE J/R · DÉCLINAISONS
+Équipe Jacques / Roussel · RE/MAX Crystal
+
+Chaque déclinaison existe en deux formats.
+Le .svg est vectoriel : aucune perte de qualité, agrandissable à l'infini,
+c'est celui à donner à un imprimeur ou à un développeur web.
+Le .png est en haute résolution avec fond transparent quand c'est indiqué,
+c'est celui à utiliser dans Canva, Word, PowerPoint ou un courriel.
+
+Les lettres sont converties en tracés. Personne n'a besoin d'installer
+la police pour que le logo s'affiche correctement.
+
+
+01 à 04 · VERROUILLAGE VERTICAL
+Le logo canonique. Monogramme au-dessus du nom complet.
+À utiliser par défaut, partout où l'espace le permet.
+  01 fond marine        pancartes, visuels Instagram, couvertures
+  02 fond ivoire        documents imprimés, présentations claires
+  03 blanc transparent  à poser sur une photo foncée
+  04 marine transparent à poser sur un fond pâle
+
+05 à 08 · VERROUILLAGE HORIZONTAL
+Monogramme, filet, nom complet sur une ligne.
+Pour les en-têtes de documents, les signatures de courriel, les bandeaux web.
+
+09 à 11 · VERROUILLAGE COMPACT
+Même idée, nom sur deux lignes. Pour les espaces courts en largeur.
+
+12 à 15 · MONOGRAMME SEUL
+Le J/R sans le nom. Réservé aux emplois où le nom de l'équipe apparaît
+déjà à côté : coin de visuel, pastille, tampon, filigrane discret.
+Ne jamais l'utiliser seul comme identification principale.
+
+16 à 20 · AVATARS
+Photos de profil, format 1080 x 1080.
+  16 carré                Instagram, Facebook
+  17 carré arrondi        applications, tuiles
+  18 rond marine          LinkedIn, Google, WhatsApp
+  19 rond ivoire          variante claire
+  20 rond avec le nom     à réserver aux affichages assez grands,
+                          le nom devient illisible en petit
+
+21 à 23 · FAVICONS
+Icône de site web. favicon.ico contient déjà toutes les tailles,
+c'est le fichier à remettre au développeur.
+
+24 · FILIGRANE
+Blanc à faible opacité, à déposer dans un coin de photo.
+
+
+RÈGLES À RESPECTER
+La barre oblique est toujours rouge. Elle ne change jamais de couleur.
+Le monogramme et le nom ne se séparent pas et ne se réorganisent pas.
+Aucune ombre, aucun contour, aucun dégradé, aucune rotation.
+Laisser autour du logo un espace libre égal à la hauteur du J.
+Sur une photo, choisir la version transparente qui contraste le plus.
+Ne jamais reconstruire le logo à la main dans Canva. Importer le fichier.
+
+COULEURS
+Marine   #2C4160
+Ivoire   #F4F2ED
+Rouge    #E11B22
+Blanc    #FFFFFF
+
+POLICES
+Monogramme   Archivo Black (900), interlettrage serré
+Nom          Archivo SemiBold (600), interlettrage très ouvert

@@ -111,6 +111,16 @@ const AGENCY = {
 // Verrou de conformité : la montgolfière ne peut jamais paraître sans le
 // logotype RE/MAX (guide, p. 4). Les deux sont dans un seul fichier verrouillé
 // — ne pas le recadrer, le recolorer ni le redimensionner de façon non uniforme.
+// Ligne directe affichée sur /contact/ et /rendez-vous/ : le numéro personnel
+// du courtier qui répond, et non la ligne principale de l'agence (AGENCY.phone).
+// AGENCY.phone reste affiché au pied de page et dans les données structurées,
+// comme l'exige le guide RE/MAX — ne pas confondre les deux.
+const CONTACT = {
+  phone: '514.805.6953',
+  tel: '+15148056953',
+  email: 'alexandre.roussel@remax-quebec.com'
+};
+
 const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
 
 // Google Calendar Appointment Schedule — l'URL longue de la page de réservation
@@ -126,7 +136,81 @@ const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/appointments/
 // perd en silence. Coller ici l'URL Formspree/Vercel du compte de l'équipe.
 const FORM_ENDPOINT = '';
 // Adresse de repli quand FORM_ENDPOINT est vide.
-const FORM_FALLBACK_EMAIL = 'info@jacquesroussel.com';
+const FORM_FALLBACK_EMAIL = 'alexRcourtier@gmail.com';
+
+// Gestionnaire commun aux formulaires de /contact/ et /rendez-vous/. Aucun des
+// deux n'envoyait quoi que ce soit : le bouton de /contact/ etait un
+// type="button" sans gestionnaire, et /rendez-vous/ affichait « Message
+// envoye » sur un simple preventDefault. Toutes les demandes recues depuis la
+// mise en ligne sont perdues (voir NOTES.md). Meme mecanique que la fenetre
+// des guides : on poste sur FORM_ENDPOINT s'il est configure, sinon on ouvre
+// le logiciel de courriel de la personne avec tout de prerempli.
+const leadFormScript = `
+<script>
+(function(){
+  var ENDPOINT = ${JSON.stringify(FORM_ENDPOINT)};
+  var FALLBACK = ${JSON.stringify(FORM_FALLBACK_EMAIL)};
+
+  document.querySelectorAll('form[data-lead-form]').forEach(function(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      var d = Object.fromEntries(new FormData(form).entries());
+      var btn = form.querySelector('.f-submit');
+      var fields = form.querySelector('.f-fields');
+      var ok = form.querySelector('.f-ok');
+
+      function afficherOk(titre, message){
+        if (ok && titre){
+          var hh = ok.querySelector('h3');
+          if (hh) hh.textContent = titre;
+        }
+        if (ok && message){
+          var pp = ok.querySelector('p');
+          if (pp) pp.textContent = message;
+        }
+        if (fields) fields.hidden = true;
+        if (ok) ok.hidden = false;
+      }
+
+      var sujet = 'Site web — ' + (d.subject || 'Message') + (d.name ? ' — ' + d.name : '');
+      var corps = [
+        'Nom : ' + (d.name || ''),
+        'Courriel : ' + (d.email || ''),
+        'Téléphone : ' + (d.phone || ''),
+        d.subject ? 'Sujet : ' + d.subject : '',
+        '',
+        (d.message || '')
+      ].filter(function(l, i){ return l !== '' || i === 4; }).join('\\r\\n');
+
+      if (ENDPOINT){
+        if (btn){ btn.disabled = true; btn.textContent = 'Envoi…'; }
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(d)
+        }).then(function(r){
+          if (!r.ok) throw new Error(r.status);
+          afficherOk();
+        }).catch(function(){
+          if (btn){ btn.disabled = false; btn.textContent = 'Réessayer →'; }
+          alert("L'envoi a échoué. Écrivez-nous à " + FALLBACK + " et on vous répond rapidement.");
+        });
+        return;
+      }
+
+      // Pas de point de chute configuré : la demande part par le logiciel de
+      // courriel de la personne. On le dit clairement plutôt que d'annoncer
+      // un envoi qui n'a pas eu lieu.
+      window.location.href = 'mailto:' + FALLBACK
+        + '?subject=' + encodeURIComponent(sujet)
+        + '&body=' + encodeURIComponent(corps);
+      afficherOk('Dernière étape.', "Votre logiciel de courriel s'ouvre avec le message prérempli — il ne reste qu'à appuyer sur Envoyer.");
+    });
+  });
+})();
+</script>`;
 
 function parseCSV(text) {
   const rows=[]; let row=[],f='',q=false,i=0;
@@ -233,6 +317,16 @@ const ROOM_LEVEL = {
   'RC':'Rez-de-chaussée', 'SS':'Sous-sol', 'SS1':'Sous-sol 1', 'SS2':'Sous-sol 2',
   'GR':'Grenier', 'MEZ':'Mezzanine'
 };
+// « 0 » ne figure pas dans ROOM_LEVEL : Centris s'en sert pour le sous-sol
+// quand la fiche a plusieurs niveaux, et pour l'unique étage d'un
+// appartement quand elle n'en a qu'un. Le tableau affichait donc « 0 » tel
+// quel. On tranche avec le même critère que faitsSaillants().
+function nomNiveau(code, surPlusieursNiveaux) {
+  const c = String(code || '').toUpperCase();
+  if (ROOM_LEVEL[c]) return ROOM_LEVEL[c];
+  if (c === '0') return surPlusieursNiveaux ? 'Sous-sol' : '—';
+  return c || '—';
+}
 // Revêtement pièce
 const ROOM_REV = {
   PFLO:'Plancher flottant', CERAM:'Céramique', BOIS:'Bois', BOIF:'Bois franc',
@@ -480,6 +574,31 @@ function ingestFromCentris(membres) {
   const isOurs = (no) => no && BROKER_NOS.includes(no);
 
   const inscr = read('INSCRIPTIONS.TXT');
+
+  // ── Diagnostic « pourquoi cette inscription est-elle encore en ligne ? » ──
+  // Une propriété vendue disparaît normalement de l'export Centris, et
+  // pruneStaleListings() efface alors sa page — ça a fonctionné cinq fois
+  // depuis août. Quand une fiche vendue reste malgré tout dans l'export, il
+  // faut voir la ligne brute pour savoir si Centris porte un statut qu'on
+  // n'ingère pas : le build ne lit que 15 des ~150 colonnes.
+  // Lancer le workflow « Daily Centris ingest » à la main en renseignant le
+  // numéro MLS, puis lire le journal.
+  const debugMls = (process.env.CENTRIS_DEBUG_MLS || '').trim();
+  if (debugMls) {
+    const ligne = inscr.find(r => String(r[0]).trim() === debugMls);
+    if (!ligne) {
+      console.log(`\n🔍 MLS ${debugMls} : ABSENT de INSCRIPTIONS.TXT.`);
+      console.log('   Centris ne l\'exporte plus — la fiche sera retirée du site à ce build.\n');
+    } else {
+      console.log(`\n🔍 MLS ${debugMls} : PRÉSENT dans INSCRIPTIONS.TXT (${ligne.length} colonnes).`);
+      console.log('   Colonnes non vides — chercher celle qui porte le statut :');
+      ligne.forEach((v, i) => {
+        const t = String(v == null ? '' : v).trim();
+        if (t) console.log(`     [${String(i).padStart(3)}] ${t.slice(0, 70)}`);
+      });
+      console.log('');
+    }
+  }
   const photos = read('PHOTOS.TXT');
   const addenda = read('ADDENDA.TXT');
   const remarques = read('REMARQUES.TXT');
@@ -493,7 +612,19 @@ function ingestFromCentris(membres) {
 
   function groupText(rows) {
     const o={}; for(const r of rows){const m=r[0],l=r[2],t=r[6]||''; if(!m)continue; const k=m+'|'+l;(o[k]??=[]).push({s:+r[1],n:+r[3],t});}
-    for(const k of Object.keys(o)){o[k].sort((a,b)=>(a.s-b.s)||(a.n-b.n)); o[k]=o[k].map(x=>x.t).join(' ').replace(/\s+/g,' ').trim();}
+    // On ne recolle plus les morceaux en écrasant tout l'espace blanc : le
+    // `.replace(/\s+/g,' ')` d'avant supprimait les sauts de ligne de Centris,
+    // et la description arrivait sur le site en un seul pavé. On normalise les
+    // espaces et les tabulations, on garde les retours à la ligne.
+    for(const k of Object.keys(o)){
+      o[k].sort((a,b)=>(a.s-b.s)||(a.n-b.n));
+      o[k]=o[k].map(x=>x.t).join(' ')
+        .replace(/\r\n?/g,'\n')
+        .replace(/[^\S\n]+/g,' ')
+        .replace(/ *\n */g,'\n')
+        .replace(/\n{3,}/g,'\n\n')
+        .trim();
+    }
     return o;
   }
   const addMap = groupText(addenda);
@@ -806,8 +937,9 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <meta name="twitter:description" content="${description}">
 <meta name="twitter:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
 <meta name="theme-color" content="#F7F5EE">
-<link rel="icon" type="image/png" href="/brand_assets/favicon.png">
-<link rel="apple-touch-icon" href="/brand_assets/favicon.png">
+<link rel="icon" href="/brand_assets/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/svg+xml" href="/brand_assets/jr-favicon.svg">
+<link rel="apple-touch-icon" href="/brand_assets/jr-favicon-192.png">
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
 <link href="https://fonts.bunny.net/css?family=montserrat:300,400,400i,500,600,700,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
@@ -820,8 +952,8 @@ ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
   <div class="site-header__inner">
     <div class="site-header__brands">
       <a class="wordmark" href="/" aria-label="Équipe Jacques-Roussel, accueil">
-        <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-blanc.png" alt="Équipe Jacques-Roussel" width="700" height="680" decoding="async">
-        <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/equipejrnoir.png" alt="" aria-hidden="true" width="700" height="680" decoding="async">
+        <img class="wordmark__logo wordmark__logo--light" src="/brand_assets/jr-compact-blanc.svg" alt="Équipe Jacques / Roussel" width="1088" height="273" decoding="async">
+        <img class="wordmark__logo wordmark__logo--dark" src="/brand_assets/jr-compact-marine.svg" alt="" aria-hidden="true" width="1088" height="273" decoding="async">
       </a>
       <img class="site-header__remax" src="${REMAX_LOCKUP}" alt="RE/MAX" width="1000" height="274" decoding="async">
     </div>
@@ -850,7 +982,7 @@ ${body}
   <div class="site-footer__grid">
     <div class="site-footer__col site-footer__col--brand">
       <div class="wordmark wordmark--footer">
-        <span class="wordmark__name">JACQUES &middot; ROUSSEL</span>
+        <img class="wordmark__logo-footer" src="/brand_assets/jr-horizontal-blanc.svg" alt="Équipe Jacques / Roussel" width="1141" height="232" decoding="async">
       </div>
       <p class="site-footer__tag">Vos courtiers d'expérience sur la Rive-Nord</p>
       <address class="site-footer__addr">
@@ -924,6 +1056,15 @@ const CSS = `
   --navy:#13202E;
   --sand:#CDB89A;
   --bronze:#B58A4F;
+  /* Rouge RE/MAX — réservé aux pastilles d'état (« Nouveau »), jamais au texte
+     courant ni aux liens : DESIGN.md interdit le rouge partout ailleurs. */
+  --remax-red:#DC1C2E;
+  /* Étiquettes en petites capitales (« PRIX DEMANDÉ », « CARACTÉRISTIQUES »).
+     --sand ne donnait que 1,76:1 sur le crème : illisible à 11 px. --label
+     monte à 4,55:1, le seuil WCAG AA, en restant dans le même bronze chaud.
+     Réservé aux fonds clairs — sur le pied de page et les héros sombres,
+     les règles gardent --sand, qui y est parfaitement lisible. */
+  --label:#8C6A38;
   /* Aliases pour les pages de contenu (vendre / acheter / guides) */
   --ink-2:var(--stone);
   --blue:var(--teal);
@@ -985,6 +1126,8 @@ const CSS = `
     --navy: oklch(22% 0.04 240);
     --sand: oklch(78% 0.04 75);
     --bronze: oklch(62% 0.08 70);
+    --remax-red: oklch(55.4% 0.208 26.5);
+    --label: oklch(54.8% 0.080 75.4);
   }
 }
 
@@ -1047,7 +1190,7 @@ strong{ font-weight: 600; }
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 600;
-  color: var(--sand);
+  color: var(--label);
 }
 @media (min-width: 768px){ .eyebrow{ font-size: 13px; } }
 
@@ -1173,7 +1316,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
    at the same scale; the white version's extra vertical padding just centers. */
-.wordmark__logo{ inline-size: clamp(46px, 4vw, 56px); block-size: auto; display: block; }
+.wordmark__logo{ block-size: clamp(30px, 3.2vw, 38px); inline-size: auto; display: block; }
 .wordmark__logo--light{ display: none; }
 .wordmark__logo--dark{ display: block; }
 /* Overlay (transparent) header → white logo */
@@ -1647,8 +1790,8 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .prop-card:hover .prop-card__media::after{ opacity: 0.88; }
 .prop-card__badge{
   position: absolute; top: 14px; inset-inline-start: 14px;
-  background: var(--sand);
-  color: var(--ink);
+  background: var(--remax-red);
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -1829,6 +1972,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .site-footer__col a{ color: var(--cream); font-size: var(--text-sm); opacity: 0.85; }
 .site-footer__col a:hover{ opacity: 1; color: var(--sand); }
 .wordmark--footer{ display: flex; flex-direction: column; align-items: flex-start; gap: 4px; line-height: 1.2; }
+.wordmark__logo-footer{ inline-size: clamp(190px, 20vw, 240px); block-size: auto; display: block; }
 .wordmark--footer .wordmark__name{ color: var(--cream); font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; letter-spacing: 0.04em; }
 .wordmark--footer .wordmark__sub{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .site-footer__tag{ margin-block-start: var(--space-3); color: oklch(96% 0.012 80 / 0.8); max-inline-size: 30ch; }
@@ -1873,7 +2017,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .section-blue{ background: var(--teal); color: var(--cream); }
 .section-blue h2, .section-blue h3{ color: var(--cream); }
 .sec-head{ display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: var(--space-4); margin-block-end: var(--space-6); }
-.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--sand); font-weight: 500; margin-block-end: 0.5rem; }
+.sec-head .eye, .eye{ font-family: 'Montserrat', sans-serif; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; color: var(--label); font-weight: 500; margin-block-end: 0.5rem; }
 .more{ font-size: var(--text-sm); color: var(--ink); border-block-end: 1px solid var(--ink); padding-block-end: 2px; }
 .section-dark .more, .section-blue .more{ color: var(--cream); border-color: var(--cream); }
 .stats-grid{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); }
@@ -1901,7 +2045,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .cat-card__count{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.16em;
-  color: var(--sand);
+  color: var(--label);
 }
 .cat-card h3{ margin: 0; }
 .cat-card p{ color: var(--stone); font-size: var(--text-sm); }
@@ -1926,7 +2070,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .mb-card__firm{
   font-size: var(--text-xs); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--sand);
+  color: var(--label);
 }
 .mb-card__note{ color: var(--stone); font-size: var(--text-sm); margin-block-start: 0.4rem; }
 .mb-card__links{
@@ -1957,8 +2101,8 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .pcard .ph{ aspect-ratio: 3/2; overflow: hidden; position: relative; background: var(--hairline); }
 .pcard .ph img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
 .pcard .body{ padding: var(--space-4); }
-.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--sand); color: var(--ink); padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
-.pcard .loc{ color: var(--sand); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
+.pcard .badge{ position: absolute; top: 12px; inset-inline-start: 12px; background: var(--remax-red); color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; z-index: 2; }
+.pcard .loc{ color: var(--label); font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; }
 .pcard .addr{ font-family: 'Montserrat', system-ui, sans-serif; font-size: 1.15rem; margin-block: 0.4rem 0.6rem; color: var(--ink); }
 .pcard .price{ font-family: 'Montserrat', system-ui, sans-serif; color: var(--bronze); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
 .pcard .meta{ margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-block-start: 1px solid var(--hairline); display: flex; gap: 1rem; color: var(--stone); font-size: var(--text-sm); }
@@ -2012,6 +2156,20 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .prop-media__overlay > *{ pointer-events: auto; }
 .prop-media__icons{ display: flex; gap: 0.5rem; }
+.share{ position: relative; }
+.share__menu{
+  position: absolute; inset-block-start: calc(100% + 8px); inset-inline-start: 0;
+  min-inline-size: 190px; padding: 0.4rem;
+  background: var(--vellum); border: 1px solid var(--hairline);
+  border-radius: 14px; box-shadow: var(--shadow-card); z-index: 20;
+}
+.share__item{
+  display: block; inline-size: 100%; text-align: start;
+  padding: 0.6rem 0.8rem; border: 0; border-radius: 9px; background: none;
+  font: 500 0.9rem 'Montserrat', sans-serif; color: var(--ink);
+  cursor: pointer; text-decoration: none;
+}
+.share__item:hover{ background: var(--cream); color: var(--ink); }
 .icon-btn{
   inline-size: 40px; block-size: 40px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -2025,6 +2183,18 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: transform 240ms var(--ease-out), background-color 240ms var(--ease-out);
 }
 .icon-btn:hover{ transform: scale(1.06); background: var(--vellum); }
+.share-toast{
+  position: fixed; inset-block-end: calc(env(safe-area-inset-bottom, 0px) + 88px);
+  inset-inline: 0; margin-inline: auto; inline-size: max-content; max-inline-size: 86vw;
+  background: var(--ink); color: var(--cream);
+  font: 500 0.9rem 'Montserrat', sans-serif; letter-spacing: 0.01em;
+  padding: 0.7rem 1.2rem; border-radius: 999px; box-shadow: var(--shadow-card);
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+  z-index: 9999;
+}
+.share-toast.is-on{ opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce){ .share-toast{ transition-duration: 1ms; } }
 .icon-btn svg{ inline-size: 18px; block-size: 18px; }
 .prop-toggle{
   position: relative;
@@ -2178,15 +2348,16 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 }
 .desc-wrap{ position: relative; }
 .desc-wrap[data-collapsible] .desc-wrap__body{
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  max-block-size: 8.5rem;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
 }
 .desc-wrap.expanded .desc-wrap__body{
-  display: block;
-  -webkit-line-clamp: unset;
+  max-block-size: none;
   overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 .desc-wrap__toggle{
   margin-block-start: 0.75rem;
@@ -2206,6 +2377,61 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   border-block: 1px solid var(--hairline);
 }
 .prop-metric{ display: flex; flex-direction: column; gap: 0.35rem; }
+.faits{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.25rem clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--hairline);
+}
+.fait{ display: flex; flex-direction: column; gap: 0.35rem; min-inline-size: 0; }
+.fait__v{
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  color: var(--ink);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+/* « Creusée, chauffée » ne peut pas s'afficher au corps d'un nombre. */
+.fait__v--texte{
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.35;
+  padding-block-start: 0.35rem;
+}
+.fait__l{
+  font: 500 12px 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stone);
+}
+/* Description Centris : intertitres et listes reconstruits. */
+.prop-info__desc p + p{ margin-block-start: 0.9rem; }
+.desc-h{
+  font: 600 0.82rem 'Montserrat', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--label);
+  margin-block: 1.8rem 0.7rem;
+}
+.prop-info__desc > .desc-h:first-child{ margin-block-start: 0; }
+.desc-liste{
+  list-style: none;
+  margin-block: 0.7rem;
+  display: grid;
+  gap: 0.45rem;
+}
+.desc-liste li{
+  position: relative;
+  padding-inline-start: 1.1rem;
+}
+.desc-liste li::before{
+  content: '';
+  position: absolute; inset-block-start: 0.62em; inset-inline-start: 0;
+  inline-size: 5px; block-size: 5px; border-radius: 50%;
+  background: var(--label);
+}
 .prop-metric__n{
   font-family: 'Montserrat', system-ui, sans-serif;
   font-weight: 700;
@@ -2241,7 +2467,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
 }
 .prop-price-band__val{
   font-family: 'Montserrat', system-ui, sans-serif;
@@ -2268,139 +2494,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   font: 500 11px 'Montserrat', system-ui, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: var(--sand);
+  color: var(--label);
   margin-block-end: 1rem;
   display: block;
 }
-.amenities{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-3);
-}
-.amenities[data-more] > .amenity--extra{ display: none; }
-.amenities[data-more][open] > .amenity--extra{ display: flex; }
-.amenity{
-  display: flex; align-items: center; gap: 0.65rem;
-  padding-block: 0.4rem;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-}
-.amenity svg{ inline-size: 22px; block-size: 22px; flex-shrink: 0; color: var(--ink); }
-.amenities-more-btn{
-  margin-block-start: 1rem;
-  background: transparent;
-  border: 1px solid var(--hairline);
-  padding: 0.55rem 1.2rem;
-  border-radius: 999px;
-  font: 500 0.85rem 'Montserrat', system-ui, sans-serif;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background-color 240ms var(--ease-out);
-}
-.amenities-more-btn:hover{ background: var(--vellum); }
-.room-table{
-  inline-size: 100%;
-  border-collapse: collapse;
-  font: 400 14px 'Montserrat', system-ui, sans-serif;
-}
-.room-table thead th{
-  text-align: start;
-  font: 500 11px 'Montserrat', system-ui, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--stone);
-  padding: 0.65rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-}
-.room-table tbody td{
-  padding: 0.8rem 0.5rem;
-  border-block-end: 1px solid var(--hairline);
-  color: var(--ink);
-}
-.room-table tbody tr{ transition: background-color 160ms var(--ease-out); }
-.room-table tbody tr:hover{ background: var(--cream); }
-@media (max-width: 640px){
-  .room-table thead{ display: none; }
-  .room-table, .room-table tbody, .room-table tr, .room-table td{ display: block; inline-size: 100%; }
-  .room-table tr{ padding-block: 0.75rem; border-block-end: 1px solid var(--hairline); }
-  .room-table td{ padding: 0.25rem 0; border: 0; }
-  .room-table td::before{
-    content: attr(data-l);
-    display: inline-block;
-    inline-size: 7rem;
-    font-weight: 500;
-    color: var(--stone);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-}
-.broker-card{
-  background: var(--vellum);
-  border-radius: 14px;
-  padding: 1.5rem 1.75rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 1.25rem;
-  box-shadow:
-    0 1px 2px oklch(30% 0.05 258 / 0.06),
-    0 4px 14px oklch(30% 0.05 258 / 0.08);
-}
-.broker-card__avatars{ display: flex; align-items: center; }
-.broker-card__avatars img{
-  inline-size: 56px; block-size: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--vellum);
-  box-shadow: 0 2px 8px oklch(30% 0.05 258 / 0.18);
-}
-.broker-card__avatars img + img{ margin-inline-start: -22px; }
-.broker-card__body{ display: flex; flex-direction: column; gap: 0.25rem; min-inline-size: 0; }
-.broker-card__name{
-  font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: 20px;
-  color: var(--ink);
-}
-.broker-card__sub{
-  font: 400 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__team{
-  font: 500 13px 'Montserrat', system-ui, sans-serif;
-  color: var(--stone);
-}
-.broker-card__cta{
-  background: var(--navy);
-  color: var(--cream);
-  padding: 0.7rem 1.3rem;
-  border-radius: 999px;
-  font: 500 0.9rem 'Montserrat', system-ui, sans-serif;
-  justify-self: end;
-  white-space: nowrap;
-  transition: transform 240ms var(--ease-out);
-}
-.broker-card__cta:hover{ transform: translateY(-1px); color: var(--cream); }
-@media (max-width: 560px){
-  .broker-card{ grid-template-columns: auto 1fr; }
-  .broker-card__cta{ grid-column: 1 / -1; justify-self: stretch; text-align: center; }
-}
-/* --- Formulaires (global) --- */
-.contact-form{display:grid;gap:1rem}
-.f-fields{display:grid;gap:1.4rem}
-.contact-form label{display:grid;gap:.5rem;font-size:.85rem;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
-.contact-form input,.contact-form textarea,.contact-form select{font-family:inherit;font-size:1rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);transition:border-color .3s var(--ease),background .3s var(--ease);font-weight:400}
-.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{outline:0;border-color:var(--blue);background:#fff}
-.contact-form textarea{resize:vertical;min-height:120px;font-family:inherit}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 1rem}
-@media(max-width:520px){.f-row{grid-template-columns:1fr}}
-.f-submit{margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
-.f-submit:hover{background:var(--blue);transform:translateY(-2px)}
-.f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
-.f-ok{text-align:center;padding:2rem 1rem}
-.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
-.f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
-.f-ok p{color:var(--ink-2)}
 .prop-similar-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3361,8 +3458,14 @@ const JS = `
         if (!el || el._inited) return;
         el._inited = true;
         const map = window.L.map(el, { zoomControl: true, scrollWheelZoom: false }).setView([lat, lon], 15);
-        window.L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        // Fond de carte OpenStreetMap : le seul vraiment sans clé aujourd'hui.
+        // Stadia Maps exige une authentification sur tout domaine public (d'où
+        // les tuiles « 401 Invalid Authentication »), et CARTO tamponne
+        // désormais ses tuiles gratuites d'un « API KEY REQUIRED ». Pour
+        // retrouver le rendu épuré d'avant, il faut une clé Stadia gratuite :
+        // voir NOTES.md.
+        window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           maxZoom: 19
         }).addTo(map);
         const pinHtml = '<div class="prop-pin"><svg viewBox="0 0 24 24" width="36" height="36" fill="#2c4160" stroke="#FBF8F2" stroke-width="1.5"><path d="M12 2c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="#FBF8F2" stroke="none"/></svg></div>';
@@ -3390,6 +3493,86 @@ const JS = `
             setTimeout(() => leafletMap.invalidateSize(), 60);
           }
         }));
+      }
+
+      // Partage. Sur téléphone, navigator.share ouvre la feuille de partage
+      // du système : Messages, courriel, WhatsApp, Facebook, AirDrop… c'est
+      // l'appareil qui décide de la liste, pas nous. Sur ordinateur, où l'API
+      // n'existe pas (Chrome et Firefox de bureau), on copie l'adresse dans le
+      // presse-papiers et on le dit, sinon le clic reste sans effet visible —
+      // c'est exactement ce qui se passait avant.
+      const shareBtn = propPage.querySelector('[data-share]');
+      if (shareBtn) {
+        const toast = (msg) => {
+          let t = document.querySelector('.share-toast');
+          if (!t) { t = document.createElement('div'); t.className = 'share-toast'; document.body.appendChild(t); }
+          t.textContent = msg;
+          t.classList.add('is-on');
+          clearTimeout(t._timer);
+          t._timer = setTimeout(() => t.classList.remove('is-on'), 2400);
+        };
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'a pas le focus (onglet en arrière-plan, fenêtre inactive).
+        // La vieille execCommand n'a pas cette exigence : elle sauve le clic.
+        // Repli pour navigator.clipboard, qui refuse d'écrire dès que le
+        // document n'est pas visible ou n'a pas le focus. La vieille
+        // execCommand a les mêmes limites : si les deux échouent, on le dit
+        // plutôt que de laisser le clic sans effet, comme avant.
+        const copier = async (texte) => {
+          try { await navigator.clipboard.writeText(texte); return true; } catch (e) {}
+          const zone = document.createElement('textarea');
+          zone.value = texte;
+          zone.setAttribute('readonly', '');
+          zone.style.cssText = 'position:fixed;inset-block-start:-9999px;opacity:0';
+          document.body.appendChild(zone);
+          zone.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          zone.remove();
+          return ok;
+        };
+
+        const menu = propPage.querySelector('[data-share-menu]');
+        const ouvrirMenu = (ouvert) => {
+          if (!menu) return;
+          menu.hidden = !ouvert;
+          shareBtn.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+        };
+
+        shareBtn.addEventListener('click', async (ev) => {
+          ev.stopPropagation();
+          const data = {
+            title: shareBtn.dataset.shareTitle || document.title,
+            text: shareBtn.dataset.shareText || '',
+            url: shareBtn.dataset.shareUrl || location.href
+          };
+          // Téléphones et tablettes : la feuille de partage du systeme donne
+          // accès à tout ce qui est installé (Messages, courriel, WhatsApp,
+          // Facebook, AirDrop...). C'est l'appareil qui compose la liste.
+          if (navigator.share) {
+            try { await navigator.share(data); return; }
+            catch (err) {
+              // Feuille fermée par la personne : ne rien afficher.
+              if (err && err.name === 'AbortError') return;
+            }
+          }
+          // Ordinateur : notre propre menu, options fixes et prévisibles.
+          ouvrirMenu(menu ? menu.hidden : false);
+        });
+
+        menu?.querySelector('[data-share-copy]')?.addEventListener('click', async () => {
+          const url = shareBtn.dataset.shareUrl || location.href;
+          toast(await copier(url) ? 'Lien copié' : 'Copie impossible');
+          ouvrirMenu(false);
+        });
+
+        menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => ouvrirMenu(false)));
+        document.addEventListener('click', (ev) => {
+          if (menu && !menu.hidden && !ev.target.closest('[data-share-root]')) ouvrirMenu(false);
+        });
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && menu && !menu.hidden) { ouvrirMenu(false); shareBtn.focus(); }
+        });
       }
 
       // Lightbox
@@ -3451,18 +3634,6 @@ const JS = `
         btn?.addEventListener('click', () => {
           wrap.classList.toggle('expanded');
           btn.textContent = wrap.classList.contains('expanded') ? 'Réduire' : 'Lire la suite';
-        });
-      });
-
-      // Amenities expand
-      propPage.querySelectorAll('[data-amenities-toggle]').forEach((btn) => {
-        const target = propPage.querySelector(btn.dataset.amenitiesToggle);
-        btn.addEventListener('click', () => {
-          if (!target) return;
-          const isOpen = target.hasAttribute('open');
-          if (isOpen) target.removeAttribute('open');
-          else target.setAttribute('open', '');
-          btn.textContent = isOpen ? btn.dataset.labelMore : btn.dataset.labelLess;
         });
       });
 
@@ -3785,6 +3956,9 @@ const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
 
 // --- Utility formatters ---
 const fmtPrice = p => p ? `${p.toLocaleString('fr-CA')} $` : 'Prix sur demande';
+// Échappement pour une valeur placée entre guillemets dans un attribut HTML.
+const attrEsc = v => String(v ?? '')
+  .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const fmtNum = n => (n||0).toLocaleString('fr-CA');
 
 // La superficie de terrain arrive brute de Centris : « 1170.40 MC », « 17234.09 PC ».
@@ -4082,11 +4256,74 @@ writePage('nos-proprietes/index.html', layout({
 }));
 
 // --- PROPERTY DETAIL PAGES ---
-function similarProperties(p){ return properties.filter(x=>x.mls!==p.mls && x.city===p.city).slice(0,3); }
+// « Propriétés similaires » — barèmes explicites. L'ancienne règle (« même
+// ville », complétée par les premières inscriptions venues quand il en manquait)
+// affichait un terrain commercial de 8 M$ sous une unifamiliale de 560 000 $.
+// Trois critères, tous obligatoires. Aucun candidat conforme → la section
+// disparaît, plutôt que de meubler avec n'importe quoi.
+const SIMILAR = {
+  // Le type de propriété passe avant tout : c'est un filtre absolu, jamais
+  // un critère qu'on relâche. Une unifamiliale n'est comparée qu'à une
+  // unifamiliale, un terrain qu'à un terrain — quitte à proposer un écart
+  // de prix large plutôt qu'un voisin du bon budget mais du mauvais genre.
+  ecartPrix: 0.35,       // 1re passe : ±35 % du prix affiché
+  rayonKm: 40,           // 1re passe : à vol d'oiseau autour de la propriété
+  ecartPrixElargi: 0.60, // 2e passe : fourchette élargie, plus de limite de distance
+  nombre: 2              // cases affichées sur la fiche
+};
+
+// Distance à vol d'oiseau en km (haversine). null si une coordonnée manque.
+function distanceKm(a, b) {
+  if (![a.lat, a.lon, b.lat, b.lon].every(v => typeof v === 'number' && isFinite(v))) return null;
+  const R = 6371, rad = d => d * Math.PI / 180;
+  const dLat = rad(b.lat - a.lat), dLon = rad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2
+    + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function similarProperties(p) {
+  if (!p.price) return [];
+  // Filtre absolu : même type de propriété, point.
+  const bassin = properties.filter(x =>
+    x.mls !== p.mls && x.price > 0 && x.typeLabel === p.typeLabel);
+
+  const trier = (ecartMax, rayonMax) => bassin
+    .map(x => {
+      const ecart = Math.abs(x.price - p.price) / p.price;
+      if (ecart > ecartMax) return null;
+      const km = distanceKm(p, x);
+      if (rayonMax !== null) {
+        // Sans coordonnées Centris, on se rabat sur la ville : mieux vaut ça
+        // que d'écarter à tort une inscription voisine.
+        if (km === null ? x.city !== p.city : km > rayonMax) return null;
+      }
+      // Le prix pèse deux fois plus que la distance : un acheteur compare
+      // d'abord ce qui entre dans son budget.
+      return { x, score: ecart * 2 + (km === null ? 0.5 : km / 100) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.score - b.score)
+    .map(r => r.x);
+
+  const retenues = trier(SIMILAR.ecartPrix, SIMILAR.rayonKm);
+  const completer = liste => {
+    for (const x of liste) {
+      if (retenues.length >= SIMILAR.nombre) return;
+      if (!retenues.includes(x)) retenues.push(x);
+    }
+  };
+  // 2e passe : fourchette de prix élargie, plus de limite de distance.
+  if (retenues.length < SIMILAR.nombre) completer(trier(SIMILAR.ecartPrixElargi, null));
+  // 3e passe : tout le bassin du même type, du prix le plus proche au plus
+  // éloigné. Avec seize inscriptions actives, masquer la section revenait
+  // souvent à ne rien proposer alors qu'une propriété du bon genre existait.
+  if (retenues.length < SIMILAR.nombre) completer(trier(Infinity, null));
+  return retenues.slice(0, SIMILAR.nombre);
+}
 
 // Lucide-style inline SVGs (stroke 1.5) used in the property detail page
 const ICON = {
-  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
   share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
@@ -4118,36 +4355,233 @@ function iconForFeature(code){
   return ICON.check;
 }
 
+// -- Mise en forme des descriptions Centris ----------------------------
+// Centris structure ses descriptions avec des intertitres en capitales et
+// des listes a puces. Tout arrivait ici en un seul pave : les morceaux du
+// fichier d'addenda etaient recolles en ecrasant l'espace blanc (corrige
+// dans groupText, mais seul un nouvel import Centris en profitera) et rien
+// ne retablissait la structure au rendu. On la reconstruit donc a partir
+// des seuls indices que le texte plat porte encore.
+const MAJUSCULES = "A-Z\\u00C0\\u00C2\\u00C4\\u00C9\\u00C8\\u00CA\\u00CB\\u00CE\\u00CF\\u00D4\\u00D6\\u00D9\\u00DB\\u00DC\\u00C7";
+const MOTS_LIAISON = new Set(['ET','DE','DES','DU','LA','LE','LES','EN','AU','AUX','À','POUR','PAR','SUR','AVEC','SANS','DANS','OU']);
+
+const echapper = t => String(t == null ? '' : t)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// Un intertitre : que des capitales, assez long, et pas un simple sigle.
+function estIntertitre(ligne) {
+  const l = ligne.trim().replace(/\s*:\s*$/, '');
+  if (!l || l.length > 60) return false;
+  if (/[a-zà-ÿ]/.test(l)) return false;
+  const lettres = l.replace(/[^A-Za-zÀ-ÿ]/g, '').length;
+  if (lettres < 6) return false;
+  const mots = l.split(/\s+/);
+  return mots.length >= 2 ? mots.some(w => w.length >= 4) : mots[0].length >= 8;
+}
+
+// Decoupe un texte en blocs { type, contenu }.
+function structurerDescription(texte) {
+  let t = String(texte || '').replace(/\r\n?/g, '\n').trim();
+  if (!t) return [];
+
+  // Texte deja ponctue de retours a la ligne (import Centris recent) : on
+  // respecte la mise en forme du courtier plutot que de la deviner.
+  if (!/\n/.test(t)) {
+    // Jamais juste apres une puce, et suivi d'une majuscule ou d'un chiffre :
+    // « Le VENDEUR connait » et « - TERRAIN 1 » sont de l'emphase, pas des
+    // titres, et doivent rester dans le fil du texte.
+    const reTitre = new RegExp(
+      '(?<![-–])\\s' +
+      '((?:[' + MAJUSCULES + '][' + MAJUSCULES + "0-9'’+-]*)(?:\\s+[" + MAJUSCULES + '0-9\\u00C0][' + MAJUSCULES + "0-9'’+-]*)*)" +
+      '(?=\\s+(?:[' + MAJUSCULES + '0-9(«"-]))', 'g');
+    t = (' ' + t).replace(reTitre, (m, brut) => {
+      let mots = brut.trim().split(/\s+/);
+      while (mots.length > 1 && MOTS_LIAISON.has(mots[mots.length - 1])) mots.pop();
+      const titre = mots.join(' ');
+      return estIntertitre(titre) ? '\n\n' + titre + '\n' + brut.slice(titre.length) : m;
+    });
+    // Les « - » de Centris separent des elements de liste.
+    t = t.replace(/\s+[-–]\s+/g, '\n- ');
+  }
+
+  const blocs = [];
+  for (const ligne of t.split('\n')) {
+    const l = ligne.trim();
+    if (!l) continue;
+    const puce = l.match(/^[-–•]\s*(.+)$/);
+    if (puce) {
+      const dernier = blocs[blocs.length - 1];
+      if (dernier && dernier.type === 'liste') dernier.contenu.push(puce[1]);
+      else blocs.push({ type: 'liste', contenu: [puce[1]] });
+    } else if (estIntertitre(l)) {
+      blocs.push({ type: 'titre', contenu: l.replace(/\s*:\s*$/, '') });
+    } else {
+      blocs.push({ type: 'paragraphe', contenu: l });
+    }
+  }
+  return blocs;
+}
+
+function descriptionHtml(texte) {
+  return structurerDescription(texte).map(b => {
+    if (b.type === 'titre') return '<h3 class="desc-h">' + echapper(b.contenu) + '</h3>';
+    if (b.type === 'liste') return '<ul class="desc-liste">' + b.contenu.map(i => '<li>' + echapper(i) + '</li>').join('') + '</ul>';
+    return '<p>' + echapper(b.contenu) + '</p>';
+  }).join('');
+}
+
+// ── Les quatre repères d'une fiche ────────────────────────────────────
+// La liste « Caractéristiques » déversait les codes bruts de Centris — ASP,
+// BALC, CREU, INTG, CEGP — parce que le dictionnaire de décodage ne les
+// couvre pas tous. Illisible. On garde plutôt les quatre premiers repères
+// réellement renseignés, dans l'ordre de priorité fixé par Alex.
+const NIVEAUX_SOUS_SOL = new Set(['0', 'SS', 'SS1', 'SS2']);
+
+// Ordre d'énumération volontaire : la taille d'abord, l'emplacement ensuite,
+// le confort en dernier. « Double, attenant, chauffé » se lit mieux que
+// l'ordre où Centris livre les codes (« chauffé, attenant, double »).
+const VAL_GARAGE = [
+  ['DOUB','Double'], ['TRIP','Triple'], ['QUAD','Quadruple'], ['SIMP','Simple'],
+  ['ATT','Attenant'], ['INTG','Intégré'], ['INT','Intégré'], ['DET','Détaché'],
+  ['CHAU','Chauffé']
+];
+const VAL_PISCINE = [
+  ['CREU','Creusée'], ['CR','Creusée'], ['HT','Hors terre'], ['INT','Intérieure'],
+  ['CHAU','Chauffée'], ['SEL','Au sel'], ['NORM','Standard']
+];
+const VAL_ZONAGE = [
+  ['RES','Résidentiel'], ['MULT','Multifamilial'], ['COMM','Commercial'],
+  ['IND','Industriel'], ['AGR','Agricole'], ['FORE','Forestier'], ['VILL','Villégiature']
+];
+const VAL_TOPO = [['PLAT','Plat'], ['ACC','Accidenté'], ['PENT','En pente']];
+
+function faitsSaillants(p) {
+  const rooms = p.rooms || [];
+  const valeurs = code => new Set((p.features || []).filter(f => f.code === code).map(f => f.value));
+
+  // Énumère les valeurs connues d'une caractéristique, dans l'ordre voulu et
+  // sans répéter un mot que deux codes Centris désignent (INT et INTG).
+  const libelle = (code, ordre) => {
+    const dispo = valeurs(code);
+    const mots = [];
+    for (const [cle, mot] of ordre) if (dispo.has(cle) && !mots.includes(mot)) mots.push(mot);
+    if (!mots.length) return '';
+    return mots[0] + (mots.length > 1 ? ', ' + mots.slice(1).join(', ').toLowerCase() : '');
+  };
+
+  // Le niveau « 0 » ne désigne un sous-sol que s'il coexiste avec un autre
+  // niveau. Dans l'appartement du 14 Rue Louis-Jolliet, les huit pièces sont
+  // au niveau « 0 » : c'est l'étage du logement, pas une cave — et un
+  // « 0 + 2 chambres » n'aurait aucun sens.
+  const niveaux = new Set(rooms.map(r => String(r.level || '').toUpperCase()));
+  const surPlusieursNiveaux = niveaux.size > 1;
+  const auSousSol = r => surPlusieursNiveaux && NIVEAUX_SOUS_SOL.has(String(r.level || '').toUpperCase());
+  const compter = (codes, filtre) =>
+    rooms.filter(r => codes.includes(r.code) && (filtre ? filtre(r) : true)).length;
+
+  const faits = [];
+  const ajouter = (valeur, etiquette, texte) => {
+    if (valeur) faits.push({ valeur, etiquette, texte: !!texte });
+  };
+
+  // 1. Année de construction
+  const annee = String(p.yearBuilt || '').trim();
+  if (/^\d{4}$/.test(annee)) ajouter(annee, 'Construction');
+
+  // Pour un plex, le nombre de logements est le chiffre qu'on cherche en
+  // premier — l'équivalent des chambres pour une maison. Seule entorse à
+  // l'ordre demandé, et seulement pour ce type de propriété.
+  const plex = String(p.typeCode || '').match(/^M\/(\d)X$/);
+  if (plex) ajouter(plex[1], Number(plex[1]) > 1 ? 'Logements' : 'Logement');
+
+  // 2. Chambres au format Centris « 3 + 1 » : hors sous-sol, puis au sous-sol.
+  const chHaut = compter(['CAC','CCP','CC2'], r => !auSousSol(r));
+  const chBas = compter(['CAC','CCP','CC2'], auSousSol);
+  if (chHaut + chBas) ajouter(chHaut + ' + ' + chBas, 'Chambres');
+
+  // 3. Salles de bain et salles d'eau dans une seule case, « 2 + 0 » comme
+  //    sur Centris : la salle d'eau n'a ni bain ni douche, elle ne se compte
+  //    pas avec les autres. Les tenir séparées mangeait deux des quatre
+  //    cases et repoussait le garage et la piscine hors de la fiche.
+  const sdb = compter(['SDB']);
+  const sde = compter(['SDE','S-E']);
+  if (sdb + sde) ajouter(sdb + ' + ' + sde, "Salles de bain + salles d'eau");
+
+  // 5. Garage, 6. piscine avec ce qui la caractérise, 7. superficie du terrain.
+  ajouter(libelle('GARA', VAL_GARAGE), 'Garage', true);
+  ajouter(libelle('PISC', VAL_PISCINE), 'Piscine', true);
+  ajouter(fmtArea(p.areaTerrain), 'Terrain');
+
+  // Terrains vacants et plex n'ont ni année, ni pièces, ni piscine : la liste
+  // ci-dessus leur donne une case ou deux. On complète avec ce qui compte
+  // vraiment pour eux, jusqu'à quatre cases — jamais au-delà.
+  if (faits.length < 4) {
+    const eau = valeurs('EAU'), egout = valeurs('SYEG');
+    const services = [
+      eau.has('AMU') ? 'Aqueduc' : '',
+      egout.has('EGMU') ? 'Égout' : ''
+    ].filter(Boolean);
+    const aucunService = eau.has('AUCN') && egout.has('AUCN');
+    const complements = [
+      [libelle('ZONG', VAL_ZONAGE), 'Zonage', true],
+      [services.length ? services.join(' et ').replace(' et Égout', ' et égout')
+        : (aucunService ? 'Aucun' : ''), 'Services', true],
+      [libelle('TOPO', VAL_TOPO), 'Topographie', true]
+    ];
+    for (const [v, l, t] of complements) {
+      if (faits.length >= 4) break;
+      ajouter(v, l, t);
+    }
+  }
+
+  // Quatre cases visées ; moins si la fiche Centris n'en renseigne pas plus.
+  return faits.slice(0, 4);
+}
+
 function detailPage(p) {
   const total = p.photos.length;
   const mosaicPhotos = p.photos.slice(0, 4);
   // Beds (chambres) — codes starting with C, excluding CR (cuisine? avoid ambiguity)
   const beds = (p.rooms || []).filter(r => ['CAC','CCP','CC2'].includes(r.code)).length;
   const baths = (p.rooms || []).filter(r => r.code === 'SDB' || r.code === 'SDE').length;
+  const faits = faitsSaillants(p);
   const yrTxt = (p.yearBuilt && String(p.yearBuilt).trim() && String(p.yearBuilt) !== '0') ? ` · Construite en ${p.yearBuilt}` : '';
-
-  // Amenities — one item per decoded feature value
-  const amenities = [];
-  for (const f of (p.features || [])) {
-    const decoded = decodeFeature(f);
-    if (!decoded) continue;
-    amenities.push({ icon: iconForFeature(f.code), label: `${decoded.name} : ${decoded.value}` });
-  }
-  const amenitiesShown = amenities.slice(0, 12);
-  const amenitiesExtra = amenities.slice(12);
 
   const photoUrls = p.photos.map(ph => ph.url);
   const hasGeo = isFinite(p.lat) && isFinite(p.lon) && p.lat !== null && p.lon !== null;
 
   // Description — fall back to remFr if descFr is empty
-  const desc = (p.descFr && p.descFr.trim()) ? p.descFr : '';
+  const desc = (p.descFr && p.descFr.trim()) ? descriptionHtml(p.descFr) : '';
 
-  // Similar — fill with other recent props if fewer than 3 same-city
-  let sim = similarProperties(p);
-  if (sim.length < 3) {
-    const fill = properties.filter(x => x.mls !== p.mls && !sim.includes(x)).slice(0, 3 - sim.length);
-    sim = sim.concat(fill);
-  }
+  // Propriétés similaires — voir les barèmes de SIMILAR plus haut.
+  const sim = similarProperties(p);
+
+  const ficheUrl = `https://jacquesroussel.com/nos-proprietes/${p.slug}/`;
+  const partageTitre = `${p.typeLabel} à vendre — ${p.street}, ${p.city}`;
+  const partageTexte = `${p.typeLabel} à vendre au ${p.street}, ${p.city} — ${fmtPrice(p.price)}. MLS ${p.mls}.`;
+  // Options de partage sur ordinateur, où la feuille système n'existe pas.
+  // Sur téléphone, navigator.share les remplace toutes par la feuille native.
+  const partageMailto = `mailto:?subject=${encodeURIComponent(partageTitre)}&body=${encodeURIComponent(`${partageTexte}\r\n\r\n${ficheUrl}`)}`;
+  const partageFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ficheUrl)}`;
+  const partageWhatsapp = `https://wa.me/?text=${encodeURIComponent(`${partageTexte} ${ficheUrl}`)}`;
+
+  // Bouton « Visiter » : ouvre le logiciel de courriel avec un message déjà
+  // rédigé, que la personne n'a plus qu'à envoyer. On ne renvoie plus vers
+  // l'agenda : réserver un créneau avant même d'avoir vu la propriété demandait
+  // un engagement de trop, et FORM_ENDPOINT est encore vide de toute façon.
+  const visiteSujet = `Demande de visite — ${p.street}, ${p.city} (MLS ${p.mls})`;
+  // Court volontairement : le prix, les disponibilités et le numéro ont été
+  // retirés. Moins il reste de champs à remplir, plus la personne envoie.
+  // L'objet porte déjà l'adresse et le numéro MLS pour retrouver la fiche.
+  const visiteCorps = [
+    'Bonjour,',
+    '',
+    `J'aimerais beaucoup visiter la propriété située au ${p.street}, ${p.city}.`,
+    'Est-ce possible de me recontacter pour convenir d\'un moment ?',
+    '',
+    'Merci !'
+  ].join('\r\n');
+  const visiteMailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(visiteSujet)}&body=${encodeURIComponent(visiteCorps)}`;
 
   const jsonld = JSON.stringify({
     "@context":"https://schema.org","@type":"RealEstateListing",
@@ -4171,15 +4605,26 @@ function detailPage(p) {
   <div class="prop-media">
     <div class="prop-media__overlay">
       <div class="prop-media__icons">
-        <button type="button" class="icon-btn" aria-label="Ajouter aux favoris">${ICON.heart}</button>
-        <button type="button" class="icon-btn" aria-label="Partager">${ICON.share}</button>
+        <div class="share" data-share-root>
+          <button type="button" class="icon-btn" data-share
+            data-share-title="${attrEsc(partageTitre)}"
+            data-share-text="${attrEsc(partageTexte)}"
+            data-share-url="${attrEsc(ficheUrl)}"
+            aria-label="Partager cette propriété" aria-expanded="false" aria-haspopup="true">${ICON.share}</button>
+          <div class="share__menu" data-share-menu hidden role="menu">
+            <a class="share__item" role="menuitem" href="${attrEsc(partageMailto)}">Par courriel</a>
+            <a class="share__item" role="menuitem" href="${attrEsc(partageFacebook)}" target="_blank" rel="noopener">Facebook</a>
+            <a class="share__item" role="menuitem" href="${attrEsc(partageWhatsapp)}" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" class="share__item" role="menuitem" data-share-copy>Copier le lien</button>
+          </div>
+        </div>
       </div>
       <div class="prop-toggle" data-prop-toggle data-mode="photos" role="tablist" aria-label="Vue média">
         <span class="prop-toggle__pill" aria-hidden="true"></span>
         <button type="button" data-mode="photos" aria-pressed="true" role="tab">Photos</button>
         <button type="button" data-mode="map" aria-pressed="false" role="tab"${hasGeo ? '' : ' aria-disabled="true"'}>Carte</button>
       </div>
-      <a class="prop-media__cta" href="/rendez-vous/?mls=${p.mls}">Visiter</a>
+      <a class="prop-media__cta" href="${visiteMailto}">Visiter</a>
     </div>
 
     <div class="prop-media__pane" id="media-pane" aria-hidden="false">
@@ -4217,39 +4662,23 @@ function detailPage(p) {
       </div>
     ` : ''}
 
-    <div class="prop-info__metrics">
-      <div class="prop-metric">
-        <div class="prop-metric__n">${beds || '—'}</div>
-        <div class="prop-metric__l">Chambres</div>
-      </div>
-      <div class="prop-metric__sep" aria-hidden="true"></div>
-      <div class="prop-metric">
-        <div class="prop-metric__n">${baths || '—'}</div>
-        <div class="prop-metric__l">Salles de bain</div>
-      </div>
-      <div class="prop-metric__sep" aria-hidden="true"></div>
-      <div class="prop-metric">
-        <div class="prop-metric__n">${fmtArea(p.areaTerrain) || '—'}</div>
-        <div class="prop-metric__l">Terrain</div>
-      </div>
-    </div>
-
     <div class="prop-price-band">
       <div class="prop-price-band__main">
         <div class="prop-price-band__eye">Prix demandé</div>
         <div class="prop-price-band__val">${fmtPrice(p.price)}</div>
       </div>
-      <a class="prop-price-band__cta" href="/rendez-vous/?mls=${p.mls}">Visiter cette propriété</a>
+      <a class="prop-price-band__cta" href="${visiteMailto}">Visiter cette propriété</a>
     </div>
 
-    ${amenities.length ? `
+    ${faits.length ? `
     <div class="prop-section">
       <span class="prop-section__eye">Caractéristiques</span>
-      <div class="amenities" ${amenitiesExtra.length ? 'data-more' : ''} id="amenities-${p.mls}">
-        ${amenitiesShown.map(a => `<div class="amenity">${a.icon}<span>${a.label}</span></div>`).join('')}
-        ${amenitiesExtra.map(a => `<div class="amenity amenity--extra">${a.icon}<span>${a.label}</span></div>`).join('')}
+      <div class="faits">
+        ${faits.map(f => `<div class="fait">
+          <div class="fait__v${f.texte ? ' fait__v--texte' : ''}">${attrEsc(f.valeur)}</div>
+          <div class="fait__l">${attrEsc(f.etiquette)}</div>
+        </div>`).join('')}
       </div>
-      ${amenitiesExtra.length ? `<button type="button" class="amenities-more-btn" data-amenities-toggle="#amenities-${p.mls}" data-label-more="Voir les ${amenities.length} caractéristiques" data-label-less="Réduire">Voir les ${amenities.length} caractéristiques</button>` : ''}
     </div>
     ` : ''}
 
@@ -4260,7 +4689,7 @@ function detailPage(p) {
         <thead><tr><th>Pièce</th><th>Niveau</th><th>Dimensions</th><th>Revêtement</th></tr></thead>
         <tbody>${p.rooms.slice(0,20).map(r=>{
           const name = ROOM_NAME[r.code] || r.code || '—';
-          const level = ROOM_LEVEL[r.level] || r.level || '—';
+          const level = nomNiveau(r.level, new Set(p.rooms.map(x => String(x.level || '').toUpperCase())).size > 1);
           const dim = fmtDim(r.dim) || '—';
           const rev = ROOM_REV[r.rev] || r.rev || '—';
           return `<tr><td data-l="Pièce">${name}</td><td data-l="Niveau">${level}</td><td data-l="Dim.">${dim}</td><td data-l="Revêtement">${rev}</td></tr>`;
@@ -4272,7 +4701,7 @@ function detailPage(p) {
     ${p.remFr ? `
     <div class="prop-section">
       <span class="prop-section__eye">Remarques du courtier</span>
-      <div class="prop-info__desc" style="max-inline-size:65ch;">${p.remFr}</div>
+      <div class="prop-info__desc" style="max-inline-size:65ch;">${descriptionHtml(p.remFr)}</div>
     </div>
     ` : ''}
 
@@ -4294,7 +4723,7 @@ function detailPage(p) {
     ${sim.length ? `
     <div class="prop-section">
       <span class="prop-section__eye">Propriétés similaires</span>
-      <div class="prop-similar-grid">${sim.slice(0,2).map(propertyCard).join('')}</div>
+      <div class="prop-similar-grid">${sim.map(propertyCard).join('')}</div>
     </div>
     ` : ''}
   </div>
@@ -4302,7 +4731,7 @@ function detailPage(p) {
 
 <aside class="bottom-bar" data-prop-bar>
   ${hasGeo ? '<button type="button" class="bottom-bar__btn" data-open-map-modal>Carte</button>' : ''}
-  <a class="bottom-bar__btn bottom-bar__btn--primary" href="/rendez-vous/?mls=${p.mls}">Visiter</a>
+  <a class="bottom-bar__btn bottom-bar__btn--primary" href="${visiteMailto}">Visiter</a>
 </aside>
 
 <div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Galerie de photos">
@@ -6634,17 +7063,17 @@ ${marketHighlightsHtml('saint-eustache')}
 
 writePage('contact/index.html', layout({
   title:'Contact — Équipe Jacques-Roussel, courtier immobilier',
-  description:'Contactez Équipe Jacques-Roussel : 450.430.5555 · info@jacquesroussel.com · RE/MAX CRYSTAL Sainte-Thérèse.',
+  description:`Contactez Équipe Jacques-Roussel : ${CONTACT.phone} · ${CONTACT.email} · RE/MAX CRYSTAL Sainte-Thérèse.`,
   canonical:'https://jacquesroussel.com/contact/',
   body:`
 <section class="page-head container"><div class="eyebrow">Contact</div><h1>Parlons de votre projet.</h1><p class="lead">Appelez, écrivez ou prenez rendez-vous en ligne. On vous répond en moins de 24 h.</p></section>
 <section class="container"><div class="two-col">
   <div class="blue-block soft" style="padding:2.5rem">
-    <h3>Téléphone</h3><p style="font-size:1.6rem;color:var(--blue);font-weight:700;margin:.5rem 0 1.5rem">450.430.5555</p>
-    <h3>Courriel</h3><p style="margin:.5rem 0 1.5rem"><a href="mailto:info@jacquesroussel.com">info@jacquesroussel.com</a></p>
+    <h3>Téléphone</h3><p style="font-size:1.6rem;color:var(--blue);font-weight:700;margin:.5rem 0 1.5rem"><a href="tel:${CONTACT.tel}" style="color:inherit">${CONTACT.phone}</a></p>
+    <h3>Courriel</h3><p style="margin:.5rem 0 1.5rem"><a href="mailto:${CONTACT.email}">${CONTACT.email}</a></p>
     <h3>Bureau</h3><p>RE/MAX CRYSTAL<br>Sainte-Thérèse, QC</p>
   </div>
-  <form class="contact-form" style="background:#fff;padding:clamp(1.8rem,4vw,2.5rem);border:1px solid var(--line);border-radius:var(--radius-lg)">
+  <form class="contact-form" data-lead-form style="background:#fff;padding:clamp(1.8rem,4vw,2.5rem);border:1px solid var(--line);border-radius:var(--radius-lg)">
     <div class="f-fields">
       <label>Nom complet<input type="text" name="name" required></label>
       <div class="f-row">
@@ -6652,7 +7081,12 @@ writePage('contact/index.html', layout({
         <label>Téléphone<input type="tel" name="phone"></label>
       </div>
       <label>Message<textarea name="message" rows="5" required></textarea></label>
-      <button type="button" class="f-submit">Envoyer le message &rarr;</button>
+      <button type="submit" class="f-submit">Envoyer le message &rarr;</button>
+    </div>
+    <div class="f-ok" hidden>
+      <div class="f-ok-icon">&#10003;</div>
+      <h3>Message envoy&eacute;.</h3>
+      <p>Merci. On vous r&eacute;pond personnellement sous 24 h.</p>
     </div>
   </form>
 </div></section>
@@ -6668,7 +7102,8 @@ writePage('contact/index.html', layout({
   const ta = document.querySelector('form textarea');
   if (ta && !ta.value) ta.value = 'Bonjour, j\\'aimerais recevoir le ' + t + ' en PDF par courriel. Merci !';
 })();
-</script>`
+</script>
+${leadFormScript}`
 }));
 
 writePage('temoignages/index.html', contentPage({
@@ -6686,7 +7121,7 @@ const gcalEmbed = GCAL_APPOINTMENT_URL.includes('REMPLACE_MOI')
        <div>
          <h3 style="margin-bottom:.5rem">Agenda en configuration</h3>
          <p style="color:var(--ink-2);max-width:42ch;margin:0 auto 1.5rem">L'agenda sera activé dès que l'équipe aura partagé son lien Google Calendar Appointment Schedule.</p>
-         <a class="btn" href="tel:4504305555" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">📞 450.430.5555</a>
+         <a class="btn" href="tel:${CONTACT.tel}" style="display:inline-block;background:var(--ink);color:#fff;padding:1rem 1.6rem;border-radius:999px;font-weight:500">📞 ${CONTACT.phone}</a>
        </div>
      </div>`
   : GCAL_APPOINTMENT_URL.includes('calendar.app.google')
@@ -6752,7 +7187,7 @@ writePage('rendez-vous/index.html', layout({
           <li>Recherche sur mesure pour les acheteurs.</li>
         </ul>
         <h3 style="margin-top:1.5rem">Préférez le téléphone ?</h3>
-        <p style="font-size:1.2rem;color:var(--blue);margin:.3rem 0 0"><a href="tel:4504305555" style="color:inherit">450.430.5555</a></p>
+        <p style="font-size:1.2rem;color:var(--blue);margin:.3rem 0 0"><a href="tel:${CONTACT.tel}" style="color:inherit">${CONTACT.phone}</a></p>
       </div>
     </aside>
   </div>
@@ -6765,11 +7200,11 @@ writePage('rendez-vous/index.html', layout({
         <h2 style="max-width:18ch">Vous avez des questions ? Écrivez-nous.</h2>
         <p style="color:var(--ink-2);margin-top:1.2rem;max-width:42ch;font-size:1.02rem;line-height:1.7">Pas prêt à réserver un créneau ? Envoyez-nous votre question directement. On vous répond personnellement en moins de 24 h, jours ouvrables.</p>
         <div style="margin-top:1.8rem;display:grid;gap:.6rem;font-size:.95rem;color:var(--ink-2)">
-          <div>📞 <a href="tel:4504305555" style="color:var(--blue)">450.430.5555</a></div>
-          <div>✉ <a href="mailto:info@jacquesroussel.com" style="color:var(--blue)">info@jacquesroussel.com</a></div>
+          <div>📞 <a href="tel:${CONTACT.tel}" style="color:var(--blue)">${CONTACT.phone}</a></div>
+          <div>✉ <a href="mailto:${CONTACT.email}" style="color:var(--blue)">${CONTACT.email}</a></div>
         </div>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.f-ok').hidden=false; this.querySelector('.f-fields').hidden=true;">
+      <form class="contact-form" data-lead-form>
         <div class="f-fields">
           <label>Nom complet<input type="text" name="name" required></label>
           <div class="f-row">
@@ -6797,7 +7232,8 @@ writePage('rendez-vous/index.html', layout({
       </form>
     </div>
   </div>
-</section>`
+</section>
+${leadFormScript}`
 }));
 
 // --- PERFORMANCE DASHBOARD ---
