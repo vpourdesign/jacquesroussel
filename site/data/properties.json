@@ -4362,7 +4362,7 @@
   },
   {
     "mls": "23453291",
-    "price": 614999,
+    "price": 614000,
     "typeCode": "R/PP",
     "typeLabel": "Unifamiliale",
     "street": "980 Rue de l'Harmonie",
@@ -4383,133 +4383,133 @@
       },
       {
         "seq": 2,
-        "type": "HAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719ADD1AE35A9D4B&t=pi&f=I"
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471904D1AE35A9D41&t=pi&f=I"
       },
       {
         "seq": 3,
-        "type": "SAM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471904D1AE35A9D24&t=pi&f=I"
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719B2D1AE35A9D2C&t=pi&f=I"
       },
       {
         "seq": 4,
-        "type": "SAM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471909D1AE35A9DCF&t=pi&f=I"
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719AAD1AE35A9DCA&t=pi&f=I"
       },
       {
         "seq": 5,
-        "type": "SAM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190BD1AE35A9DED&t=pi&f=I"
+        "type": "FACARR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471714D1AE35A9DEF&t=pi&f=I"
       },
       {
         "seq": 6,
-        "type": "CUI",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471905D1AE35A9DAC&t=pi&f=I"
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719ADD1AE35A9DA4&t=pi&f=I"
       },
       {
         "seq": 7,
-        "type": "CUI",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719B2D1AE35A9D0B&t=pi&f=I"
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471909D1AE35A9D04&t=pi&f=I"
       },
       {
         "seq": 8,
-        "type": "CUI",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719BFD1AE35A9DBE&t=pi&f=I"
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190BD1AE35A9DB2&t=pi&f=I"
       },
       {
         "seq": 9,
-        "type": "SAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190DD1AE35A9DFA&t=pi&f=I"
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471905D1AE35A9DF0&t=pi&f=I"
       },
       {
         "seq": 10,
-        "type": "SAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432646D1AE35A9D8B&t=pi&f=I"
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719BFD1AE35A9D8C&t=pi&f=I"
       },
       {
         "seq": 11,
         "type": "SAL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719AAD1AE35A9D9D&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47190DD1AE35A9D9E&t=pi&f=I"
       },
       {
         "seq": 12,
-        "type": "CCP",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432647D1AE35A9D70&t=pi&f=I"
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432646D1AE35A9D7D&t=pi&f=I"
       },
       {
         "seq": 13,
         "type": "CCP",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432643D1AE35A9D3F&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432647D1AE35A9D3B&t=pi&f=I"
       },
       {
         "seq": 14,
         "type": "CCP",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F0D1AE35A9D50&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA432643D1AE35A9D5D&t=pi&f=I"
       },
       {
         "seq": 15,
-        "type": "SDB",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471980D1AE35A9D6A&t=pi&f=I"
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F0D1AE35A9D6B&t=pi&f=I"
       },
       {
         "seq": 16,
         "type": "SDB",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F9D1AE35A91DB&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471980D1AE35A91DE&t=pi&f=I"
       },
       {
         "seq": 17,
         "type": "SDB",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471984D1AE35A9111&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA4719F9D1AE35A911F&t=pi&f=I"
       },
       {
         "seq": 18,
-        "type": "SFM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471998D1AE35A914B&t=pi&f=I"
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471984D1AE35A9144&t=pi&f=I"
       },
       {
         "seq": 19,
         "type": "SFM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471983D1AE35A9121&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471998D1AE35A912F&t=pi&f=I"
       },
       {
         "seq": 20,
         "type": "SFM",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471992D1AE35A91CA&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471983D1AE35A91C4&t=pi&f=I"
       },
       {
         "seq": 21,
-        "type": "CAC",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197DD1AE35A91EE&t=pi&f=I"
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471992D1AE35A91E0&t=pi&f=I"
       },
       {
         "seq": 22,
         "type": "CAC",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197FD1AE35A91AE&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197DD1AE35A91AA&t=pi&f=I"
       },
       {
         "seq": 23,
-        "type": "SDL",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193DD1AE35A910B&t=pi&f=I"
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47197FD1AE35A910A&t=pi&f=I"
       },
       {
         "seq": 24,
-        "type": "GARA",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193ED1AE35A91BC&t=pi&f=I"
+        "type": "SDL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193DD1AE35A91BF&t=pi&f=I"
       },
       {
         "seq": 25,
-        "type": "VER",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EEF5D1AE35A91F1&t=pi&f=I"
+        "type": "GARA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47193ED1AE35A91FE&t=pi&f=I"
       },
       {
         "seq": 26,
         "type": "VER",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EA21D1AE35A918C&t=pi&f=I"
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EEF5D1AE35A918F&t=pi&f=I"
       },
       {
         "seq": 27,
-        "type": "FACARR",
-        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA471714D1AE35A9192&t=pi&f=I"
+        "type": "VER",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA47EA21D1AE35A919E&t=pi&f=I"
       },
       {
         "seq": 28,
