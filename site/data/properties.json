@@ -166,6 +166,385 @@
     "slug": "10920974-994-rue-lamontagne-saint-jerome"
   },
   {
+    "mls": "11213951",
+    "price": 579900,
+    "typeCode": "R/ME",
+    "typeLabel": "Unifamiliale",
+    "street": "412 Rue Laplante",
+    "city": "Saint-Eustache",
+    "munCode": "72005",
+    "postalCode": "J7R7J2",
+    "yearBuilt": "1992",
+    "areaTerrain": "3147 PC",
+    "lat": 45.55120894,
+    "lon": -73.90203979,
+    "descFr": "Bienvenue au 412, rue Laplante à Saint-Eustache! Ce magnifique jumelé à étage, construit en 1992 et ayant bénéficié d'un entretien remarquable au fil des ans, saura vous séduire dès votre arrivée. Le rez-de-chaussée offre un magnifique concept à aire ouverte regroupant un salon lumineux, une salle à manger accueillante et une cuisine fonctionnelle, idéal pour la vie de famille. Vous y trouverez également une salle d'eau pratique intégrant l'espace laveuse et sécheuse. À l'étage, la propriété compte trois chambres à coucher de belles dimensions, dont une vaste chambre principale dotée d'un grand garde-robe de type walk-in, ainsi qu'une salle de bain complète. Un climatiseur mural installé à l'étage assure un confort optimal pour tout le niveau. Le sous-sol entièrement aménagé propose une spacieuse salle familiale, une quatrième chambre à coucher idéale pour un adolescent, des invités ou un espace bureau, ainsi qu'un établi pour vos travaux de bricolage et rangements. À l'extérieur, profitez d'une cour arrière parfaitement aménagée et entièrement clôturée offrant une belle intimité. Une propriété clé en main, chaleureuse et idéalement située! En voiture : -Vieux-Saint-Eustache (approx. 5-7 min) : Secteur historique, Moulin Légaré, cafés, restaurants, marché public et promenade au bord de la rivière -Axes routiers principaux : Accès rapide à l'Autoroute 640 et à la Route 148 -Transport en commun : Station du REM de Deux-Montagnes accessible en environ 10 minutes (accès rapide et fluide vers le centre-ville de Montréal) -Commerces et services (approx. 5-10 min) : Épiceries, pharmacies, centres commerciaux, Cinéma Saint-Eustache et Hôpital de Saint-Eustache -Plein air et loisirs (approx. 10-15 min) : Parc Nature de Saint-Eustache (marche, ski de fond, raquette) et Parc de la Rivière-des-Mille-Îles (kayak, planche à pagaie) Le courtier du vendeur informe l'acheteur qu'il ne peut le représenter ni défendre ses intérêts. Il lui rappelle qu'il peut être représenté par un autre courtier de son choix. Si l'acheteur choisit tout de même de communiquer directement avec le courtier du vendeur, ce dernier lui accordera un traitement équitable et lui fournira, de manière objective, l'information pertinente à l'achat.***",
+    "remFr": "Superbe jumelé à étage au 412, rue Laplante à St-Eustache! Méticuleusement entretenu depuis 1992, ce clé en main offre un RDC lumineux à aire ouverte avec salle d'eau (laveuse/sécheuse). À l'étage : 3 chambres (maître avec grand walk-in), sdb complète et climatiseur mural. Le sous-sol aménagé comprend une 4e chambre, une grande salle familiale et un établi. Cour arrière entièrement clôturée et aménagée. Près des écoles, parcs, commerces, du Vieux-St-Eustache et à 10 min de la station du REM de Deux-Montagnes. Une opportunité à ne pas manquer!",
+    "photos": [
+      {
+        "seq": 1,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29701EDD891706D11&t=pi&f=I"
+      },
+      {
+        "seq": 2,
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297041DD891706D4F&t=pi&f=I"
+      },
+      {
+        "seq": 3,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29704BDD891706D20&t=pi&f=I"
+      },
+      {
+        "seq": 4,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297025DD891706DC4&t=pi&f=I"
+      },
+      {
+        "seq": 5,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29702DDD891706DE4&t=pi&f=I"
+      },
+      {
+        "seq": 6,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29702BDD891706DA1&t=pi&f=I"
+      },
+      {
+        "seq": 7,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970CEDD891706D0D&t=pi&f=I"
+      },
+      {
+        "seq": 8,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970E1DD891706DBB&t=pi&f=I"
+      },
+      {
+        "seq": 9,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970ADDD891706DFF&t=pi&f=I"
+      },
+      {
+        "seq": 10,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970AADD891706D82&t=pi&f=I"
+      },
+      {
+        "seq": 11,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297002DD891706D94&t=pi&f=I"
+      },
+      {
+        "seq": 12,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970B2DD891706D7C&t=pi&f=I"
+      },
+      {
+        "seq": 13,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA2970FADD891706D3F&t=pi&f=I"
+      },
+      {
+        "seq": 14,
+        "type": "S-E",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29708EDD891706D50&t=pi&f=I"
+      },
+      {
+        "seq": 15,
+        "type": "SDL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29709FDD891706D62&t=pi&f=I"
+      },
+      {
+        "seq": 16,
+        "type": "ESCA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA29707ADD8917061DD&t=pi&f=I"
+      },
+      {
+        "seq": 17,
+        "type": "CORRIDOR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297032DD89170611F&t=pi&f=I"
+      },
+      {
+        "seq": 18,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297035DD89170614B&t=pi&f=I"
+      },
+      {
+        "seq": 19,
+        "type": "CCP",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297058DD89170612A&t=pi&f=I"
+      },
+      {
+        "seq": 20,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297068DD8917061CB&t=pi&f=I"
+      },
+      {
+        "seq": 21,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BD1DD8917061E4&t=pi&f=I"
+      },
+      {
+        "seq": 22,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BDADD8917061AB&t=pi&f=I"
+      },
+      {
+        "seq": 23,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BD5DD89170610C&t=pi&f=I"
+      },
+      {
+        "seq": 24,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BD8DD8917061B1&t=pi&f=I"
+      },
+      {
+        "seq": 25,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B12DD8917061FF&t=pi&f=I"
+      },
+      {
+        "seq": 26,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B10DD891706181&t=pi&f=I"
+      },
+      {
+        "seq": 27,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B1FDD89170619C&t=pi&f=I"
+      },
+      {
+        "seq": 28,
+        "type": "SFM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B13DD89170617A&t=pi&f=I"
+      },
+      {
+        "seq": 29,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B44DD89170613D&t=pi&f=I"
+      },
+      {
+        "seq": 30,
+        "type": "RAN",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B4EDD89170615C&t=pi&f=I"
+      },
+      {
+        "seq": 31,
+        "type": "BALCON",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B4BDD89170616B&t=pi&f=I"
+      },
+      {
+        "seq": 32,
+        "type": "BALCON",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B47DD8917064DB&t=pi&f=I"
+      },
+      {
+        "seq": 33,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B21DD891706414&t=pi&f=I"
+      },
+      {
+        "seq": 34,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B2EDD891706440&t=pi&f=I"
+      },
+      {
+        "seq": 35,
+        "type": "COUR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297B26DD89170642E&t=pi&f=I"
+      },
+      {
+        "seq": 36,
+        "type": "STAT",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BCFDD8917064CC&t=pi&f=I"
+      },
+      {
+        "seq": 37,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA297BC7DD8917064EE&t=pi&f=I"
+      }
+    ],
+    "features": [
+      {
+        "code": "ALLE",
+        "value": "ASPH"
+      },
+      {
+        "code": "ALLE",
+        "value": "DOUB"
+      },
+      {
+        "code": "LOC",
+        "value": "CEAU"
+      },
+      {
+        "code": "ARMO",
+        "value": "POLY"
+      },
+      {
+        "code": "CHAU",
+        "value": "PELC"
+      },
+      {
+        "code": "EAU",
+        "value": "AMU"
+      },
+      {
+        "code": "ENER",
+        "value": "ELEC"
+      },
+      {
+        "code": "EQUI",
+        "value": "CLMM"
+      },
+      {
+        "code": "FENE",
+        "value": "PVC"
+      },
+      {
+        "code": "FOND",
+        "value": "BETO"
+      },
+      {
+        "code": "PARE",
+        "value": "ALUM"
+      },
+      {
+        "code": "PARE",
+        "value": "BRIQ"
+      },
+      {
+        "code": "SS",
+        "value": "6"
+      },
+      {
+        "code": "SS",
+        "value": "AMNT"
+      },
+      {
+        "code": "STAT",
+        "value": "EXT"
+      },
+      {
+        "code": "SYEG",
+        "value": "EGMU"
+      },
+      {
+        "code": "TFEN",
+        "value": "COUL"
+      },
+      {
+        "code": "TFEN",
+        "value": "MAN"
+      },
+      {
+        "code": "TOIT",
+        "value": "BAA"
+      },
+      {
+        "code": "TOPO",
+        "value": "PLAT"
+      },
+      {
+        "code": "ZONG",
+        "value": "RES"
+      }
+    ],
+    "rooms": [
+      {
+        "seq": 1,
+        "code": "HAL",
+        "level": "RC",
+        "dim": "4.11x4.11 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 2,
+        "code": "SAL",
+        "level": "RC",
+        "dim": "16.5x18.6 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 3,
+        "code": "SAM",
+        "level": "RC",
+        "dim": "19.6x11.7 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 4,
+        "code": "CUI",
+        "level": "RC",
+        "dim": "10.3x9.3 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 5,
+        "code": "S-E",
+        "level": "RC",
+        "dim": "5.0x7.7 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 6,
+        "code": "CCP",
+        "level": "2",
+        "dim": "16.11x11.2 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 7,
+        "code": "CAC",
+        "level": "2",
+        "dim": "9.9x10.2 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 8,
+        "code": "CAC",
+        "level": "2",
+        "dim": "10.4x9.11 P",
+        "rev": "BOIS"
+      },
+      {
+        "seq": 9,
+        "code": "SDB",
+        "level": "2",
+        "dim": "9.2x4.11 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 10,
+        "code": "SFM",
+        "level": "0",
+        "dim": "26.1x16.2 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 11,
+        "code": "CAC",
+        "level": "0",
+        "dim": "11.5x9.3 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 12,
+        "code": "RAN",
+        "level": "0",
+        "dim": "6.11x9.1 P",
+        "rev": "BETO"
+      }
+    ],
+    "links": [],
+    "listedAt": "2026-09-20",
+    "isCoBroker": false,
+    "slug": "11213951-412-rue-laplante-saint-eustache"
+  },
+  {
     "mls": "12206682",
     "price": 67500,
     "typeCode": "T/TV",
@@ -4755,6 +5134,298 @@
     "listedAt": "2026-08-12",
     "isCoBroker": false,
     "slug": "23453291-980-rue-de-l-harmonie-laval"
+  },
+  {
+    "mls": "26206925",
+    "price": 330000,
+    "typeCode": "R/AP",
+    "typeLabel": "Condo",
+    "street": "2170 Rue Isaac-Jogues, app. 4",
+    "city": "Saint-Jérôme",
+    "munCode": "75017",
+    "postalCode": "J7Y0A2",
+    "yearBuilt": "2011",
+    "areaTerrain": "",
+    "lat": 45.80415344,
+    "lon": -73.99977885,
+    "descFr": "PRISE DE POSSESSION RAPIDE! Bienvenue au 2170, rue Isaac-Jogues, app. 4 à Saint-Jérôme! Située dans le secteur prisé de Lafontaine, cette charmante copropriété construite en 2011 a bénéficié d'un entretien rigoureux au fil des ans. Profitez d'une tranquillité d'esprit remarquable grâce à son entrée complètement indépendante et à son intérieur entièrement repeint à neuf suite au départ des derniers locataires. L'unité propose une aire de vie lumineuse et conviviale grâce à sa position en coin, regroupant un salon chaleureux avec foyer au gaz naturel, une salle à manger accueillante et une cuisine fonctionnelle dotée de jolies armoires et d'un comptoir-lunch. Le condo comprend deux chambres à coucher de belles dimensions ainsi qu'une salle de bains complèteavec baignoire et douche séparée. À l'extérieur, vous bénéficierez d'un espace terrasse privé, d'un espace de rangement/cabanon extérieur et de deux espaces de stationnement. Un produit clé en main idéal pour un premier acheteur, un investisseur ou un pied-à-terre dans les Laurentides! POINTS FORTS ET CARACTÉRISTIQUES DE L'IMMEUBLE -Entrée indépendante : Accès privé et direct à votre unité sans passer par un hall commun. -Intérieur rafraîchi : Entièrement repeint de fond en comble, prêt à vous accueillir. -Confort & Ambiance : Foyer au gaz naturel au salon, climatiseur mural et échangeur d'air. -Stationnements & Rangement : 2 espaces de stationnement réservés et un rangement extérieur privé. -Environnement : Secteur paisible, bordé d'espaces verts et de sentiers pédestres. En voiture (moins de 20 minutes) : -Transport & Axes routiers (5 à 10 min) : Accès direct et rapide à l'Autoroute 15 et à la Route 117. Gare de train de banlieue de Saint-Jérôme (accès direct vers Montréal). -Éducation & Santé (5 à 10 min) : Cégep de Saint-Jérôme, Université du Québec en Outaouais (UQO - Saint-Jérôme) et l'Hôpital régional de Saint-Jérôme. -Commerces & Services (5 à 10 min) : Épiceries, pharmacies, restaurants, Carrefour du Nord et centres commerciaux. -Plein air & Sports (10 à 15 min) : Parc régional de la Rivière-du-Nord (chutes Wilson), Piste cyclable/ski de fond Le P'tit Train du Nord et terrains de golf. CLAUSE TRANSACTIONNELLE OBLIGATOIRE Le courtier du vendeur informe l'acheteur qu'il ne peut le représenter ni défendre ses intérêts. Il lui rappelle qu'il peut être représenté par un autre courtier de son choix. Si l'acheteur choisit tout de même de communiquer directement avec le courtier du vendeur, ce dernier lui accordera un traitement équitable et lui fournira, de manière objective, l'information pertinente à l'achat.",
+    "remFr": "OCCUPATION IMMÉDIATE ! Superbe condo à St-Jérôme (secteur Lafontaine) au 2170, rue Isaac-Jogues, app. 4! Impeccablement entretenu depuis 2011, ce clé en main possède son entrée indépendante et a été complètement repeint à neuf. Unité de coin offrant une magnifique luminosité, 2 chambres, salle de bain complète et salon avec foyer au gaz. Inclut 2 stationnements, rangement extérieur et climatiseur mural. Près de l'A-15, Cégep, hôpital, train de banlieue et sentiers pédestres. Idéal pour premier acheteur ou investisseur!",
+    "photos": [
+      {
+        "seq": 1,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A70DD1B65473D11&t=pi&f=I"
+      },
+      {
+        "seq": 2,
+        "type": "ENTREE",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A702D1B65473D4E&t=pi&f=I"
+      },
+      {
+        "seq": 3,
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A70CD1B65473D20&t=pi&f=I"
+      },
+      {
+        "seq": 4,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A70ED1B65473DCF&t=pi&f=I"
+      },
+      {
+        "seq": 5,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A70AD1B65473DE1&t=pi&f=I"
+      },
+      {
+        "seq": 6,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A70FD1B65473DAE&t=pi&f=I"
+      },
+      {
+        "seq": 7,
+        "type": "SAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A708D1B65473D0C&t=pi&f=I"
+      },
+      {
+        "seq": 8,
+        "type": "HAL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A706D1B65473DBD&t=pi&f=I"
+      },
+      {
+        "seq": 9,
+        "type": "SAM",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7B2D1B65473DF2&t=pi&f=I"
+      },
+      {
+        "seq": 10,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7BAD1B65473D8C&t=pi&f=I"
+      },
+      {
+        "seq": 11,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7B9D1B65473D90&t=pi&f=I"
+      },
+      {
+        "seq": 12,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7FDD1B65473D71&t=pi&f=I"
+      },
+      {
+        "seq": 13,
+        "type": "CUI",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F4D1B65473D3C&t=pi&f=I"
+      },
+      {
+        "seq": 14,
+        "type": "CORRIDOR",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F0D1B65473D5D&t=pi&f=I"
+      },
+      {
+        "seq": 15,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7FBD1B65473D64&t=pi&f=I"
+      },
+      {
+        "seq": 16,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7FFD1B654731D4&t=pi&f=I"
+      },
+      {
+        "seq": 17,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F8D1B65473111&t=pi&f=I"
+      },
+      {
+        "seq": 18,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F9D1B65473142&t=pi&f=I"
+      },
+      {
+        "seq": 19,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F7D1B6547312E&t=pi&f=I"
+      },
+      {
+        "seq": 20,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F3D1B654731C0&t=pi&f=I"
+      },
+      {
+        "seq": 21,
+        "type": "SDB",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F5D1B654731EF&t=pi&f=I"
+      },
+      {
+        "seq": 22,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A7F6D1B654731A1&t=pi&f=I"
+      },
+      {
+        "seq": 23,
+        "type": "CAC",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A78DD1B6547310B&t=pi&f=I"
+      },
+      {
+        "seq": 24,
+        "type": "SDL",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A781D1B654731BD&t=pi&f=I"
+      },
+      {
+        "seq": 25,
+        "type": "EXTE",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A78CD1B654731FC&t=pi&f=I"
+      },
+      {
+        "seq": 26,
+        "type": "RAN",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A78FD1B65473180&t=pi&f=I"
+      },
+      {
+        "seq": 27,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A701D1B6547319D&t=pi&f=I"
+      },
+      {
+        "seq": 28,
+        "type": "FACA",
+        "url": "https://mediaserver.centris.ca/media.ashx?id=ADDE24EDA27A704D1B65473174&t=pi&f=I"
+      }
+    ],
+    "features": [
+      {
+        "code": "ALLE",
+        "value": "ASPH"
+      },
+      {
+        "code": "REPE",
+        "value": "CHAT"
+      },
+      {
+        "code": "REPE",
+        "value": "COND"
+      },
+      {
+        "code": "ARMO",
+        "value": "MELM"
+      },
+      {
+        "code": "CHAU",
+        "value": "PELC"
+      },
+      {
+        "code": "EAU",
+        "value": "AMU"
+      },
+      {
+        "code": "ENER",
+        "value": "ELEC"
+      },
+      {
+        "code": "ENER",
+        "value": "GAZN"
+      },
+      {
+        "code": "EQUI",
+        "value": "EAIR"
+      },
+      {
+        "code": "EQUI",
+        "value": "INTP"
+      },
+      {
+        "code": "EQUI",
+        "value": "THEM"
+      },
+      {
+        "code": "FENE",
+        "value": "PVC"
+      },
+      {
+        "code": "FOPO",
+        "value": "GAZ"
+      },
+      {
+        "code": "PARE",
+        "value": "ALUM"
+      },
+      {
+        "code": "PARE",
+        "value": "BRIQ"
+      },
+      {
+        "code": "SDB",
+        "value": "DIND"
+      },
+      {
+        "code": "STAT",
+        "value": "EXT"
+      },
+      {
+        "code": "SYEG",
+        "value": "EGMU"
+      },
+      {
+        "code": "TFEN",
+        "value": "MAN"
+      },
+      {
+        "code": "TOIT",
+        "value": "BAA"
+      },
+      {
+        "code": "ZONG",
+        "value": "RES"
+      }
+    ],
+    "rooms": [
+      {
+        "seq": 1,
+        "code": "SAL",
+        "level": "RC",
+        "dim": "14.0x13.0 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 2,
+        "code": "CUI",
+        "level": "RC",
+        "dim": "9.3x9.1 P",
+        "rev": "CERAM"
+      },
+      {
+        "seq": 3,
+        "code": "SAM",
+        "level": "RC",
+        "dim": "12.5x10.6 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 4,
+        "code": "CCP",
+        "level": "RC",
+        "dim": "11.11x11.1 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 5,
+        "code": "CAC",
+        "level": "RC",
+        "dim": "12.10x9.9 P",
+        "rev": "PFLO"
+      },
+      {
+        "seq": 6,
+        "code": "SDB",
+        "level": "RC",
+        "dim": "8.6x7.10 P",
+        "rev": "CERAM"
+      }
+    ],
+    "links": [],
+    "listedAt": "2026-09-20",
+    "isCoBroker": false,
+    "slug": "26206925-2170-rue-isaac-jogues-app-4-saint-jerome"
   },
   {
     "mls": "27533692",
