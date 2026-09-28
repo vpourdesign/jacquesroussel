@@ -123,6 +123,19 @@ const CONTACT = {
 
 const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
 
+// --- Données structurées : une seule entité pour l'équipe ---
+// Accueil, À propos, fiches et articles pointent vers le même @id : Google et les
+// moteurs de réponse IA rattachent ainsi tout le site à « Équipe Jacques-Roussel ».
+const AGENT_ID = 'https://jacquesroussel.com/#equipe';
+const SOCIAL_PROFILES = [
+  'https://www.instagram.com/equipejacquesroussel/',
+  'https://www.facebook.com/profile.php?id=61566770076579'
+];
+const ARTICLE_PUBLISHER = {
+  "@type":"Organization","@id":AGENT_ID,"name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL",
+  "logo":{"@type":"ImageObject","url":"https://jacquesroussel.com/brand_assets/jr-favicon-512.png","width":512,"height":512}
+};
+
 // Google Calendar Appointment Schedule — l'URL longue de la page de réservation
 // (Google Agenda → Créer → Planification de rendez-vous → Partager → Copier le lien).
 // Il faut la version longue, calendar.google.com/calendar/appointments/schedules/…
@@ -885,7 +898,12 @@ const NAV = [
   { label: "L'équipe", href: '/a-propos/' }
 ];
 
-function layout({ title, description, canonical, body, extraHead='', extraBody='', bodyClass='', jsonld='' }) {
+// Image de partage par défaut : le portrait d'équipe. Les fiches et les articles
+// passent la leur (ogImage) pour qu'un partage montre la maison ou l'article.
+const OG_DEFAULT_IMAGE = { url: 'https://jacquesroussel.com/photos/equipe-jr-portrait.jpg', width: 1500, height: 650, alt: "L'équipe Jacques-Roussel, courtiers immobiliers RE/MAX CRYSTAL" };
+
+function layout({ title, description, canonical, body, extraHead='', extraBody='', bodyClass='', jsonld='', ogImage=null, ogType='website' }) {
+  const og = ogImage || OG_DEFAULT_IMAGE;
   const curPath = (canonical || '').replace(/^https?:\/\/[^/]+/, '');
   const seg = s => (s || '').split('/').filter(Boolean)[0] || '';
   const curSeg = seg(curPath);
@@ -925,17 +943,16 @@ function layout({ title, description, canonical, body, extraHead='', extraBody='
 ${canonical ? `<link rel="canonical" href="${canonical}">` : ''}
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
 ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <meta property="og:locale" content="fr_CA">
-<meta property="og:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
-<meta property="og:image:width" content="1500">
-<meta property="og:image:height" content="650">
-<meta property="og:image:alt" content="L'équipe Jacques-Roussel, courtiers immobiliers RE/MAX CRYSTAL">
+<meta property="og:image" content="${og.url}">
+${og.width ? `<meta property="og:image:width" content="${og.width}">\n<meta property="og:image:height" content="${og.height}">` : ''}
+<meta property="og:image:alt" content="${og.alt}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${description}">
-<meta name="twitter:image" content="https://jacquesroussel.com/photos/equipe-jr-portrait.jpg">
+<meta name="twitter:image" content="${og.url}">
 <meta name="theme-color" content="#F7F5EE">
 <link rel="icon" href="/brand_assets/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/svg+xml" href="/brand_assets/jr-favicon.svg">
@@ -3974,7 +3991,12 @@ const fmtArea = raw => {
 };
 
 // --- Helpers ---
+// Pages écrites pendant ce build : le sitemap et la passe SEO finale partent de
+// cette liste, pas d'une liste tenue à la main qui finit par diverger.
+const WRITTEN_PAGES = new Set();
+
 function writePage(relpath, html) {
+  if (relpath.endsWith('index.html')) WRITTEN_PAGES.add(relpath);
   const out = path.join(SITE, relpath);
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);
@@ -3999,9 +4021,12 @@ const videos = [
   { file: 'ARRETER-TRAVAILLER.mp4', title: "Arrêter de travailler" }
 ];
 
-const homeJsonld = JSON.stringify({
-  "@context":"https://schema.org","@type":"RealEstateAgent",
+const homeJsonld = JSON.stringify([{
+  "@context":"https://schema.org","@type":"RealEstateAgent","@id":AGENT_ID,
   "name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com",
+  "logo":"https://jacquesroussel.com/brand_assets/jr-favicon-512.png",
+  "email":CONTACT.email,
+  "sameAs":SOCIAL_PROFILES,
   "image":"https://jacquesroussel.com/photos/equipe-jacques-roussel.jpg",
   // À CONFIRMER : le +1-450-430-5555 qui figurait ici ne correspond pas à la ligne
   // principale du bureau relevée au dossier RE/MAX CRYSTAL (450 430-4207). Le guide
@@ -4009,9 +4034,14 @@ const homeJsonld = JSON.stringify({
   "telephone":AGENCY.tel,"priceRange":"$$",
   "address":{"@type":"PostalAddress","streetAddress":AGENCY.street,"addressLocality":AGENCY.city,"addressRegion":"QC","postalCode":AGENCY.postal,"addressCountry":"CA"},
   "parentOrganization":{"@type":"Organization","name":AGENCY.name,"url":AGENCY.franchisorUrl},
-  "employee":TEAM.map(m => ({"@type":"RealEstateAgent","name":`${m.first} ${m.last}`,"jobTitle":m.role,"telephone":m.tel,"email":m.email})),
-  "areaServed":["Saint-Eustache","Deux-Montagnes","Sainte-Marthe-sur-le-Lac","Boisbriand","Mirabel","Sainte-Thérèse","Blainville","Rosemère","Lorraine"]
-});
+  // Person, pas RealEstateAgent : ce dernier est un type d'organisation (LocalBusiness).
+  "employee":TEAM.map(m => ({"@type":"Person","name":`${m.first} ${m.last}`,"jobTitle":m.role,"telephone":m.tel,"email":m.email,"worksFor":{"@id":AGENT_ID}})),
+  "areaServed":["Saint-Eustache","Deux-Montagnes","Sainte-Marthe-sur-le-Lac","Boisbriand","Mirabel","Sainte-Thérèse","Blainville","Rosemère","Lorraine"].map(name => ({"@type":"City","name":name}))
+}, {
+  "@context":"https://schema.org","@type":"WebSite","@id":"https://jacquesroussel.com/#website",
+  "name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/","inLanguage":"fr-CA",
+  "publisher":{"@id":AGENT_ID}
+}]);
 
 // Helpers for homepage data
 const featProps = properties.slice(0, 6);
@@ -4211,9 +4241,11 @@ function propertyCard(p) {
   </article>`;
 }
 
+// Réutilisée par llms.txt.
+const homeDescription = `Équipe Jacques-Roussel, ${TEAM.length} courtiers immobiliers RE/MAX CRYSTAL à Saint-Eustache, Deux-Montagnes, Sainte-Marthe-sur-le-Lac, Boisbriand et Mirabel. Statistiques Centris à jour, évaluation gratuite et mise en marché sur mesure.`;
 writePage('index.html', layout({
   title: 'Équipe Jacques-Roussel · Courtier immobilier Saint-Eustache et Rive-Nord | RE/MAX CRYSTAL',
-  description: `Équipe Jacques-Roussel, ${TEAM.length} courtiers immobiliers RE/MAX CRYSTAL à Saint-Eustache, Deux-Montagnes, Sainte-Marthe-sur-le-Lac, Boisbriand et Mirabel. Statistiques Centris à jour, évaluation gratuite et mise en marché sur mesure.`,
+  description: homeDescription,
   canonical: 'https://jacquesroussel.com/',
   // Plus d'en-tête transparent sur l'accueil : le guide RE/MAX (p. 4) impose un
   // fond neutre derrière le logotype et la montgolfière. Une barre crème pleine
@@ -4587,15 +4619,21 @@ function detailPage(p) {
     "@context":"https://schema.org","@type":"RealEstateListing",
     "name":`${p.typeLabel} à vendre, ${p.street}, ${p.city}`,
     "url":`https://jacquesroussel.com/nos-proprietes/${p.slug}/`,
+    "description":(p.remFr || p.descFr || '').trim() || undefined,
+    "datePosted":p.listedAt || undefined,
+    "identifier":{"@type":"PropertyValue","propertyID":"MLS","value":p.mls},
     "image":photoUrls.slice(0, 6),
-    "offers":{"@type":"Offer","price":p.price,"priceCurrency":"CAD"},
-    "address":{"@type":"PostalAddress","streetAddress":p.street,"addressLocality":p.city,"postalCode":p.postalCode,"addressCountry":"CA"}
+    "offers":{"@type":"Offer","price":p.price,"priceCurrency":"CAD","offeredBy":{"@id":AGENT_ID}},
+    "address":{"@type":"PostalAddress","streetAddress":p.street,"addressLocality":p.city,"addressRegion":"QC","postalCode":p.postalCode,"addressCountry":"CA"},
+    ...(hasGeo && {"geo":{"@type":"GeoCoordinates","latitude":p.lat,"longitude":p.lon}})
   });
 
   const mosaicCellHtml = (cellClass, idx) => {
     const ph = mosaicPhotos[idx];
     if (ph) {
-      return `<div class="prop-mosaic__cell ${cellClass}" data-open-lightbox="${idx}"><img loading="lazy" src="${ph.url}" alt="${p.street}, photo ${idx + 1}"></div>`;
+      // La 1re photo est l'image principale (LCP) : chargée tout de suite, pas en différé.
+      const loadAttr = idx === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
+      return `<div class="prop-mosaic__cell ${cellClass}" data-open-lightbox="${idx}"><img ${loadAttr} src="${ph.url}" alt="${p.street}, photo ${idx + 1}"></div>`;
     }
     return `<div class="prop-mosaic__cell ${cellClass}"><div class="prop-mosaic__empty">${ICON.camera}</div></div>`;
   };
@@ -4765,7 +4803,8 @@ ${hasGeo ? `
     body,
     extraHead,
     bodyClass: 'page-prop-detail',
-    jsonld
+    jsonld,
+    ogImage: photoUrls[0] ? { url: photoUrls[0], alt: `${p.typeLabel} à vendre, ${p.street}, ${p.city}` } : null
   });
 }
 for (const p of properties) writePage(`nos-proprietes/${p.slug}/index.html`, detailPage(p));
@@ -4787,11 +4826,11 @@ for (const p of properties) writePage(`nos-proprietes/${p.slug}/index.html`, det
 })();
 
 // --- GENERIC CONTENT PAGE BUILDER ---
-function contentPage({ eyebrow, h1, lead, body, title, desc, canonical, image, afterProse = '', jsonld = '' }) {
+function contentPage({ eyebrow, h1, lead, body, title, desc, canonical, image, afterProse = '', jsonld = '', ogType = 'website' }) {
   const banner = image ? `
 <section class="container">
   <figure class="content-hero" data-parallax>
-    <img src="${image}" alt="${h1}" loading="lazy">
+    <img src="${image}" alt="${h1}" fetchpriority="high" decoding="async">
   </figure>
 </section>` : '';
   const html = `
@@ -4831,7 +4870,8 @@ ${afterProse}
     </div>
   </div>
 </section>`;
-  return layout({ title, description: desc, canonical, body: html, jsonld });
+  const ogImage = image ? { url: `https://jacquesroussel.com${image}`, alt: h1 } : null;
+  return layout({ title, description: desc, canonical, body: html, jsonld, ogImage, ogType });
 }
 
 // --- CITY PAGES ---
@@ -6261,10 +6301,10 @@ const hasMarketData = compareRows.length > 0;
 const articleJsonld = JSON.stringify({
   "@context":"https://schema.org","@type":"Article",
   "headline":featuredArticle.title,
-  "author":{"@type":"Organization","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
+  "author":{"@type":"Organization","@id":AGENT_ID,"name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
   "image":"https://jacquesroussel.com/photos/stock/quartier-aerien.jpg",
   "datePublished":"2026-08-07","dateModified":market.fetchedAt || new Date().toISOString().slice(0,10),
-  "publisher":{"@type":"Organization","name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL"},
+  "publisher":ARTICLE_PUBLISHER,"inLanguage":"fr-CA",
   "mainEntityOfPage":`https://jacquesroussel.com/blog/${featuredArticle.slug}/`
 });
 
@@ -6273,6 +6313,8 @@ writePage(`blog/${featuredArticle.slug}/index.html`, layout({
   description: `Prix médian, délai de vente et volume de transactions à Saint-Eustache${se && se.prixUni ? ` : ${se.prixUni} pour une unifamiliale au ${marketPeriod.toLowerCase()}` : ''}. Comparatif avec Deux-Montagnes, Sainte-Marthe-sur-le-Lac, Boisbriand et Mirabel. Données Centris.`,
   canonical: `https://jacquesroussel.com/blog/${featuredArticle.slug}/`,
   jsonld: articleJsonld,
+  ogType: 'article',
+  ogImage: { url: 'https://jacquesroussel.com/photos/stock/quartier-aerien.jpg', alt: featuredArticle.title },
   extraHead: `<style>
     .a-hero{position:relative;border-radius:var(--radius-lg);overflow:hidden;min-height:clamp(420px,55vw,640px);margin-bottom:3rem}
     .a-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -6956,15 +6998,16 @@ for (const post of BLOG_POSTS) {
     title: `${post.title} | Équipe Jacques-Roussel`,
     desc: post.teaser,
     canonical: `https://jacquesroussel.com/blog/${post.slug}/`,
+    ogType: 'article',
     jsonld: JSON.stringify({
       "@context":"https://schema.org","@type":"Article",
       "headline": post.title,
       "description": post.teaser,
-      "author":{"@type":"Organization","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
+      "author":{"@type":"Organization","@id":AGENT_ID,"name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
       "image":`https://jacquesroussel.com${post.image}`,
       "datePublished": post.date,
       "dateModified": market.fetchedAt || post.date,
-      "publisher":{"@type":"Organization","name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL"},
+      "publisher":ARTICLE_PUBLISHER,"inLanguage":"fr-CA",
       "mainEntityOfPage":`https://jacquesroussel.com/blog/${post.slug}/`
     }),
     body: post.body,
@@ -6983,8 +7026,8 @@ writePage('a-propos/index.html', layout({
   description: `${teamNamesFr}, courtiers immobiliers résidentiel et commercial à RE/MAX CRYSTAL. Stratégie, transparence et expertise locale sur la Rive-Nord.`,
   canonical: 'https://jacquesroussel.com/a-propos/',
   jsonld: JSON.stringify({
-    "@context": "https://schema.org", "@type": "RealEstateAgent",
-    "name": "Équipe Jacques-Roussel", "url": "https://jacquesroussel.com/a-propos/",
+    "@context": "https://schema.org", "@type": "RealEstateAgent", "@id": AGENT_ID,
+    "name": "Équipe Jacques-Roussel", "url": "https://jacquesroussel.com/",
     "employee": TEAM.map(m => ({
       "@type": "Person",
       "name": `${m.first} ${m.last}`,
@@ -7270,21 +7313,138 @@ writePage('404.html', layout({
   body:`<section class="page-head container"><div class="eyebrow">404</div><h1>Cette page a changé d'adresse.</h1><p class="lead"><a href="/">Retour à l'accueil</a> · <a href="/nos-proprietes/">Nos propriétés</a> · <a href="/contact/">Contact</a></p></section>`
 }));
 
-const allUrls = [
-  '/', '/nos-proprietes/', '/a-propos/', '/contact/', '/temoignages/', '/rendez-vous/', '/guides/', '/marche-immobilier/', '/blog/',
-  ...CITIES.flatMap(([s,_,ns]) => [`/courtier-immobilier/${s}/`, ...ns.map(n=>`/quartiers/${s}/${slug(n)}/`)]),
-  ...TYPES.map(([s])=>`/types-de-propriete/${s}/`),
-  ...SUBPAGES.map(([p])=>`/${p}/`),
-  ...GUIDES.map(([s])=>`/guides/${s}/`),
-  ...['statistiques-blainville','statistiques-sainte-therese','rapport-mensuel'].map(s=>`/marche-immobilier/${s}/`),
-  ...BLOG_POSTS.map(p=>`/blog/${p.slug}/`),
-  ...properties.map(p=>`/nos-proprietes/${p.slug}/`)
-];
+// --- SEO : passe finale sur les pages générées ---
+// Fil d'Ariane et FAQ en JSON-LD, dérivés du HTML déjà écrit : les données
+// structurées reprennent mot pour mot ce que la page affiche, sans second texte
+// à tenir à jour.
+const SITE_URL = 'https://jacquesroussel.com';
+const NOINDEX_PAGES = new Set(['/performance/']);
+const BREADCRUMB_LABELS = {
+  '/nos-proprietes/': 'Propriétés',
+  '/blog/': 'Blogue',
+  '/guides/': 'Guides',
+  '/marche-immobilier/': 'Marché',
+  '/types-de-propriete/': 'Types de propriété'
+};
+const pagePath = rel => '/' + rel.replace(/index\.html$/, '');
+const decodeEntities = t => t
+  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&rarr;/g, '→')
+  .replace(/&#39;|&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+const plainText = html => decodeEntities(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+const pageHtml = rel => fs.readFileSync(path.join(SITE, rel), 'utf8');
+const h1Of = html => { const m = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/); return m ? plainText(m[1]).replace(/\.$/, '') : ''; };
+
+function breadcrumbFor(p, html) {
+  if (p === '/') return null;
+  const writtenPaths = new Set([...WRITTEN_PAGES].map(pagePath));
+  const segs = p.split('/').filter(Boolean);
+  const ancestors = segs.slice(0, -1).map((_, i) => '/' + segs.slice(0, i + 1).join('/') + '/');
+  // Un quartier se rattache à la page courtier de sa ville (/quartiers/ n'existe pas).
+  if (segs[0] === 'quartiers' && segs[1]) ancestors.push(`/courtier-immobilier/${segs[1]}/`);
+  const crumbs = [{ name: 'Accueil', url: '/' }];
+  for (const a of ancestors) {
+    if (!writtenPaths.has(a)) continue;
+    crumbs.push({ name: BREADCRUMB_LABELS[a] || h1Of(pageHtml(a.slice(1) + 'index.html')), url: a });
+  }
+  crumbs.push({ name: h1Of(html), url: p });
+  return {
+    "@context":"https://schema.org","@type":"BreadcrumbList",
+    "itemListElement": crumbs.map((c, i) => ({ "@type":"ListItem","position":i + 1,"name":c.name,"item":SITE_URL + c.url }))
+  };
+}
+
+// FAQ visibles : un <h2> « FAQ… » ou « …Questions fréquentes », puis des paires <h3>/<p>.
+function faqFor(html) {
+  const head = html.match(/<h2[^>]*>[^<]*(?:FAQ|Questions fréquentes)[^<]*<\/h2>/);
+  if (!head) return null;
+  const rest = html.slice(head.index + head[0].length);
+  const stop = rest.search(/<h2[\s>]|<\/article>/);
+  const block = stop === -1 ? rest : rest.slice(0, stop);
+  const pairs = [...block.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/g)]
+    .map(m => ({ q: plainText(m[1]), a: plainText(m[2]) }))
+    .filter(x => x.q && x.a);
+  if (!pairs.length) return null;
+  return {
+    "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity": pairs.map(x => ({ "@type":"Question","name":x.q,"acceptedAnswer":{ "@type":"Answer","text":x.a } }))
+  };
+}
+
+for (const rel of WRITTEN_PAGES) {
+  const p = pagePath(rel);
+  if (NOINDEX_PAGES.has(p)) continue;
+  const html = pageHtml(rel);
+  const blocks = [breadcrumbFor(p, html), faqFor(html)].filter(Boolean);
+  if (!blocks.length) continue;
+  const scripts = blocks.map(b => `<script type="application/ld+json">${JSON.stringify(b)}</script>`).join('\n');
+  fs.writeFileSync(path.join(SITE, rel), html.replace('</head>', `${scripts}\n</head>`));
+}
+
+// --- Sitemap ---
+// Toutes les pages réellement générées, sauf celles hors index. lastmod seulement
+// quand on connaît la vraie date : articles et statistiques Centris.
+const LASTMOD = {};
+for (const post of BLOG_POSTS) LASTMOD[`/blog/${post.slug}/`] = market.fetchedAt || post.date;
+if (market.fetchedAt) {
+  LASTMOD[`/blog/${featuredArticle.slug}/`] = market.fetchedAt;
+  for (const rel of WRITTEN_PAGES) {
+    const p = pagePath(rel);
+    if (p.startsWith('/marche-immobilier/')) LASTMOD[p] = market.fetchedAt;
+  }
+}
+const allUrls = [...WRITTEN_PAGES].map(pagePath).filter(p => !NOINDEX_PAGES.has(p))
+  .sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)));
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allUrls.map(u=>`<url><loc>https://jacquesroussel.com${u}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
+${allUrls.map(u=>`<url><loc>${SITE_URL}${u}</loc>${LASTMOD[u] ? `<lastmod>${LASTMOD[u]}</lastmod>` : ''}<changefreq>weekly</changefreq></url>`).join('\n')}
 </urlset>`;
 writePage('sitemap.xml', sitemap);
-writePage('robots.txt', `User-agent: *\nAllow: /\nDisallow: /performance/\nSitemap: https://jacquesroussel.com/sitemap.xml\n`);
+
+// Moteurs de réponse IA : admis explicitement (GEO). La règle « * » les
+// autoriserait déjà ; les nommer documente le choix.
+const AI_CRAWLERS = ['GPTBot','OAI-SearchBot','ChatGPT-User','ClaudeBot','Claude-SearchBot','Claude-User','PerplexityBot','Perplexity-User','Google-Extended','Applebot-Extended'];
+writePage('robots.txt', [
+  'User-agent: *', 'Allow: /', 'Disallow: /performance/', '',
+  ...AI_CRAWLERS.map(b => `User-agent: ${b}`), 'Allow: /', 'Disallow: /performance/', '',
+  `Sitemap: ${SITE_URL}/sitemap.xml`, ''
+].join('\n'));
+
+// llms.txt : résumé du site pour les moteurs de réponse IA, régénéré à chaque
+// build à partir des mêmes données que les pages.
+const llmsLink = (p, fallback) => {
+  const rel = p.slice(1) + 'index.html';
+  const name = WRITTEN_PAGES.has(rel) ? h1Of(pageHtml(rel)) : fallback;
+  return `- [${name || fallback}](${SITE_URL}${p})`;
+};
+const llmsSection = (title, paths) => {
+  const lines = paths.filter(p => WRITTEN_PAGES.has(p.slice(1) + 'index.html')).map(p => llmsLink(p, p));
+  return lines.length ? [`## ${title}`, '', ...lines, ''] : [];
+};
+const writtenUnder = prefix => [...WRITTEN_PAGES].map(pagePath).filter(p => p.startsWith(prefix) && p !== prefix).sort();
+writePage('llms.txt', [
+  '# Équipe Jacques-Roussel · RE/MAX CRYSTAL',
+  '',
+  `> ${homeDescription}`,
+  '',
+  `- Agence : ${AGENCY.name}, ${AGENCY.street}, ${AGENCY.city} (QC) ${AGENCY.postal}. ${AGENCY.franchise}.`,
+  `- Téléphone du bureau : ${AGENCY.phone}`,
+  ...TEAM.map(m => `- ${m.first} ${m.last}, ${m.role} : ${m.phone}, ${m.email}`),
+  `- Instagram : ${SOCIAL_PROFILES[0]}`,
+  `- Facebook : ${SOCIAL_PROFILES[1]}`,
+  `- Statistiques de marché : données Centris${market.fetchedAt ? `, relevées le ${market.fetchedAt}` : ''}.`,
+  '',
+  ...llmsSection('Pages clés', ['/', '/nos-proprietes/', '/a-propos/', '/vendre/evaluation-gratuite/', '/rendez-vous/', '/marche-immobilier/', '/temoignages/']),
+  ...llmsSection('Courtier immobilier par ville', writtenUnder('/courtier-immobilier/')),
+  ...llmsSection('Statistiques du marché immobilier (Centris)', writtenUnder('/marche-immobilier/')),
+  ...llmsSection('Blogue', writtenUnder('/blog/')),
+  ...llmsSection('Acheter', writtenUnder('/acheter/')),
+  ...llmsSection('Vendre', writtenUnder('/vendre/')),
+  ...llmsSection('Types de propriété', writtenUnder('/types-de-propriete/')),
+  ...llmsSection('Propriétés à vendre', writtenUnder('/nos-proprietes/')),
+  '## Optional', '',
+  ...writtenUnder('/quartiers/').map(p => llmsLink(p, p)),
+  `- [Sitemap XML](${SITE_URL}/sitemap.xml)`,
+  ''
+].join('\n'));
 
 console.log(`Generated ${allUrls.length} pages → ${SITE}`);
