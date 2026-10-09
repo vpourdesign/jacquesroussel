@@ -4112,7 +4112,7 @@ const homeBody = `
       <a class="hm-member hm-member--soon reveal" href="/a-propos/">
         <span class="hm-member__photo hm-member__photo--empty" aria-hidden="true"><span>+</span></span>
         <span class="hm-member__name">Bientôt</span>
-        <span class="hm-member__role">Un quatrième membre se joint à l'équipe</span>
+        <span class="hm-member__role">Un troisième membre se joint à l'équipe</span>
       </a>` : ''}
     </div>
     <div class="hm-team__foot reveal">
@@ -7026,8 +7026,8 @@ writePage('a-propos/index.html', layout({
       <div class="team-card__photo team-card__photo--empty" aria-hidden="true"><span>+</span></div>
       <div class="team-card__body">
         <span class="team-card__role">Prochainement</span>
-        <h2 class="team-card__name">Un quatrième membre</h2>
-        <div class="team-card__bio"><div><p>L'équipe s'agrandit. Un quatrième courtier se joint à nous sous peu, avec le même mandat : connaître le territoire par cœur et répondre quand ça compte.</p></div></div>
+        <h2 class="team-card__name">Un troisième membre</h2>
+        <div class="team-card__bio"><div><p>L'équipe s'agrandit. Un troisième courtier se joint à nous sous peu, avec le même mandat : connaître le territoire par cœur et répondre quand ça compte.</p></div></div>
         <a class="team-card__cta" href="/contact/">Nous écrire &rarr;</a>
       </div>
     </article>` : ''}
