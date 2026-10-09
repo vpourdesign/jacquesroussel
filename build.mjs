@@ -17,8 +17,7 @@ const MIN_PHOTOS = 1;
 
 const TARGET_BROKERS = [
   { firstName: 'Marilyn',   lastName: 'Jacques' },
-  { firstName: 'Alexandre', lastName: 'Roussel' },
-  { firstName: 'Vincent',   lastName: 'Lanni'   }
+  { firstName: 'Alexandre', lastName: 'Roussel' }
 ];
 
 // ── L'ÉQUIPE ───────────────────────────────────────────────────────────
@@ -55,24 +54,10 @@ const TEAM = [
       "Grâce à ma connaissance du marché et à mon engagement, je veille à offrir un service personnalisé et à transformer chaque projet immobilier en une réussite. Ayant les permis résidentiel et commercial, je me spécialise dans divers domaines pour répondre aux besoins variés de mes clients. Je me démarque par mon esprit d'analyse et mon souci du détail.",
       "Vous ne manquerez jamais d'information lorsque viendra le moment de prendre une décision éclairée. Je traite chaque transaction comme si je m'y impliquais personnellement&nbsp;!"
     ]
-  },
-  {
-    // Bio adaptée de vincentlanni.com — À FAIRE VALIDER par Vincent Lanni.
-    first: 'Vincent',
-    last: 'Lanni',
-    role: 'Courtier immobilier résidentiel et commercial',
-    photo: '/photos/vincent-portrait.jpg',
-    email: 'vincent.lanni@remax-quebec.com',
-    phone: '514 262-9446',
-    tel: '+15142629446',
-    bio: [
-      "J'arrive dans l'immobilier avec de nombreuses années d'expérience en vente de haut niveau. Ce qui me motive, ce sont les gens, les entreprises, l'immobilier et la finance, et je m'investis sincèrement dans chaque dossier qu'on me confie.",
-      "On me reconnaît pour dépasser les attentes plutôt que de simplement les remplir. Transparence, expertise et attention méticuleuse aux détails : c'est ce que je mets sur la table à chaque transaction, autant en résidentiel qu'en commercial."
-    ]
   }
-  // 4e membre à venir — ajouter l'entrée ici quand le profil sera confirmé.
+  // 3e membre à venir — ajouter l'entrée ici quand le profil sera confirmé.
 ];
-// Une place reste visible tant que le quatrième membre n'est pas annoncé.
+// Une place reste visible tant que le troisième membre n'est pas annoncé.
 const TEAM_HAS_OPENING = true;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -917,6 +902,14 @@ function layout({ title, description, canonical, body, extraHead='', extraBody='
   return `<!DOCTYPE html>
 <html lang="fr-CA">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Q06NFYCJC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4Q06NFYCJC');
+</script>
 <script>document.documentElement.classList.add('js')</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
