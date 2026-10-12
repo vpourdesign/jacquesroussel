@@ -1,11 +1,11 @@
 {
   "source": "Centris.ca — Statistiques immobilières",
-  "fetchedAt": "2026-09-28",
+  "fetchedAt": "2026-10-12",
   "cities": {
     "saint-eustache": {
       "name": "Saint-Eustache",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/saint-eustache",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -13,29 +13,29 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "180",
-                "variation": "9 %",
-                "direction": "up",
+                "value": "100",
+                "variation": "-13 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "572",
-                "variation": "4 %",
-                "direction": "up",
+                "value": "555",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             },
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "223",
-                "variation": "12 %",
-                "direction": "up",
+                "value": "179",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "781",
-                "variation": "9 %",
+                "value": "779",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -43,14 +43,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "144",
-                "variation": "14 %",
+                "value": "142",
+                "variation": "26 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "129",
-                "variation": "6 %",
+                "value": "136",
+                "variation": "14 %",
                 "direction": "up",
                 "unit": null
               }
@@ -58,14 +58,14 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "103 395",
-                "variation": "16 %",
-                "direction": "up",
+                "value": "54 697",
+                "variation": "-16 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "320 793",
-                "variation": "11 %",
+                "value": "309 857",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -78,14 +78,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "138",
-                "variation": "20 %",
-                "direction": "up",
+                "value": "68",
+                "variation": "-15 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "412",
-                "variation": "10 %",
+                "value": "400",
+                "variation": "5 %",
                 "direction": "up",
                 "unit": null
               }
@@ -93,14 +93,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "82",
-                "variation": "-5 %",
-                "direction": "down",
+                "value": "84",
+                "variation": "1 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
                 "value": "85",
-                "variation": "11 %",
+                "variation": "7 %",
                 "direction": "up",
                 "unit": null
               }
@@ -108,13 +108,13 @@
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "597 000 $",
-                "variation": "10 %",
+                "value": "598 250 $",
+                "variation": "5 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "580 875 $",
+                "value": "589 187 $",
                 "variation": "6 %",
                 "direction": "up",
                 "unit": null
@@ -123,14 +123,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "24",
-                "variation": "2",
-                "direction": "up",
+                "value": "23",
+                "variation": "-5",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "30",
-                "variation": "-4",
+                "value": "28",
+                "variation": "-3",
                 "direction": "down",
                 "unit": null
               }
@@ -143,15 +143,15 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "38",
-                "variation": "-9 %",
-                "direction": "down",
+                "value": "28",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "147",
-                "variation": "1 %",
-                "direction": "up",
+                "value": "143",
+                "variation": "-3 %",
+                "direction": "down",
                 "unit": null
               }
             },
@@ -159,44 +159,34 @@
               "label": "Inscriptions en vigueur",
               "trimestre": {
                 "value": "51",
-                "variation": "96 %",
+                "variation": "121 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "35",
-                "variation": "25 %",
+                "value": "42",
+                "variation": "55 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "378 000 $",
-                "variation": "3 %",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "370 000 $",
-                "variation": "0 %",
-                "direction": null,
+                "value": "366 250 $",
+                "variation": "2 %",
+                "direction": "up",
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "28",
-                "variation": "-3",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "36",
-                "variation": "-5",
-                "direction": "down",
+                "value": "39",
+                "variation": "4",
+                "direction": "up",
                 "unit": null
               }
             }
@@ -208,13 +198,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "4",
+                "value": "3",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "12",
+                "value": "10",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -223,7 +213,7 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "8",
+                "value": "4",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -252,7 +242,7 @@
     "deux-montagnes": {
       "name": "Deux-Montagnes",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/deux-montagnes",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -260,14 +250,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "78",
-                "variation": "36 %",
-                "direction": "up",
+                "value": "40",
+                "variation": "-2 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "230",
-                "variation": "21 %",
+                "value": "229",
+                "variation": "19 %",
                 "direction": "up",
                 "unit": null
               }
@@ -275,14 +265,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "97",
-                "variation": "40 %",
+                "value": "74",
+                "variation": "39 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "306",
-                "variation": "24 %",
+                "value": "325",
+                "variation": "32 %",
                 "direction": "up",
                 "unit": null
               }
@@ -290,14 +280,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "59",
-                "variation": "25 %",
+                "value": "64",
+                "variation": "72 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "50",
-                "variation": "4 %",
+                "value": "56",
+                "variation": "24 %",
                 "direction": "up",
                 "unit": null
               }
@@ -305,14 +295,14 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "46 091",
-                "variation": "45 %",
+                "value": "25 806",
+                "variation": "19 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "127 566",
-                "variation": "30 %",
+                "value": "131 769",
+                "variation": "29 %",
                 "direction": "up",
                 "unit": null
               }
@@ -325,13 +315,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "65",
-                "variation": "51 %",
-                "direction": "up",
+                "value": "29",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "172",
+                "value": "170",
                 "variation": "17 %",
                 "direction": "up",
                 "unit": null
@@ -340,28 +330,23 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "41",
-                "variation": "46 %",
+                "value": "45",
+                "variation": "95 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "31",
-                "variation": "0 %",
-                "direction": null,
+                "value": "36",
+                "variation": "28 %",
+                "direction": "up",
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "570 000 $",
-                "variation": "5 %",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "540 000 $",
+                "value": "553 750 $",
                 "variation": "8 %",
                 "direction": "up",
                 "unit": null
@@ -369,15 +354,10 @@
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "27",
-                "variation": "5",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
                 "value": "26",
-                "variation": "-11",
+                "variation": "-7",
                 "direction": "down",
                 "unit": null
               }
@@ -390,14 +370,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "7",
+                "value": "5",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "39",
-                "variation": "62 %",
+                "value": "37",
+                "variation": "42 %",
                 "direction": "up",
                 "unit": null
               }
@@ -405,13 +385,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "7",
+                "value": "10",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "9",
+                "value": "10",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -421,9 +401,9 @@
               "label": "Prix médian",
               "trimestre": null,
               "cumul": {
-                "value": "368 475 $",
-                "variation": "3 %",
-                "direction": "up",
+                "value": "359 725 $",
+                "variation": "-2 %",
+                "direction": "down",
                 "unit": null
               }
             },
@@ -431,8 +411,8 @@
               "label": "Moyenne de jours sur le marché",
               "trimestre": null,
               "cumul": {
-                "value": "64",
-                "variation": "20",
+                "value": "63",
+                "variation": "22",
                 "direction": "up",
                 "unit": null
               }
@@ -451,7 +431,7 @@
                 "unit": null
               },
               "cumul": {
-                "value": "19",
+                "value": "22",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -460,13 +440,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "10",
+                "value": "9",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "8",
+                "value": "9",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -489,7 +469,7 @@
     "sainte-marthe-sur-le-lac": {
       "name": "Sainte-Marthe-sur-le-Lac",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-marthe-sur-le-lac",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -497,29 +477,29 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "106",
-                "variation": "0 %",
-                "direction": null,
+                "value": "71",
+                "variation": "10 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "344",
-                "variation": "-4 %",
-                "direction": "down",
+                "value": "350",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             },
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "156",
-                "variation": "40 %",
+                "value": "119",
+                "variation": "4 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "501",
-                "variation": "5 %",
+                "value": "505",
+                "variation": "6 %",
                 "direction": "up",
                 "unit": null
               }
@@ -527,30 +507,30 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "101",
-                "variation": "27 %",
+                "value": "96",
+                "variation": "35 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "81",
-                "variation": "-4 %",
-                "direction": "down",
+                "value": "87",
+                "variation": "7 %",
+                "direction": "up",
                 "unit": null
               }
             },
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "57 234",
-                "variation": "1 %",
+                "value": "39 716",
+                "variation": "16 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "183 761",
-                "variation": "-2 %",
-                "direction": "down",
+                "value": "189 057",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             }
@@ -562,14 +542,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "70",
-                "variation": "-10 %",
-                "direction": "down",
+                "value": "49",
+                "variation": "28 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "221",
-                "variation": "-12 %",
+                "value": "231",
+                "variation": "-8 %",
                 "direction": "down",
                 "unit": null
               }
@@ -577,29 +557,29 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "74",
-                "variation": "29 %",
+                "value": "69",
+                "variation": "35 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "59",
-                "variation": "-13 %",
-                "direction": "down",
+                "value": "64",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "644 000 $",
-                "variation": "10 %",
-                "direction": "up",
+                "value": "558 750 $",
+                "variation": "-9 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "620 500 $",
-                "variation": "10 %",
+                "value": "605 187 $",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -607,14 +587,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "27",
-                "variation": "-7",
+                "value": "29",
+                "variation": "-3",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "32",
-                "variation": "-10",
+                "value": "31",
+                "variation": "-8",
                 "direction": "down",
                 "unit": null
               }
@@ -627,14 +607,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "34",
-                "variation": "30 %",
-                "direction": "up",
+                "value": "19",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "117",
-                "variation": "18 %",
+                "value": "112",
+                "variation": "25 %",
                 "direction": "up",
                 "unit": null
               }
@@ -642,13 +622,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "25",
+                "value": "26",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "20",
+                "value": "22",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -656,31 +636,21 @@
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "373 450 $",
-                "variation": "-3 %",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "379 362 $",
-                "variation": "0 %",
-                "direction": null,
+                "value": "383 487 $",
+                "variation": "-1 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "25",
-                "variation": "7",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "21",
-                "variation": "-7",
-                "direction": "down",
+                "value": "24",
+                "variation": "2",
+                "direction": "up",
                 "unit": null
               }
             }
@@ -692,13 +662,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "2",
+                "value": "3",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "6",
+                "value": "7",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -736,7 +706,7 @@
     "mirabel": {
       "name": "Mirabel",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/mirabel",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -744,14 +714,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "294",
-                "variation": "5 %",
-                "direction": "up",
+                "value": "173",
+                "variation": "-15 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "953",
-                "variation": "-1 %",
+                "value": "918",
+                "variation": "-6 %",
                 "direction": "down",
                 "unit": null
               }
@@ -759,14 +729,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "413",
-                "variation": "7 %",
+                "value": "370",
+                "variation": "23 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "1 430",
-                "variation": "5 %",
+                "value": "1 483",
+                "variation": "9 %",
                 "direction": "up",
                 "unit": null
               }
@@ -774,14 +744,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "313",
-                "variation": "10 %",
+                "value": "307",
+                "variation": "18 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "283",
-                "variation": "1 %",
+                "value": "293",
+                "variation": "6 %",
                 "direction": "up",
                 "unit": null
               }
@@ -789,15 +759,15 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "189 849",
-                "variation": "14 %",
-                "direction": "up",
+                "value": "113 490",
+                "variation": "-9 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "600 641",
-                "variation": "4 %",
-                "direction": "up",
+                "value": "587 067",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             }
@@ -809,14 +779,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "200",
-                "variation": "21 %",
-                "direction": "up",
+                "value": "112",
+                "variation": "-4 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "579",
-                "variation": "-4 %",
+                "value": "572",
+                "variation": "-2 %",
                 "direction": "down",
                 "unit": null
               }
@@ -824,14 +794,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "187",
-                "variation": "22 %",
+                "value": "180",
+                "variation": "26 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "163",
-                "variation": "1 %",
+                "value": "171",
+                "variation": "10 %",
                 "direction": "up",
                 "unit": null
               }
@@ -839,14 +809,14 @@
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "657 000 $",
-                "variation": "7 %",
+                "value": "650 000 $",
+                "variation": "11 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "631 750 $",
-                "variation": "6 %",
+                "value": "647 750 $",
+                "variation": "8 %",
                 "direction": "up",
                 "unit": null
               }
@@ -854,14 +824,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "26",
-                "variation": "-8",
-                "direction": "down",
+                "value": "37",
+                "variation": "12",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "28",
-                "variation": "-14",
+                "value": "31",
+                "variation": "-6",
                 "direction": "down",
                 "unit": null
               }
@@ -874,29 +844,29 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "75",
-                "variation": "-11 %",
+                "value": "47",
+                "variation": "-21 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "282",
-                "variation": "2 %",
-                "direction": "up",
+                "value": "269",
+                "variation": "-7 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "93",
-                "variation": "17 %",
+                "value": "92",
+                "variation": "29 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "82",
-                "variation": "13 %",
+                "value": "87",
+                "variation": "19 %",
                 "direction": "up",
                 "unit": null
               }
@@ -904,13 +874,13 @@
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "459 900 $",
-                "variation": "9 %",
+                "value": "462 000 $",
+                "variation": "4 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "439 712 $",
+                "value": "444 212 $",
                 "variation": "3 %",
                 "direction": "up",
                 "unit": null
@@ -919,14 +889,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "42",
-                "variation": "4",
+                "value": "52",
+                "variation": "10",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "41",
-                "variation": "-12",
+                "value": "43",
+                "variation": "-6",
                 "direction": "down",
                 "unit": null
               }
@@ -939,15 +909,15 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "19",
+                "value": "14",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "85",
-                "variation": "8 %",
-                "direction": "up",
+                "value": "72",
+                "variation": "-25 %",
+                "direction": "down",
                 "unit": null
               }
             },
@@ -960,7 +930,7 @@
                 "unit": null
               },
               "cumul": {
-                "value": "28",
+                "value": "25",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -970,8 +940,8 @@
               "label": "Prix médian",
               "trimestre": null,
               "cumul": {
-                "value": "832 500 $",
-                "variation": "15 %",
+                "value": "841 312 $",
+                "variation": "14 %",
                 "direction": "up",
                 "unit": null
               }
@@ -980,8 +950,8 @@
               "label": "Moyenne de jours sur le marché",
               "trimestre": null,
               "cumul": {
-                "value": "57",
-                "variation": "-1",
+                "value": "52",
+                "variation": "-4",
                 "direction": "down",
                 "unit": null
               }
@@ -993,7 +963,7 @@
     "boisbriand": {
       "name": "Boisbriand",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/boisbriand",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -1001,14 +971,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "62",
-                "variation": "-51 %",
+                "value": "71",
+                "variation": "-7 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "244",
-                "variation": "-23 %",
+                "value": "238",
+                "variation": "-32 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1016,14 +986,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "124",
-                "variation": "-7 %",
-                "direction": "down",
+                "value": "112",
+                "variation": "31 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "389",
-                "variation": "-8 %",
+                "value": "412",
+                "variation": "-5 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1031,14 +1001,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "108",
-                "variation": "16 %",
+                "value": "93",
+                "variation": "43 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "75",
-                "variation": "-14 %",
+                "value": "82",
+                "variation": "-3 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1046,14 +1016,14 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "40 350",
-                "variation": "-42 %",
+                "value": "46 278",
+                "variation": "-3 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "152 096",
-                "variation": "-17 %",
+                "value": "150 564",
+                "variation": "-26 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1066,14 +1036,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "43",
-                "variation": "-43 %",
-                "direction": "down",
+                "value": "48",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               },
               "cumul": {
                 "value": "162",
-                "variation": "-16 %",
+                "variation": "-25 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1081,29 +1051,29 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "61",
-                "variation": "24 %",
+                "value": "48",
+                "variation": "50 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "42",
-                "variation": "-2 %",
-                "direction": "down",
+                "value": "45",
+                "variation": "9 %",
+                "direction": "up",
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "635 000 $",
-                "variation": "2 %",
+                "value": "622 500 $",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "621 525 $",
-                "variation": "4 %",
+                "value": "626 875 $",
+                "variation": "5 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1111,14 +1081,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "25",
-                "variation": "-5",
-                "direction": "down",
+                "value": "38",
+                "variation": "7",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "26",
-                "variation": "-11",
+                "value": "28",
+                "variation": "-7",
                 "direction": "down",
                 "unit": null
               }
@@ -1131,14 +1101,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "13",
+                "value": "18",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "67",
-                "variation": "-40 %",
+                "value": "62",
+                "variation": "-47 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1146,14 +1116,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "40",
-                "variation": "2 %",
+                "value": "35",
+                "variation": "20 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "30",
-                "variation": "-26 %",
+                "value": "31",
+                "variation": "-20 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1162,8 +1132,8 @@
               "label": "Prix médian",
               "trimestre": null,
               "cumul": {
-                "value": "478 487 $",
-                "variation": "-4 %",
+                "value": "492 237 $",
+                "variation": "-1 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1172,8 +1142,8 @@
               "label": "Moyenne de jours sur le marché",
               "trimestre": null,
               "cumul": {
-                "value": "47",
-                "variation": "-19",
+                "value": "53",
+                "variation": "-10",
                 "direction": "down",
                 "unit": null
               }
@@ -1186,7 +1156,7 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "6",
+                "value": "5",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1201,13 +1171,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "6",
+                "value": "9",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "3",
+                "value": "4",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1230,7 +1200,7 @@
     "sainte-therese": {
       "name": "Sainte-Thérèse",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-therese",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -1238,14 +1208,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "95",
-                "variation": "-18 %",
+                "value": "70",
+                "variation": "-9 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "348",
-                "variation": "-3 %",
+                "value": "341",
+                "variation": "-9 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1253,14 +1223,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "123",
-                "variation": "-8 %",
-                "direction": "down",
+                "value": "116",
+                "variation": "12 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "455",
-                "variation": "-3 %",
+                "value": "467",
+                "variation": "-2 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1268,14 +1238,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "77",
-                "variation": "2 %",
+                "value": "89",
+                "variation": "28 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "72",
-                "variation": "-16 %",
+                "value": "77",
+                "variation": "-6 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1283,15 +1253,15 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "55 629",
-                "variation": "-8 %",
-                "direction": "down",
+                "value": "44 327",
+                "variation": "10 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "191 628",
-                "variation": "4 %",
-                "direction": "up",
+                "value": "195 771",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             }
@@ -1303,14 +1273,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "38",
-                "variation": "-22 %",
-                "direction": "down",
+                "value": "35",
+                "variation": "16 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "135",
-                "variation": "-8 %",
+                "value": "140",
+                "variation": "-10 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1318,13 +1288,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "34",
-                "variation": "70 %",
+                "value": "33",
+                "variation": "83 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "25",
+                "value": "29",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1333,14 +1303,14 @@
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "662 500 $",
-                "variation": "9 %",
+                "value": "710 000 $",
+                "variation": "15 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "591 012 $",
-                "variation": "6 %",
+                "value": "615 400 $",
+                "variation": "5 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1348,14 +1318,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "33",
-                "variation": "7",
+                "value": "28",
+                "variation": "2",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "25",
-                "variation": "-15",
+                "value": "26",
+                "variation": "-11",
                 "direction": "down",
                 "unit": null
               }
@@ -1368,14 +1338,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "33",
-                "variation": "-40 %",
-                "direction": "down",
+                "value": "23",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "142",
-                "variation": "-9 %",
+                "value": "129",
+                "variation": "-21 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1383,13 +1353,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "27",
-                "variation": null,
-                "direction": null,
+                "value": "35",
+                "variation": "12 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "28",
+                "value": "29",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1397,14 +1367,9 @@
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "340 000 $",
-                "variation": "-10 %",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "367 125 $",
+                "value": "366 250 $",
                 "variation": "0 %",
                 "direction": null,
                 "unit": null
@@ -1412,15 +1377,10 @@
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "36",
-                "variation": "3",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "36",
-                "variation": "-4",
+                "value": "33",
+                "variation": "-5",
                 "direction": "down",
                 "unit": null
               }
@@ -1433,14 +1393,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "24",
+                "value": "12",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "71",
-                "variation": "24 %",
+                "value": "72",
+                "variation": "30 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1448,7 +1408,7 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "15",
+                "value": "19",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1464,8 +1424,8 @@
               "label": "Prix médian",
               "trimestre": null,
               "cumul": {
-                "value": "748 125 $",
-                "variation": "11 %",
+                "value": "800 612 $",
+                "variation": "14 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1474,8 +1434,8 @@
               "label": "Moyenne de jours sur le marché",
               "trimestre": null,
               "cumul": {
-                "value": "35",
-                "variation": "-11",
+                "value": "33",
+                "variation": "-4",
                 "direction": "down",
                 "unit": null
               }
@@ -1487,7 +1447,7 @@
     "blainville": {
       "name": "Blainville",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/blainville",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -1495,29 +1455,29 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "262",
-                "variation": "7 %",
-                "direction": "up",
+                "value": "185",
+                "variation": "-4 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "858",
-                "variation": "1 %",
-                "direction": "up",
+                "value": "849",
+                "variation": "-3 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "350",
-                "variation": "0 %",
-                "direction": null,
+                "value": "293",
+                "variation": "-2 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "1 255",
-                "variation": "10 %",
+                "value": "1 245",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1525,14 +1485,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "267",
-                "variation": "21 %",
+                "value": "232",
+                "variation": "8 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "238",
-                "variation": "15 %",
+                "value": "242",
+                "variation": "16 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1540,14 +1500,14 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "207 498",
-                "variation": "18 %",
+                "value": "160 974",
+                "variation": "7 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "664 159",
-                "variation": "7 %",
+                "value": "675 346",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1560,13 +1520,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "197",
-                "variation": "5 %",
+                "value": "148",
+                "variation": "8 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "635",
+                "value": "646",
                 "variation": "0 %",
                 "direction": null,
                 "unit": null
@@ -1575,14 +1535,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "196",
-                "variation": "19 %",
+                "value": "174",
+                "variation": "10 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "173",
-                "variation": "16 %",
+                "value": "177",
+                "variation": "17 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1590,13 +1550,13 @@
             "prixMedian": {
               "label": "Prix médian",
               "trimestre": {
-                "value": "803 000 $",
-                "variation": "14 %",
+                "value": "835 000 $",
+                "variation": "11 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "740 375 $",
+                "value": "762 625 $",
                 "variation": "4 %",
                 "direction": "up",
                 "unit": null
@@ -1605,14 +1565,14 @@
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
               "trimestre": {
-                "value": "27",
-                "variation": "3",
+                "value": "34",
+                "variation": "5",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "29",
-                "variation": "-12",
+                "value": "30",
+                "variation": "-6",
                 "direction": "down",
                 "unit": null
               }
@@ -1625,60 +1585,50 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "51",
-                "variation": "13 %",
-                "direction": "up",
+                "value": "28",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "175",
-                "variation": "10 %",
-                "direction": "up",
+                "value": "159",
+                "variation": "-10 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "66",
-                "variation": "46 %",
+                "value": "51",
+                "variation": "4 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
                 "value": "59",
-                "variation": "40 %",
+                "variation": "31 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "425 000 $",
-                "variation": "1 %",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "436 487 $",
-                "variation": "5 %",
+                "value": "432 425 $",
+                "variation": "1 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "52",
-                "variation": "13",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "46",
-                "variation": "-3",
-                "direction": "down",
+                "value": "49",
+                "variation": "8",
+                "direction": "up",
                 "unit": null
               }
             }
@@ -1690,14 +1640,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "14",
+                "value": "9",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "48",
-                "variation": "-4 %",
+                "value": "44",
+                "variation": "-15 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1705,13 +1655,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "5",
+                "value": "7",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "4",
+                "value": "5",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1721,8 +1671,8 @@
               "label": "Prix médian",
               "trimestre": null,
               "cumul": {
-                "value": "802 812 $",
-                "variation": "11 %",
+                "value": "821 562 $",
+                "variation": "10 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1731,8 +1681,8 @@
               "label": "Moyenne de jours sur le marché",
               "trimestre": null,
               "cumul": {
-                "value": "16",
-                "variation": "-32",
+                "value": "12",
+                "variation": "-29",
                 "direction": "down",
                 "unit": null
               }
@@ -1744,7 +1694,7 @@
     "rosemere": {
       "name": "Rosemère",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/rosemere",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -1752,29 +1702,29 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "59",
-                "variation": "15 %",
-                "direction": "up",
+                "value": "38",
+                "variation": "-32 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "194",
-                "variation": "4 %",
-                "direction": "up",
+                "value": "176",
+                "variation": "-15 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "86",
-                "variation": "7 %",
-                "direction": "up",
+                "value": "67",
+                "variation": "-6 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "304",
-                "variation": "9 %",
+                "value": "296",
+                "variation": "3 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1782,14 +1732,14 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "82",
-                "variation": "30 %",
+                "value": "70",
+                "variation": "18 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "68",
-                "variation": "4 %",
+                "value": "70",
+                "variation": "11 %",
                 "direction": "up",
                 "unit": null
               }
@@ -1797,15 +1747,15 @@
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "47 217",
-                "variation": "3 %",
-                "direction": "up",
+                "value": "33 459",
+                "variation": "-36 %",
+                "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "169 689",
-                "variation": "16 %",
-                "direction": "up",
+                "value": "150 531",
+                "variation": "-13 %",
+                "direction": "down",
                 "unit": null
               }
             }
@@ -1817,24 +1767,24 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "47",
-                "variation": "2 %",
-                "direction": "up",
+                "value": "26",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "165",
-                "variation": "10 %",
-                "direction": "up",
+                "value": "141",
+                "variation": "-17 %",
+                "direction": "down",
                 "unit": null
               }
             },
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "49",
-                "variation": "-10 %",
-                "direction": "down",
+                "value": "50",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               },
               "cumul": {
@@ -1846,29 +1796,19 @@
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "817 000 $",
-                "variation": "3 %",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "856 659 $",
-                "variation": "15 %",
+                "value": "877 722 $",
+                "variation": "10 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "30",
-                "variation": "-40",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "44",
+                "value": "40",
                 "variation": "-19",
                 "direction": "down",
                 "unit": null
@@ -1882,13 +1822,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "9",
+                "value": "10",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "24",
+                "value": "28",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1897,13 +1837,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "28",
+                "value": "19",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "19",
+                "value": "22",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1927,13 +1867,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "3",
+                "value": "2",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "5",
+                "value": "7",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1942,7 +1882,7 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "4",
+                "value": "1",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -1971,7 +1911,7 @@
     "lorraine": {
       "name": "Lorraine",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/lorraine",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -1979,14 +1919,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "36",
-                "variation": "-7 %",
-                "direction": "down",
+                "value": "21",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "120",
-                "variation": "-5 %",
+                "value": "110",
+                "variation": "-19 %",
                 "direction": "down",
                 "unit": null
               }
@@ -1994,14 +1934,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "47",
-                "variation": "-2 %",
+                "value": "39",
+                "variation": "-9 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "161",
-                "variation": "-10 %",
+                "value": "157",
+                "variation": "-14 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2015,23 +1955,18 @@
                 "unit": null
               },
               "cumul": {
-                "value": "31",
-                "variation": "-18 %",
-                "direction": "down",
+                "value": "29",
+                "variation": null,
+                "direction": null,
                 "unit": null
               }
             },
             "volume": {
               "label": "Volume (en millier $)",
-              "trimestre": {
-                "value": "29 064",
-                "variation": "-15 %",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "104 300",
-                "variation": "-3 %",
+                "value": "96 508",
+                "variation": "-16 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2044,14 +1979,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "34",
-                "variation": "-10 %",
-                "direction": "down",
+                "value": "21",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "114",
-                "variation": "-6 %",
+                "value": "106",
+                "variation": "-18 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2059,13 +1994,13 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "25",
+                "value": "26",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "28",
+                "value": "25",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -2073,29 +2008,19 @@
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "780 000 $",
-                "variation": "-5 %",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "781 437 $",
-                "variation": "3 %",
-                "direction": "up",
+                "value": "773 937 $",
+                "variation": "0 %",
+                "direction": null,
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "18",
-                "variation": "-18",
-                "direction": "down",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "44",
+                "value": "43",
                 "variation": "2",
                 "direction": "up",
                 "unit": null
@@ -2109,13 +2034,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "2",
+                "value": "0",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "6",
+                "value": "4",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -2198,7 +2123,7 @@
     "sainte-anne-des-plaines": {
       "name": "Sainte-Anne-des-Plaines",
       "url": "https://www.centris.ca/fr/outils/statistiques-immobilieres/laurentides/sainte-anne-des-plaines",
-      "period": "2e trimestre 2026",
+      "period": "3e trimestre 2026",
       "sections": {
         "total": {
           "label": "Total résidentiel",
@@ -2206,14 +2131,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "44",
-                "variation": "-13 %",
+                "value": "31",
+                "variation": "-20 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "166",
-                "variation": "-20 %",
+                "value": "158",
+                "variation": "-19 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2221,14 +2146,14 @@
             "nouvellesInscriptions": {
               "label": "Nouvelles inscriptions",
               "trimestre": {
-                "value": "59",
-                "variation": "-10 %",
-                "direction": "down",
+                "value": "58",
+                "variation": "9 %",
+                "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "230",
-                "variation": "-7 %",
+                "value": "235",
+                "variation": "-2 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2236,29 +2161,29 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "55",
-                "variation": "30 %",
+                "value": "61",
+                "variation": "48 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "49",
-                "variation": "0 %",
-                "direction": null,
+                "value": "54",
+                "variation": "20 %",
+                "direction": "up",
                 "unit": null
               }
             },
             "volume": {
               "label": "Volume (en millier $)",
               "trimestre": {
-                "value": "23 340",
-                "variation": "-11 %",
+                "value": "16 478",
+                "variation": "-14 %",
                 "direction": "down",
                 "unit": null
               },
               "cumul": {
-                "value": "86 345",
-                "variation": "-17 %",
+                "value": "83 652",
+                "variation": "-13 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2271,14 +2196,14 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "35",
-                "variation": "-2 %",
-                "direction": "down",
+                "value": "26",
+                "variation": null,
+                "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "130",
-                "variation": "-18 %",
+                "value": "129",
+                "variation": "-10 %",
                 "direction": "down",
                 "unit": null
               }
@@ -2286,44 +2211,34 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "40",
-                "variation": "53 %",
+                "value": "46",
+                "variation": "58 %",
                 "direction": "up",
                 "unit": null
               },
               "cumul": {
-                "value": "36",
-                "variation": "16 %",
+                "value": "40",
+                "variation": "37 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "prixMedian": {
               "label": "Prix médian",
-              "trimestre": {
-                "value": "530 000 $",
-                "variation": "6 %",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "521 375 $",
-                "variation": "10 %",
+                "value": "528 566 $",
+                "variation": "9 %",
                 "direction": "up",
                 "unit": null
               }
             },
             "joursSurLeMarche": {
               "label": "Moyenne de jours sur le marché",
-              "trimestre": {
-                "value": "32",
-                "variation": "14",
-                "direction": "up",
-                "unit": null
-              },
+              "trimestre": null,
               "cumul": {
-                "value": "45",
-                "variation": "7",
+                "value": "48",
+                "variation": "14",
                 "direction": "up",
                 "unit": null
               }
@@ -2336,13 +2251,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "6",
+                "value": "2",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "25",
+                "value": "19",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -2351,7 +2266,7 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "8",
+                "value": "10",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -2381,13 +2296,13 @@
             "ventes": {
               "label": "Ventes",
               "trimestre": {
-                "value": "3",
+                "value": "2",
                 "variation": null,
                 "direction": null,
                 "unit": null
               },
               "cumul": {
-                "value": "10",
+                "value": "9",
                 "variation": null,
                 "direction": null,
                 "unit": null
@@ -2396,7 +2311,7 @@
             "inscriptionsActives": {
               "label": "Inscriptions en vigueur",
               "trimestre": {
-                "value": "6",
+                "value": "5",
                 "variation": null,
                 "direction": null,
                 "unit": null
