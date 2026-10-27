@@ -1,9 +1,9 @@
 {
-  "total": 13,
-  "avgPrice": 1273915,
-  "totalValue": 16560900,
+  "total": 14,
+  "avgPrice": 1204129,
+  "totalValue": 16857800,
   "byCity": {
-    "Saint-Jérôme": 4,
+    "Saint-Jérôme": 5,
     "Saint-Eustache": 1,
     "Laval": 4,
     "Terrebonne": 2,
@@ -13,11 +13,11 @@
   "byType": {
     "Terrain": 5,
     "Unifamiliale": 5,
-    "Condo": 2,
+    "Condo": 3,
     "Multilogements": 1
   },
   "priceRanges": {
-    "<300k": 3,
+    "<300k": 4,
     "300-500k": 2,
     "500-800k": 4,
     "800k-1.5M": 1,
