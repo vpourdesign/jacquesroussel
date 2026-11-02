@@ -2495,6 +2495,22 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   margin-block-end: 1rem;
   display: block;
 }
+/* --- Formulaires (global) --- */
+.contact-form{display:grid;gap:1rem}
+.f-fields{display:grid;gap:1.4rem}
+.contact-form label{display:grid;gap:.5rem;font-size:.85rem;font-weight:500;color:var(--ink-2);letter-spacing:.01em}
+.contact-form input,.contact-form textarea,.contact-form select{font-family:inherit;font-size:1rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);transition:border-color .3s var(--ease),background .3s var(--ease);font-weight:400}
+.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{outline:0;border-color:var(--blue);background:#fff}
+.contact-form textarea{resize:vertical;min-height:120px;font-family:inherit}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem 1rem}
+@media(max-width:520px){.f-row{grid-template-columns:1fr}}
+.f-submit:not(.btn-primary){margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
+.f-submit:not(.btn-primary):hover{background:var(--blue);transform:translateY(-2px)}
+.f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
+.f-ok{text-align:center;padding:2rem 1rem}
+.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
+.f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
+.f-ok p{color:var(--ink-2)}
 .prop-similar-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
