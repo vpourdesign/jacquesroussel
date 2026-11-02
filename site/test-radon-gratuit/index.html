@@ -86,8 +86,8 @@
 .rd-form__sub{ color: var(--stone); font-size: var(--text-sm); margin-block-end: var(--space-4); }
 .rd-field{ display: grid; gap: .35rem; margin-block-end: .85rem; }
 .rd-field label{ font-size: .82rem; font-weight: 500; color: var(--stone); }
-.rd-field input, .rd-field select{ inline-size: 100%; padding: .8rem 1rem; border: 1.5px solid var(--hairline); border-radius: var(--radius); font: inherit; font-size: 1rem; background: var(--cream); color: var(--ink); min-block-size: 48px; transition: border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
-.rd-field input:focus, .rd-field select:focus{ outline: 0; border-color: var(--teal); box-shadow: 0 0 0 4px var(--blue-soft); }
+.rd-field input{ inline-size: 100%; padding: .8rem 1rem; border: 1.5px solid var(--hairline); border-radius: var(--radius); font: inherit; font-size: 1rem; background: var(--cream); color: var(--ink); min-block-size: 48px; transition: border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+.rd-field input:focus{ outline: 0; border-color: var(--teal); box-shadow: 0 0 0 4px var(--blue-soft); }
 .rd-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 .85rem; }
 .rd-hint{ font-size: .78rem; color: var(--stone); margin-block: -.35rem .85rem; }
 .rd-check{ display: grid; grid-template-columns: 1.15rem 1fr; gap: .6rem; align-items: start; font-size: .84rem; line-height: 1.45; margin-block: .2rem .7rem; cursor: pointer; }
@@ -241,7 +241,7 @@
           <div class="rd-field"><label for="rd-courriel">Courriel</label><input id="rd-courriel" name="email" type="email" inputmode="email" autocomplete="email"></div>
         </div>
         <p class="rd-hint" id="rd-hint">L'un ou l'autre.</p>
-        <div class="rd-field"><label for="rd-ville">Ville</label><select id="rd-ville" name="ville" required><option value="" disabled selected>Choisir</option><option>Saint-Eustache</option><option>Deux-Montagnes</option><option>Sainte-Marthe-sur-le-Lac</option><option>Boisbriand</option><option>Mirabel</option><option>Sainte-Thérèse</option><option>Blainville</option><option>Rosemère</option><option>Lorraine</option><option>Autre ville</option></select></div>
+        <div class="rd-field"><label for="rd-ville">Ville</label><input id="rd-ville" name="ville" type="text" autocomplete="address-level2" required></div>
         <label class="rd-check"><input type="checkbox" name="consentement" value="oui" required><span>J'accepte d'être contacté au sujet de ce test.</span></label>
         <button type="submit" class="btn-primary f-submit">Recevoir mon test gratuit &rarr;</button>
         <p class="rd-form__fine">Vos coordonnées servent seulement à ce test. Elles ne sont ni vendues ni partagées.</p>

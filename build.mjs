@@ -7328,8 +7328,8 @@ const radonCss = `<style>
 .rd-form__sub{ color: var(--stone); font-size: var(--text-sm); margin-block-end: var(--space-4); }
 .rd-field{ display: grid; gap: .35rem; margin-block-end: .85rem; }
 .rd-field label{ font-size: .82rem; font-weight: 500; color: var(--stone); }
-.rd-field input, .rd-field select{ inline-size: 100%; padding: .8rem 1rem; border: 1.5px solid var(--hairline); border-radius: var(--radius); font: inherit; font-size: 1rem; background: var(--cream); color: var(--ink); min-block-size: 48px; transition: border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
-.rd-field input:focus, .rd-field select:focus{ outline: 0; border-color: var(--teal); box-shadow: 0 0 0 4px var(--blue-soft); }
+.rd-field input{ inline-size: 100%; padding: .8rem 1rem; border: 1.5px solid var(--hairline); border-radius: var(--radius); font: inherit; font-size: 1rem; background: var(--cream); color: var(--ink); min-block-size: 48px; transition: border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+.rd-field input:focus{ outline: 0; border-color: var(--teal); box-shadow: 0 0 0 4px var(--blue-soft); }
 .rd-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 .85rem; }
 .rd-hint{ font-size: .78rem; color: var(--stone); margin-block: -.35rem .85rem; }
 .rd-check{ display: grid; grid-template-columns: 1.15rem 1fr; gap: .6rem; align-items: start; font-size: .84rem; line-height: 1.45; margin-block: .2rem .7rem; cursor: pointer; }
@@ -7380,7 +7380,6 @@ const radonCss = `<style>
 
 function radonLanding({ slug: lslug, source, index }) {
   const url = `https://jacquesroussel.com/${lslug}/`;
-  const villesOpts = RADON.villes.map(v => `<option>${v}</option>`).join('') + '<option>Autre ville</option>';
   const faqHtml = RADON.faq.map(([q,a], i) => `<details${i === 0 ? ' open' : ''}><summary><h3>${q}</h3></summary><p>${a}</p></details>`).join('');
   const body = `
 <section class="rd-hero container">
@@ -7455,7 +7454,7 @@ function radonLanding({ slug: lslug, source, index }) {
           <div class="rd-field"><label for="rd-courriel">Courriel</label><input id="rd-courriel" name="email" type="email" inputmode="email" autocomplete="email"></div>
         </div>
         <p class="rd-hint" id="rd-hint">L'un ou l'autre.</p>
-        <div class="rd-field"><label for="rd-ville">Ville</label><select id="rd-ville" name="ville" required><option value="" disabled selected>Choisir</option>${villesOpts}</select></div>
+        <div class="rd-field"><label for="rd-ville">Ville</label><input id="rd-ville" name="ville" type="text" autocomplete="address-level2" required></div>
         <label class="rd-check"><input type="checkbox" name="consentement" value="oui" required><span>J'accepte d'être contacté au sujet de ce test.</span></label>
         <button type="submit" class="btn-primary f-submit">Recevoir mon test gratuit &rarr;</button>
         <p class="rd-form__fine">Vos coordonnées servent seulement à ce test. Elles ne sont ni vendues ni partagées.</p>
