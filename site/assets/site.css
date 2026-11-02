@@ -1200,8 +1200,12 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: transform 240ms var(--ease-out);
 }
 .prop-media__cta:hover{ transform: translateY(-1px); color: var(--cream); }
+/* z-index 0 enferme les calques Leaflet (z-index 400 à 1000) dans le panneau :
+   sans ce contexte, la carte passait par-dessus la barre Photos / Carte (z-index 4)
+   et le sélecteur disparaissait dès qu'on cliquait sur « Carte ». */
 .prop-media__pane{
   position: absolute; inset: 0;
+  z-index: 0;
   transition: opacity 280ms var(--ease-out);
 }
 .prop-media__pane[aria-hidden="true"]{ opacity: 0; pointer-events: none; }
