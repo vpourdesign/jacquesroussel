@@ -8,6 +8,12 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
+- [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
+- [ ] Trancher la crème du site : `site.css` déclare `#F7F5EE` (RE/MAX) mais le bloc `oklch` affiche l'ancienne crème maison partout (2026-10-27)
+- [ ] Landing radon (`/test-radon-gratuit/`) : confirmer l'offre avec Alexandre avant de la diffuser. La page promet un détecteur à long terme, l'analyse en laboratoire incluse, un résultat par courriel et un contact sous 48 h ouvrables. Qui fournit les détecteurs, combien, et comment on les remet ? Ajuster `RADON` dans `build.mjs` au besoin (2026-11-02)
+- [ ] Brancher `FORM_ENDPOINT` (Formspree ou fonction Vercel) avant d'imprimer le dépliant radon : sans lui, chaque demande ouvre le logiciel de courriel du visiteur et une partie des demandes se perd (2026-11-02)
+- [ ] Landing radon : remplacer l'illustration du détecteur (`photos/radon/detecteur.svg`, dessin original sans marque) par une photo des vrais détecteurs prise par l'équipe, sur fond pâle (2026-11-02)
+- [ ] Dépliants radon : pour chaque envoi (mars, août…), ajouter une variante dans `LANDINGS` (`build.mjs`) et imprimer son adresse, puis comparer les `generate_lead` par `page_path` dans GA4 (2026-11-02)
 
 ### Fiches de propriété — décisions restées ouvertes (2026-09-03)
 
@@ -55,6 +61,7 @@
 - Le client bâtit un dashboard sur mesure en parallèle — prévoir l'hébergement du site + dashboard ensemble. (2026-07-03)
 
 ## 🔍 Précisions
+- **Google Analytics 4** : compte « Jacques Roussel » (a411408468), propriété « jacquesroussel.com - GA4 » (p558284387), flux Web jacquesroussel.com, ID de mesure `G-4Q06NFYCJC`. Fuseau Toronto, CAD, secteur Immobilier. Balise installée dans le `<head>` de `build.mjs` (toutes les pages). (2026-10-09)
 
 - **Les nouveaux logos J/R sont en place, et le monogramme seul ne l'est plus.** Le lot livré par Alex (2026-09-03) est dans `brand_assets/_logo-jr/` — 51 fichiers, SVG et PNG, avec son LISEZ-MOI. Le souligné du dossier empêche `copyDir` de publier 1,1 Mo de déclinaisons inutiles : seuls les fichiers réellement posés sont copiés à la racine de `brand_assets/`, sous des noms lisibles. L'en-tête portait `equipejrnoir.png`, le monogramme seul ; le LISEZ-MOI le réserve aux emplois « où le nom de l'équipe apparaît déjà à côté » et interdit de s'en servir comme identification principale. C'est donc le verrouillage compact qui est en place, en marine sur l'en-tête clair et en blanc sur l'en-tête transparent de l'accueil. Le pied de page, déjà sur le marine `--teal` (#2c4160, exactement le marine de la charte), reçoit le verrouillage horizontal blanc à la place du nom composé en texte. Favicons remplacés par le jeu complet : `.ico` multi-tailles, SVG pour les écrans denses, PNG 192 pour l'écran d'accueil iOS. Le logo passant de presque carré à 4:1, il est désormais dimensionné par la hauteur (30 à 38 px) et non par la largeur, pour rester calé sur le verrouillage RE/MAX qui l'accompagne. (2026-09-03)
 - **Les anciens fichiers de logo ne sont plus référencés nulle part** : `jr-blanc.png`, `equipejrnoir.png`, `equipejrbleu.png`, `jrbleu.png`, `jrnoir.png`, `LOGOEQUIPE.png`, `logo-bandeblanche*.png`, `favicon.png`. Attention avant de les supprimer : ils n'existent que dans `site/brand_assets/`, pas dans le dossier source `brand_assets/` — ils ont été committés directement dans la sortie du build et ne se régénèrent pas. Les effacer est irréversible autrement qu'en les repêchant dans l'historique git. (2026-09-03)
@@ -84,6 +91,12 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
+
+- [2026-11-02] Bouton Photos / Carte des fiches : il disparaissait au clic sur « Carte », les calques Leaflet (z-index 400) passaient par-dessus la barre (z-index 4). `.prop-media__pane` a maintenant son propre contexte d'empilement.
+- [2026-11-02] Landing `/test-radon-gratuit/` créée dans `build.mjs` (gabarit `LANDINGS`) : formulaire court (téléphone ou courriel), consentement Loi 25, événement GA4 `generate_lead`, FAQ en JSON-LD, page au sitemap.
+- [2026-11-02] DESIGN.md réécrit d'après le site en ligne ; design system publié : https://claude.ai/artifact/KJoGDYUtkfiJFcAUSdv3R2
+- [2026-10-09] Google Analytics 4 créé et balise installée sur toutes les pages (G-4Q06NFYCJC)
+- [2026-10-09] Vincent Lanni retiré de l'équipe (TEAM et TARGET_BROKERS dans build.mjs) : le site affiche maintenant 2 courtiers
 
 - **L'agenda de prise de rendez-vous pointe enfin sur le bon compte.** (2026-08-24) `/rendez-vous/` montrait la page de réservation d'un compte personnel, au nom d'Alain Brunelle. Elle affiche maintenant la planification d'Alexandre Roussel. Deux choses restent à régler du côté de Google, dans son compte à lui : la page s'affiche **en anglais** (« Select an appointment time ») parce que la langue du compte Google est l'anglais, et elle s'intitule « Planification de rendez-vous », le nom par défaut. Le lien court qu'il a envoyé ne s'intégrait pas, voir la précision à ce sujet.
 
@@ -118,3 +131,4 @@
   - *« Contacter Marilyn »* n'envoyait plus au formulaire général : le bouton est devenu « Écrire à Marilyn » en `mailto:` vers l'adresse de la personne. Le téléphone et le courriel de chaque courtier étaient déjà affichés sur sa carte.
 - Round de corrections client : Montserrat partout, catégories de propriétés refaites, statistiques Centris branchées, équipe en cartes avec Vincent Lanni, blog recentré sur Saint-Eustache, filtre washed-out retiré des photos, overlay dégradé bleu sur les fiches. (2026-08-07)
 - Couleur de base migrée du vert `#1E3A44` vers `#2c4160` (build.mjs + DESIGN.md + pin carte + covers guides). (2026-07-03)
+

@@ -2238,8 +2238,12 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: transform 240ms var(--ease-out);
 }
 .prop-media__cta:hover{ transform: translateY(-1px); color: var(--cream); }
+/* z-index 0 enferme les calques Leaflet (z-index 400 à 1000) dans le panneau :
+   sans ce contexte, la carte passait par-dessus la barre Photos / Carte (z-index 4)
+   et le sélecteur disparaissait dès qu'on cliquait sur « Carte ». */
 .prop-media__pane{
   position: absolute; inset: 0;
+  z-index: 0;
   transition: opacity 280ms var(--ease-out);
 }
 .prop-media__pane[aria-hidden="true"]{ opacity: 0; pointer-events: none; }
@@ -7229,6 +7233,329 @@ writePage('rendez-vous/index.html', layout({
 ${leadFormScript}`
 }));
 
+// --- LANDING PAGES DE CAMPAGNE ---
+// Une entrée par adresse. La page de référence est indexée et porte le texte SEO ;
+// une variante (un dépliant de mars, un autre d'août) reprend le même gabarit sous
+// une autre adresse, en noindex, avec un canonical vers la référence : Google ne
+// voit qu'une page, GA4 compare les adresses. Pour ajouter une variante :
+//   { slug: 'radon-mars-2027', offer: 'radon', source: 'depliant-mars-2027', index: false }
+// puis imprimer jacquesroussel.com/radon-mars-2027 sur le dépliant.
+const LANDINGS = [
+  { slug: 'test-radon-gratuit', offer: 'radon', source: 'site', index: true }
+];
+
+// L'offre telle qu'on la promet. À CONFIRMER avec Alexandre avant la mise en ligne
+// (voir NOTES.md) : provenance des détecteurs, analyse incluse, mode de remise.
+const RADON = {
+  canonical: 'https://jacquesroussel.com/test-radon-gratuit/',
+  villes: ['Saint-Eustache','Deux-Montagnes','Sainte-Marthe-sur-le-Lac','Boisbriand','Mirabel','Sainte-Thérèse','Blainville','Rosemère','Lorraine'],
+  faq: [
+    ['Le test de radon est-il vraiment gratuit ?',
+     "Oui. Le détecteur et l'analyse en laboratoire sont offerts par l'Équipe Jacques-Roussel. Vous n'avez rien à payer et rien à signer."],
+    ['Est-ce que ça m\'engage à vendre ou à acheter avec vous ?',
+     "Non. Le test est offert aux propriétaires de la Rive-Nord, sans condition. On vous transmet le résultat, et c'est tout, à moins que vous ayez des questions sur votre propriété."],
+    ['Combien de temps dure un test de radon ?',
+     "Santé Canada recommande un test d'au moins trois mois. La concentration de radon varie d'un jour à l'autre et d'une saison à l'autre : un test court donne une image partielle."],
+    ['Quel est le meilleur moment pour tester ?',
+     "Entre octobre et avril. Les fenêtres restent fermées et la maison aspire davantage d'air du sol, ce qui donne la mesure la plus représentative de l'année."],
+    ['Où placer le détecteur dans la maison ?',
+     "Au niveau habité le plus bas, celui où vous passez au moins quatre heures par jour : souvent le sous-sol aménagé ou le rez-de-chaussée. Loin des fenêtres, des portes et du drain de plancher, à environ un mètre du sol."],
+    ['Quel niveau de radon est trop élevé ?',
+     "La ligne directrice canadienne est de 200 becquerels par mètre cube (Bq/m³). Au-delà, Santé Canada recommande de corriger la situation, d'autant plus rapidement que le niveau est élevé. Le travail se confie à un professionnel certifié par le Programme national de compétence sur le radon (C-NRPP)."],
+    ['Le radon est-il un problème sur la Rive-Nord ?',
+     "Le radon vient du sol et se trouve partout au Québec, à des niveaux qui varient d'une maison à l'autre, même entre deux voisines. Seul un test dans votre maison vous dit où vous en êtes."]
+  ]
+};
+
+const radonJsonld = (canonical) => JSON.stringify([
+  { "@context":"https://schema.org","@type":"WebPage","name":"Test de radon gratuit sur la Rive-Nord","url":canonical,"inLanguage":"fr-CA",
+    "description":"Détecteur de radon à long terme et analyse en laboratoire offerts aux propriétaires de la Rive-Nord par l'Équipe Jacques-Roussel, RE/MAX CRYSTAL.",
+    "about":{"@type":"Thing","name":"Radon"},
+    "provider":{"@type":"RealEstateAgent","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/","telephone":CONTACT.tel},
+    "areaServed":RADON.villes.map(name => ({"@type":"City","name":name})) },
+  { "@context":"https://schema.org","@type":"FAQPage",
+    "mainEntity":RADON.faq.map(([q,a]) => ({"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}})) }
+]);
+
+const radonCss = `<style>
+.rd-hero{ padding-block: var(--space-8) var(--space-6); }
+.rd-hero__top{ display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); grid-template-areas: "title side"; gap: clamp(1.5rem,4vw,4rem); align-items: end; }
+.rd-hero__title{ grid-area: title; }
+.rd-hero__title h1{ font-size: clamp(2.3rem, 4.8vw, 4.2rem); max-inline-size: 14ch; margin-block-start: var(--space-3); }
+.rd-hero__side{ grid-area: side; display: grid; gap: var(--space-4); padding-block-end: .4rem; }
+.rd-hero__side .lead{ color: var(--stone); font-size: var(--text-lg); line-height: 1.55; max-inline-size: 38ch; }
+.rd-hero__actions{ display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.rd-team{ display: flex; align-items: center; gap: .75rem; font-size: var(--text-sm); color: var(--stone); line-height: 1.4; }
+.rd-team__faces{ display: flex; }
+.rd-team__faces img{ inline-size: 44px; block-size: 44px; border-radius: 999px; border: 2px solid var(--cream); object-fit: cover; }
+.rd-team__faces img + img{ margin-inline-start: -12px; }
+.rd-team strong{ color: var(--ink); font-weight: 600; }
+.rd-photo-wrap{ position: relative; margin-block-start: var(--space-12); }
+/* Carte du détecteur : chevauche le bord haut de la photo, côté droit. */
+.rd-det{ position: absolute; z-index: 2; inset-block-start: -3rem; inset-inline-end: clamp(1rem, 5vw, 4.5rem); inline-size: clamp(170px, 19vw, 250px); background: var(--vellum); border: 1px solid var(--hairline); border-radius: var(--radius-lg); padding: 1rem 1rem 1.1rem; box-shadow: var(--shadow-card-hover); }
+.rd-det img{ inline-size: 100%; block-size: auto; display: block; margin-block-start: -.25rem; }
+.rd-det__label{ display: block; margin-block-start: .5rem; font-size: .7rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--label); }
+.rd-det__title{ display: block; font-weight: 700; font-size: 1rem; line-height: 1.25; margin-block-start: .2rem; color: var(--ink); }
+.rd-det__meta{ display: block; font-size: .78rem; color: var(--stone); margin-block-start: .25rem; }
+.rd-photo{ position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 1400 / 620; background: var(--hairline); box-shadow: var(--shadow-card); }
+.rd-photo img{ inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 50% 12%; }
+.rd-photo::after{ content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(22% 0.04 240 / 0.55), transparent 45%); pointer-events: none; }
+.rd-chips{ position: absolute; inset-inline-start: clamp(1rem,3vw,2rem); inset-block-end: clamp(1rem,3vw,2rem); z-index: 1; display: flex; flex-wrap: wrap; gap: .5rem; }
+.rd-chip{ background: oklch(96% 0.012 80 / 0.94); color: var(--ink); font-size: var(--text-sm); font-weight: 600; padding: .55rem 1rem; border-radius: 999px; }
+.rd-chip--teal{ background: var(--teal); color: var(--cream); }
+
+.rd-facts{ background: var(--teal); color: var(--cream); margin-block-start: var(--space-16); }
+.rd-facts .container{ padding-block: var(--space-12); display: grid; grid-template-columns: auto minmax(0,1fr); gap: clamp(2rem,6vw,5rem); align-items: center; }
+.rd-facts__num{ font-size: clamp(4.5rem, 10vw, 7.5rem); font-weight: 800; line-height: .9; letter-spacing: -0.04em; color: var(--bronze); font-variant-numeric: tabular-nums; }
+.rd-facts__unit{ display: block; font-size: var(--text-sm); font-weight: 600; letter-spacing: .02em; color: var(--sand); margin-block-start: var(--space-2); }
+.rd-facts h2{ color: var(--cream); font-size: clamp(1.6rem, 2.8vw, 2.4rem); max-inline-size: 22ch; }
+.rd-facts p{ color: oklch(96% 0.012 80 / 0.86); margin-block-start: var(--space-3); max-inline-size: 58ch; }
+.rd-facts__src{ font-size: .8rem; }
+.rd-facts__src a{ color: var(--sand); text-decoration: underline; text-underline-offset: 3px; }
+
+.rd-how{ display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(2rem,5vw,4.5rem); align-items: center; }
+.rd-how__img{ border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 5 / 4; background: var(--hairline); }
+.rd-how__img img{ inline-size: 100%; block-size: 100%; object-fit: cover; }
+.rd-how h2{ margin-block: var(--space-2) var(--space-6); max-inline-size: 16ch; }
+.rd-steps{ list-style: none; display: grid; gap: 0; }
+.rd-steps li{ display: grid; gap: .25rem; padding-block: 1.1rem; border-block-start: 1px solid var(--hairline); }
+.rd-steps li:last-child{ border-block-end: 1px solid var(--hairline); }
+.rd-steps h3{ font-size: 1.1rem; }
+.rd-steps p{ color: var(--stone); font-size: var(--text-sm); }
+
+.rd-ask{ display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 0; background: var(--vellum); border: 1px solid var(--hairline); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); scroll-margin-block-start: 110px; }
+.rd-ask__who{ position: relative; min-block-size: 100%; background: var(--hairline); }
+.rd-ask__who img{ position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 50% 20%; }
+.rd-ask__who figcaption{ position: absolute; inset-inline: 0; inset-block-end: 0; padding: var(--space-6) var(--space-4) var(--space-4); background: linear-gradient(to top, oklch(22% 0.04 240 / 0.85), transparent); color: var(--cream); font-size: var(--text-sm); line-height: 1.45; }
+.rd-ask__who figcaption strong{ display: block; font-size: 1.05rem; font-weight: 700; }
+.rd-form{ padding: clamp(1.5rem,4vw,3rem); }
+.rd-form h2{ font-size: clamp(1.5rem, 2.4vw, 2rem); margin-block: var(--space-2) .4rem; }
+.rd-form__sub{ color: var(--stone); font-size: var(--text-sm); margin-block-end: var(--space-4); }
+.rd-field{ display: grid; gap: .35rem; margin-block-end: .85rem; }
+.rd-field label{ font-size: .82rem; font-weight: 500; color: var(--stone); }
+.rd-field input, .rd-field select{ inline-size: 100%; padding: .8rem 1rem; border: 1.5px solid var(--hairline); border-radius: var(--radius); font: inherit; font-size: 1rem; background: var(--cream); color: var(--ink); min-block-size: 48px; transition: border-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+.rd-field input:focus, .rd-field select:focus{ outline: 0; border-color: var(--teal); box-shadow: 0 0 0 4px var(--blue-soft); }
+.rd-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 0 .85rem; }
+.rd-hint{ font-size: .78rem; color: var(--stone); margin-block: -.35rem .85rem; }
+.rd-check{ display: grid; grid-template-columns: 1.15rem 1fr; gap: .6rem; align-items: start; font-size: .84rem; line-height: 1.45; margin-block: .2rem .7rem; cursor: pointer; }
+.rd-check input{ inline-size: 1.05rem; block-size: 1.05rem; margin-block-start: .12rem; accent-color: var(--teal); }
+.rd-form .f-submit{ inline-size: 100%; justify-content: center; margin-block-start: .4rem; border: 0; cursor: pointer; }
+.rd-form__fine{ font-size: .74rem; color: var(--stone); margin-block-start: .8rem; line-height: 1.5; }
+.rd-form .f-ok{ padding-block: var(--space-8); }
+.rd-form .f-ok h3{ margin-block: var(--space-3) var(--space-2); font-size: 1.6rem; }
+.rd-form .f-ok-icon{ inline-size: 52px; block-size: 52px; border-radius: 999px; display: grid; place-items: center; background: var(--teal); color: var(--cream); font-weight: 700; font-size: 1.3rem; }
+
+.rd-faq-wrap{ display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: clamp(2rem,5vw,4.5rem); align-items: start; }
+.rd-faq-wrap h2{ margin-block-start: var(--space-2); max-inline-size: 14ch; }
+.rd-faq details{ border-block-end: 1px solid var(--hairline); }
+.rd-faq details:first-child{ border-block-start: 1px solid var(--hairline); }
+.rd-faq summary{ list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.1rem; }
+.rd-faq summary::-webkit-details-marker{ display: none; }
+.rd-faq summary::after{ content: "+"; flex: none; color: var(--bronze); font-weight: 700; font-size: 1.3rem; line-height: 1; transition: transform 240ms var(--ease-out); }
+.rd-faq details[open] summary::after{ transform: rotate(45deg); }
+.rd-faq summary h3{ font-size: 1.02rem; font-weight: 600; letter-spacing: 0; margin: 0; }
+.rd-faq details p{ color: var(--stone); font-size: var(--text-sm); padding-block-end: 1.1rem; }
+.rd-villes{ color: var(--stone); font-size: .8rem; margin-block-start: var(--space-4); }
+
+.rd-sticky{ display: none; }
+@media (max-width: 960px){
+  .rd-hero__top, .rd-how, .rd-faq-wrap{ grid-template-columns: minmax(0,1fr); grid-template-areas: none; }
+  .rd-hero__title, .rd-hero__side{ grid-area: auto; }
+  .rd-photo{ aspect-ratio: 4 / 3; }
+  .rd-det{ inset-block-start: auto; inset-block-end: -2.5rem; inline-size: 150px; padding: .7rem .7rem .8rem; }
+  .rd-det__meta{ display: none; }
+  .rd-chips{ inset-block-end: auto; inset-block-start: clamp(1rem,3vw,2rem); }
+  .rd-photo-wrap{ margin-block-end: 2.5rem; }
+  .rd-facts .container{ grid-template-columns: minmax(0,1fr); }
+  .rd-ask{ grid-template-columns: minmax(0,1fr); }
+  .rd-ask__who{ aspect-ratio: 4 / 3; min-block-size: 0; }
+}
+@media (max-width: 560px){
+  .rd-row{ grid-template-columns: minmax(0,1fr); }
+  .rd-chip:not(.rd-chip--teal){ display: none; }
+  .rd-det{ inline-size: 128px; inset-inline-end: .75rem; }
+  .rd-det__label{ display: none; }
+  .rd-det__title{ font-size: .85rem; }
+  .rd-hero__actions .btn-primary{ inline-size: 100%; justify-content: center; }
+  .rd-sticky{ display: flex; position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 40; padding: .7rem clamp(1rem,4vw,2rem) calc(.7rem + env(safe-area-inset-bottom, 0px)); background: oklch(96% 0.012 80 / 0.96); border-block-start: 1px solid var(--hairline); }
+  .rd-sticky a{ flex: 1; justify-content: center; }
+  .rd-sticky[hidden]{ display: none; }
+  body.page-landing{ padding-block-end: 76px; }
+}
+</style>`;
+
+function radonLanding({ slug: lslug, source, index }) {
+  const url = `https://jacquesroussel.com/${lslug}/`;
+  const villesOpts = RADON.villes.map(v => `<option>${v}</option>`).join('') + '<option>Autre ville</option>';
+  const faqHtml = RADON.faq.map(([q,a], i) => `<details${i === 0 ? ' open' : ''}><summary><h3>${q}</h3></summary><p>${a}</p></details>`).join('');
+  const faces = `<span class="rd-team__faces"><img src="/photos/radon/avatar-marilyn.webp" alt="" width="44" height="44"><img src="/photos/radon/avatar-alexandre.webp" alt="" width="44" height="44"></span>`;
+  const body = `
+<section class="rd-hero container">
+  <div class="rd-hero__top">
+    <div class="rd-hero__title">
+      <span class="eyebrow">Offert aux propriétaires de la Rive-Nord</span>
+      <h1>Testez le radon chez vous. C'est gratuit.</h1>
+    </div>
+    <div class="rd-hero__side">
+      <p class="lead">Le radon ne se voit pas et ne se sent pas. On vous offre le détecteur et l'analyse en laboratoire, sans frais et sans engagement.</p>
+      <div class="rd-hero__actions"><a class="btn-primary" href="#formulaire">Recevoir mon test gratuit &rarr;</a></div>
+      <div class="rd-team">${faces}<span>Offert par <strong>Marilyn Jacques et Alexandre Roussel</strong><br>courtiers immobiliers, RE/MAX CRYSTAL</span></div>
+    </div>
+  </div>
+  <div class="rd-photo-wrap">
+  <aside class="rd-det" aria-label="Le détecteur offert">
+    <img src="/photos/radon/detecteur.svg" alt="Détecteur de radon à long terme, à poser au sous-sol" width="320" height="250">
+    <span class="rd-det__label">Votre détecteur</span>
+    <span class="rd-det__title">Test à long terme</span>
+    <span class="rd-det__meta">3 mois au sous-sol · analyse en labo incluse</span>
+  </aside>
+  <figure class="rd-photo">
+    <img src="/photos/radon/courtiers-maison.webp" alt="Marilyn Jacques et Alexandre Roussel dans une maison de la Rive-Nord" width="1400" height="740" fetchpriority="high">
+    <div class="rd-chips"><span class="rd-chip rd-chip--teal">Gratuit</span><span class="rd-chip">Analyse en laboratoire incluse</span><span class="rd-chip">Sans engagement</span></div>
+  </figure>
+  </div>
+</section>
+
+<section class="rd-facts" aria-labelledby="rd-facts-h">
+  <div class="container">
+    <div class="rd-facts__num">200<span class="rd-facts__unit">Bq/m³ · ligne directrice canadienne</span></div>
+    <div>
+      <h2 id="rd-facts-h">Le radon est la 2<sup>e</sup> cause du cancer du poumon au Canada.</h2>
+      <p>C'est un gaz radioactif naturel qui monte du sol et s'accumule dans les sous-sols. Deux maisons voisines peuvent avoir des niveaux très différents : seul un test chez vous donne la réponse.</p>
+      <p class="rd-facts__src">Source : <a href="https://www.canada.ca/fr/sante-canada/services/radiation-environnement/radon.html" rel="noopener" target="_blank">Santé Canada</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section container" aria-labelledby="rd-how-h">
+  <div class="rd-how">
+    <div class="rd-how__img"><img src="/photos/radon/sous-sol.webp" alt="Sous-sol aménagé, là où le détecteur de radon s'installe" width="1200" height="750" loading="lazy"></div>
+    <div>
+      <span class="eyebrow">Comment ça fonctionne</span>
+      <h2 id="rd-how-h">Trois étapes, rien à payer.</h2>
+      <ol class="rd-steps">
+        <li><h3>Vous faites la demande</h3><p>Votre nom, un numéro ou un courriel, votre ville.</p></li>
+        <li><h3>Le détecteur mesure pendant 3 mois</h3><p>On vous le remet. Vous le posez au sous-sol, rien à brancher.</p></li>
+        <li><h3>Vous recevez votre résultat</h3><p>Analysé en laboratoire, expliqué en mots simples.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="container" aria-labelledby="rd-form-h">
+  <div class="rd-ask" id="formulaire">
+    <figure class="rd-ask__who">
+      <img src="/photos/radon/equipe.webp" alt="Marilyn Jacques et Alexandre Roussel" width="900" height="1123" loading="lazy">
+      <figcaption><strong>Marilyn et Alexandre</strong>On vous contacte personnellement, d'ici 48 heures ouvrables.</figcaption>
+    </figure>
+    <form class="rd-form contact-form" data-lead-form data-radon-form novalidate>
+      <div class="f-fields">
+        <span class="eyebrow">Demande en 30 secondes</span>
+        <h2 id="rd-form-h">Recevez votre test de radon</h2>
+        <p class="rd-form__sub">Un numéro ou un courriel suffit.</p>
+        <input type="hidden" name="subject" value="Test de radon gratuit">
+        <input type="hidden" name="source" value="${source}">
+        <input type="hidden" name="page" value="/${lslug}/">
+        <textarea name="message" hidden aria-hidden="true" tabindex="-1"></textarea>
+        <div class="rd-field"><label for="rd-nom">Prénom et nom</label><input id="rd-nom" name="name" type="text" autocomplete="name" required></div>
+        <div class="rd-row">
+          <div class="rd-field"><label for="rd-tel">Téléphone</label><input id="rd-tel" name="phone" type="tel" inputmode="tel" autocomplete="tel"></div>
+          <div class="rd-field"><label for="rd-courriel">Courriel</label><input id="rd-courriel" name="email" type="email" inputmode="email" autocomplete="email"></div>
+        </div>
+        <p class="rd-hint" id="rd-hint">L'un ou l'autre.</p>
+        <div class="rd-field"><label for="rd-ville">Ville</label><select id="rd-ville" name="ville" required><option value="" disabled selected>Choisir</option>${villesOpts}</select></div>
+        <label class="rd-check"><input type="checkbox" name="consentement" value="oui" required><span>J'accepte d'être contacté au sujet de ce test.</span></label>
+        <button type="submit" class="btn-primary f-submit">Recevoir mon test gratuit &rarr;</button>
+        <p class="rd-form__fine">Vos coordonnées servent seulement à ce test. Elles ne sont ni vendues ni partagées.</p>
+      </div>
+      <div class="f-ok" hidden role="status">
+        <div class="f-ok-icon" aria-hidden="true">&#10003;</div>
+        <h3>Demande reçue.</h3>
+        <p>Merci. On vous contacte d'ici 48 heures ouvrables pour vous remettre le détecteur.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section container" aria-labelledby="rd-faq-h">
+  <div class="rd-faq-wrap">
+    <div>
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2 id="rd-faq-h">Le radon, en clair.</h2>
+    </div>
+    <div>
+      <div class="rd-faq">${faqHtml}</div>
+      <p class="rd-villes">Offert aux propriétaires de ${RADON.villes.slice(0,-1).join(', ')} et ${RADON.villes.at(-1)}.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="cta-band">
+    <div class="cta-band__inner">
+      <h2>D'octobre à avril : le meilleur moment pour tester.</h2>
+      <div class="cta-band__actions"><a class="btn" href="#formulaire">Recevoir mon test gratuit &rarr;</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="rd-sticky" data-rd-sticky><a class="btn-primary" href="#formulaire">Recevoir mon test gratuit &rarr;</a></div>
+
+<script>
+(function(){
+  var form = document.querySelector('[data-radon-form]');
+  if (!form) return;
+  var tel = form.querySelector('#rd-tel'), mail = form.querySelector('#rd-courriel'), hint = form.querySelector('#rd-hint');
+  var qs = new URLSearchParams(location.search);
+  var src = form.querySelector('[name=source]');
+  if (qs.get('utm_campaign') || qs.get('src')) src.value = (qs.get('src') || qs.get('utm_campaign')) + (qs.get('utm_source') ? ' / ' + qs.get('utm_source') : '');
+
+  function joignable(){
+    var ok = tel.value.trim() || mail.value.trim();
+    tel.setCustomValidity(ok ? '' : 'Indiquez un téléphone ou un courriel.');
+    hint.style.color = ok ? '' : 'var(--remax-red)';
+    return !!ok;
+  }
+  tel.addEventListener('input', joignable);
+  mail.addEventListener('input', joignable);
+
+  // Enregistré avant le gestionnaire commun : il prépare le message lisible
+  // (ville, provenance) que le courriel de repli transporte.
+  form.addEventListener('submit', function(e){
+    joignable();
+    if (!form.checkValidity()){ e.stopImmediatePropagation(); e.preventDefault(); form.reportValidity(); return; }
+    var d = new FormData(form);
+    form.querySelector('[name=message]').value = [
+      'Demande de test de radon gratuit.',
+      'Ville : ' + (d.get('ville') || ''),
+      'Provenance : ' + (d.get('source') || '') + ' (' + (d.get('page') || '') + ')'
+    ].join('\\n');
+    if (typeof gtag === 'function') gtag('event', 'generate_lead', { form_name: 'radon', lead_source: d.get('source'), page_path: d.get('page') });
+  });
+
+  var sticky = document.querySelector('[data-rd-sticky]');
+  if (sticky && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ sticky.hidden = es[0].isIntersecting; }, { threshold: 0.15 }).observe(form);
+  }
+})();
+</script>
+${leadFormScript}`;
+
+  return layout({
+    title: 'Test de radon gratuit sur la Rive-Nord | Équipe Jacques-Roussel, RE/MAX CRYSTAL',
+    description: "Détecteur de radon à long terme et analyse en laboratoire offerts aux propriétaires de Saint-Eustache, Boisbriand, Mirabel, Blainville et de la Rive-Nord. Sans frais, sans engagement.",
+    canonical: RADON.canonical,
+    bodyClass: 'page-landing',
+    extraHead: radonCss + '\n<link rel="preload" as="image" href="/photos/radon/courtiers-maison.webp" fetchpriority="high">' + (index ? '' : '\n<meta name="robots" content="noindex,follow">'),
+    jsonld: index ? radonJsonld(url) : '',
+    body
+  });
+}
+
+for (const l of LANDINGS) {
+  if (l.offer === 'radon') writePage(`${l.slug}/index.html`, radonLanding(l));
+}
+
 // --- PERFORMANCE DASHBOARD ---
 writePage('performance/index.html', layout({
   title:'Performance SEO — Dashboard interne',
@@ -7265,6 +7592,7 @@ writePage('404.html', layout({
 
 const allUrls = [
   '/', '/nos-proprietes/', '/a-propos/', '/contact/', '/temoignages/', '/rendez-vous/', '/guides/', '/marche-immobilier/', '/blog/',
+  ...LANDINGS.filter(l => l.index).map(l => `/${l.slug}/`),
   ...CITIES.flatMap(([s,_,ns]) => [`/courtier-immobilier/${s}/`, ...ns.map(n=>`/quartiers/${s}/${slug(n)}/`)]),
   ...TYPES.map(([s])=>`/types-de-propriete/${s}/`),
   ...SUBPAGES.map(([p])=>`/${p}/`),
