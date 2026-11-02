@@ -369,7 +369,7 @@
           { yPercent: 110 },
           { yPercent: 0, duration: 1.25, ease: 'power3.out', stagger: 0.12, delay: 0.15, immediateRender: false }
         );
-        window.gsap.fromTo(['.hm-hero__eyebrow', '.hm-hero__bar'],
+        window.gsap.fromTo(['.hm-hero__eyebrow', '.hm-hero__h2', '.hm-hero__bar'],
           { opacity: 0, y: 18 },
           { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.15, delay: 0.65, immediateRender: false }
         );

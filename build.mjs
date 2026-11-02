@@ -1311,7 +1311,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
    vertical de .site-header__inner. Aucune boîte ni cadre autour du logo. */
 .site-header__brands{ display: inline-flex; align-items: center; gap: clamp(1.1rem, 2.2vw, 1.6rem); }
 .site-header__remax{
-  block-size: clamp(24px, 2.5vw, 31px);
+  block-size: clamp(14px, 1.3vw, 18px);
   inline-size: auto;
   display: block;
   flex-shrink: 0;
@@ -1319,7 +1319,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
    at the same scale; the white version's extra vertical padding just centers. */
-.wordmark__logo{ block-size: clamp(30px, 3.2vw, 38px); inline-size: auto; display: block; }
+.wordmark__logo{ block-size: clamp(40px, 4.2vw, 54px); inline-size: auto; display: block; }
 .wordmark__logo--light{ display: none; }
 .wordmark__logo--dark{ display: block; }
 /* Overlay (transparent) header → white logo */
@@ -2710,14 +2710,21 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .hm-hero__bar{
   position: relative;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: var(--space-6);
   padding: clamp(0.9rem, 2.5vh, 1.4rem) clamp(1rem, 4vw, 2rem);
   border-block-start: 1px solid oklch(96% 0.012 80 / 0.22);
   color: var(--cream);
 }
-.hm-hero__bar-names{ font-size: var(--text-sm); opacity: 0.92; }
+.hm-hero__h2{
+  color: var(--cream);
+  font-size: clamp(1.15rem, 2.2vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  text-shadow: 0 1px 24px oklch(20% 0.005 250 / 0.45);
+}
 .hm-hero__bar-meta{
   font-family: 'Montserrat', system-ui, sans-serif;
   font-size: 11px; letter-spacing: 0.08em;
@@ -3692,7 +3699,7 @@ const JS = `
           { yPercent: 110 },
           { yPercent: 0, duration: 1.25, ease: 'power3.out', stagger: 0.12, delay: 0.15, immediateRender: false }
         );
-        window.gsap.fromTo(['.hm-hero__eyebrow', '.hm-hero__bar'],
+        window.gsap.fromTo(['.hm-hero__eyebrow', '.hm-hero__h2', '.hm-hero__bar'],
           { opacity: 0, y: 18 },
           { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.15, delay: 0.65, immediateRender: false }
         );
@@ -4061,9 +4068,9 @@ const homeBody = `
       <span class="hm-line"><span class="hm-line__in"><em>d'expérience</em></span></span>
       <span class="hm-line"><span class="hm-line__in">sur la Rive-Nord.</span></span>
     </h1>
+    <h2 class="hm-hero__h2">${TEAM.map(m => `${m.first} ${m.last}`).join(' et ')}</h2>
   </div>
   <div class="hm-hero__bar">
-    <span class="hm-hero__bar-names">${TEAM.map(m => `${m.first} ${m.last}`).join(' &middot; ')}</span>
     <span class="hm-hero__bar-meta">Centris &middot; ${stats.total ? stats.total + ' inscriptions actives' : 'mis à jour quotidiennement'}</span>
     <a class="btn-cream hm-hero__cta" href="/nos-proprietes/">Voir nos propriétés &rarr;</a>
   </div>

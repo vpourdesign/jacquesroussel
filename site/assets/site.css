@@ -263,7 +263,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
    vertical de .site-header__inner. Aucune boîte ni cadre autour du logo. */
 .site-header__brands{ display: inline-flex; align-items: center; gap: clamp(1.1rem, 2.2vw, 1.6rem); }
 .site-header__remax{
-  block-size: clamp(24px, 2.5vw, 31px);
+  block-size: clamp(14px, 1.3vw, 18px);
   inline-size: auto;
   display: block;
   flex-shrink: 0;
@@ -271,7 +271,7 @@ body.header-overlay .site-header:has(.has-mega:focus-within){
 .wordmark{ display: inline-flex; align-items: center; line-height: 0; }
 /* Sized by WIDTH — both logo files are 700px wide, so the J/R glyph renders
    at the same scale; the white version's extra vertical padding just centers. */
-.wordmark__logo{ block-size: clamp(30px, 3.2vw, 38px); inline-size: auto; display: block; }
+.wordmark__logo{ block-size: clamp(40px, 4.2vw, 54px); inline-size: auto; display: block; }
 .wordmark__logo--light{ display: none; }
 .wordmark__logo--dark{ display: block; }
 /* Overlay (transparent) header → white logo */
@@ -1662,14 +1662,21 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .hm-hero__bar{
   position: relative;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: var(--space-6);
   padding: clamp(0.9rem, 2.5vh, 1.4rem) clamp(1rem, 4vw, 2rem);
   border-block-start: 1px solid oklch(96% 0.012 80 / 0.22);
   color: var(--cream);
 }
-.hm-hero__bar-names{ font-size: var(--text-sm); opacity: 0.92; }
+.hm-hero__h2{
+  color: var(--cream);
+  font-size: clamp(1.15rem, 2.2vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  text-shadow: 0 1px 24px oklch(20% 0.005 250 / 0.45);
+}
 .hm-hero__bar-meta{
   font-family: 'Montserrat', system-ui, sans-serif;
   font-size: 11px; letter-spacing: 0.08em;
