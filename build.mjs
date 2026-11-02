@@ -117,10 +117,11 @@ const REMAX_LOCKUP = '/brand_assets/remax-ballon-logotype.png';
 // court, l'ouvrir et copier l'adresse d'arrivée.
 const GCAL_APPOINTMENT_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2UIJvhwNZ8nggid9vBsvMCLRlE-OZakBWU_2r1Z_TD6tibnwFK-lYgG1dSr_n2H6ox3aBz_t54';
 
-// Point de chute des formulaires (guides, contact). Tant qu'il est vide, les
-// formulaires basculent sur le client courriel de la personne : rien ne se
-// perd en silence. Coller ici l'URL Formspree/Vercel du compte de l'équipe.
-const FORM_ENDPOINT = '';
+// Point de chute des cinq formulaires (contact, rendez-vous, guides, radon,
+// évaluation). Formspree, branché le 2026-11-02 : les demandes arrivent par
+// courriel et dans l'onglet Submissions du compte. Vidé, chaque formulaire
+// rebascule sur le logiciel de courriel de la personne.
+const FORM_ENDPOINT = 'https://formspree.io/f/mkjjpqeo';
 // Adresse de repli quand FORM_ENDPOINT est vide.
 const FORM_FALLBACK_EMAIL = 'alexRcourtier@gmail.com';
 
@@ -171,6 +172,9 @@ const leadFormScript = `
       ].filter(function(l, i){ return l !== '' || i === 4; }).join('\\r\\n');
 
       if (ENDPOINT){
+        d._subject = sujet;
+        // Formspree valide « email » : un champ vide (radon, téléphone seul) ferait échouer l'envoi.
+        Object.keys(d).forEach(function(k){ if (d[k] === '') delete d[k]; });
         if (btn){ btn.disabled = true; btn.textContent = 'Envoi…'; }
         fetch(ENDPOINT, {
           method: 'POST',
@@ -5367,8 +5371,8 @@ writePage('vendre/evaluation-gratuite/index.html', layout({
 
   // Submit
   function submit(){
-    // For now, no backend — show success state with summary.
-    // To wire backend later: POST answers to /api/evaluation or Formspree.
+    const ENDPOINT=${JSON.stringify(FORM_ENDPOINT)};
+    const FALLBACK=${JSON.stringify(FORM_FALLBACK_EMAIL)};
     const labels={
       type:{unifamiliale:'Unifamiliale',condo:'Condo','maison-ville':'Maison de ville',plex:'Plex'},
       etages:{'1':'1 étage','1.5':'1½','2':'2 étages','3+':'3+ étages'},
@@ -5380,6 +5384,25 @@ writePage('vendre/evaluation-gratuite/index.html', layout({
       '🏡 '+(labels.type[answers.type]||answers.type)+' · '+(labels.etages[answers.etages]||answers.etages)+' · sous-sol '+(labels.soussol[answers.soussol]||answers.soussol)+'<br>'+
       '🛏️ '+answers.chambres+' chambre(s) · '+answers.sdb+' salle(s) de bain<br>'+
       '🔧 Rénovations : '+(labels.renos[answers.renos]||answers.renos);
+    const lab=(k)=>labels[k]?.[answers[k]]||answers[k]||'';
+    const payload={
+      _subject:'Site web — Évaluation gratuite — '+answers.name,
+      name:answers.name,email:answers.email,phone:answers.phone,
+      adresse:answers.address,type:lab('type'),etages:lab('etages'),soussol:lab('soussol'),
+      chambres:answers.chambres,salles_de_bain:answers.sdb,renovations:lab('renos')
+    };
+    const next=$('#eval-next');
+    if(ENDPOINT){
+      next.disabled=true;next.textContent='Envoi…';
+      fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(Object.fromEntries(Object.entries(payload).filter(([,v])=>v!==''&&v!=null)))})
+        .then(r=>{if(!r.ok)throw new Error(r.status);next.disabled=false;afficher(recap);})
+        .catch(()=>{next.disabled=false;next.textContent='Réessayer →';alert("L'envoi a échoué. Écrivez-nous à "+FALLBACK+" et on vous prépare votre évaluation.");});
+      return;
+    }
+    window.location.href='mailto:'+FALLBACK+'?subject='+encodeURIComponent(payload._subject)+'&body='+encodeURIComponent(Object.entries(payload).filter(([k])=>k!=='_subject').map(([k,v])=>k+' : '+v).join('\\r\\n'));
+    afficher(recap);
+  }
+  function afficher(recap){
     $('#eval-recap').innerHTML=recap;
     $('#eval-actions').style.display='none';
     stepEl(current).classList.remove('active');
@@ -6056,7 +6079,7 @@ writePage('guides/index.html', layout({
     slotSlug.value = slug;
     title.textContent = 'Laissez-nous vos informations pour recevoir votre ' + name + '.';
     doneTx.textContent = ENDPOINT
-      ? 'Votre ' + name + ' s\\'en vient dans votre boîte de réception. S\\'il tarde, vérifiez vos indésirables.'
+      ? 'C\\'est noté. On vous envoie votre ' + name + ' par courriel très bientôt.'
       : 'Votre logiciel de courriel vient de s\\'ouvrir avec le message prérempli : il ne reste qu\\'à l\\'envoyer et on vous fait parvenir votre ' + name + '.';
     fields.hidden = false; done.hidden = true;
     form.reset(); slotSlug.value = slug;
@@ -6107,6 +6130,7 @@ writePage('guides/index.html', layout({
     btn.disabled = true; btn.textContent = 'Envoi…';
 
     if (ENDPOINT) {
+      d._subject = 'Site web — Demande de ' + (d.guide === 'guide-du-vendeur-2026' ? 'guide du vendeur' : 'guide de l\\'acheteur') + ' — ' + (d.prenom || '') + ' ' + (d.nom || '');
       fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },

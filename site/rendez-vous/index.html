@@ -161,7 +161,7 @@
 
 <script>
 (function(){
-  var ENDPOINT = "";
+  var ENDPOINT = "https://formspree.io/f/mkjjpqeo";
   var FALLBACK = "alexRcourtier@gmail.com";
 
   document.querySelectorAll('form[data-lead-form]').forEach(function(form){
@@ -198,6 +198,9 @@
       ].filter(function(l, i){ return l !== '' || i === 4; }).join('\r\n');
 
       if (ENDPOINT){
+        d._subject = sujet;
+        // Formspree valide « email » : un champ vide (radon, téléphone seul) ferait échouer l'envoi.
+        Object.keys(d).forEach(function(k){ if (d[k] === '') delete d[k]; });
         if (btn){ btn.disabled = true; btn.textContent = 'Envoi…'; }
         fetch(ENDPOINT, {
           method: 'POST',

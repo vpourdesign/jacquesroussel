@@ -339,8 +339,8 @@
 
   // Submit
   function submit(){
-    // For now, no backend — show success state with summary.
-    // To wire backend later: POST answers to /api/evaluation or Formspree.
+    const ENDPOINT="https://formspree.io/f/mkjjpqeo";
+    const FALLBACK="alexRcourtier@gmail.com";
     const labels={
       type:{unifamiliale:'Unifamiliale',condo:'Condo','maison-ville':'Maison de ville',plex:'Plex'},
       etages:{'1':'1 étage','1.5':'1½','2':'2 étages','3+':'3+ étages'},
@@ -352,6 +352,25 @@
       '🏡 '+(labels.type[answers.type]||answers.type)+' · '+(labels.etages[answers.etages]||answers.etages)+' · sous-sol '+(labels.soussol[answers.soussol]||answers.soussol)+'<br>'+
       '🛏️ '+answers.chambres+' chambre(s) · '+answers.sdb+' salle(s) de bain<br>'+
       '🔧 Rénovations : '+(labels.renos[answers.renos]||answers.renos);
+    const lab=(k)=>labels[k]?.[answers[k]]||answers[k]||'';
+    const payload={
+      _subject:'Site web — Évaluation gratuite — '+answers.name,
+      name:answers.name,email:answers.email,phone:answers.phone,
+      adresse:answers.address,type:lab('type'),etages:lab('etages'),soussol:lab('soussol'),
+      chambres:answers.chambres,salles_de_bain:answers.sdb,renovations:lab('renos')
+    };
+    const next=$('#eval-next');
+    if(ENDPOINT){
+      next.disabled=true;next.textContent='Envoi…';
+      fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(Object.fromEntries(Object.entries(payload).filter(([,v])=>v!==''&&v!=null)))})
+        .then(r=>{if(!r.ok)throw new Error(r.status);next.disabled=false;afficher(recap);})
+        .catch(()=>{next.disabled=false;next.textContent='Réessayer →';alert("L'envoi a échoué. Écrivez-nous à "+FALLBACK+" et on vous prépare votre évaluation.");});
+      return;
+    }
+    window.location.href='mailto:'+FALLBACK+'?subject='+encodeURIComponent(payload._subject)+'&body='+encodeURIComponent(Object.entries(payload).filter(([k])=>k!=='_subject').map(([k,v])=>k+' : '+v).join('\r\n'));
+    afficher(recap);
+  }
+  function afficher(recap){
     $('#eval-recap').innerHTML=recap;
     $('#eval-actions').style.display='none';
     stepEl(current).classList.remove('active');

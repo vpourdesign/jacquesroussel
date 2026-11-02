@@ -401,7 +401,7 @@
     slotSlug.value = slug;
     title.textContent = 'Laissez-nous vos informations pour recevoir votre ' + name + '.';
     doneTx.textContent = ENDPOINT
-      ? 'Votre ' + name + ' s\'en vient dans votre boîte de réception. S\'il tarde, vérifiez vos indésirables.'
+      ? 'C\'est noté. On vous envoie votre ' + name + ' par courriel très bientôt.'
       : 'Votre logiciel de courriel vient de s\'ouvrir avec le message prérempli : il ne reste qu\'à l\'envoyer et on vous fait parvenir votre ' + name + '.';
     fields.hidden = false; done.hidden = true;
     form.reset(); slotSlug.value = slug;
@@ -436,7 +436,7 @@
     }
   });
 
-  var ENDPOINT = "";
+  var ENDPOINT = "https://formspree.io/f/mkjjpqeo";
   var FALLBACK = "alexRcourtier@gmail.com";
 
   function succeed(){
@@ -452,6 +452,7 @@
     btn.disabled = true; btn.textContent = 'Envoi…';
 
     if (ENDPOINT) {
+      d._subject = 'Site web — Demande de ' + (d.guide === 'guide-du-vendeur-2026' ? 'guide du vendeur' : 'guide de l\'acheteur') + ' — ' + (d.prenom || '') + ' ' + (d.nom || '');
       fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },

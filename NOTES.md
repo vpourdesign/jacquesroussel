@@ -11,7 +11,8 @@
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
 - [ ] Trancher la crème du site : `site.css` déclare `#F7F5EE` (RE/MAX) mais le bloc `oklch` affiche l'ancienne crème maison partout (2026-10-27)
 - [ ] Landing radon (`/test-radon-gratuit/`) : confirmer l'offre avec Alexandre avant de la diffuser. La page promet un détecteur à long terme, l'analyse en laboratoire incluse, un résultat par courriel et un contact sous 48 h ouvrables. Qui fournit les détecteurs, combien, et comment on les remet ? Ajuster `RADON` dans `build.mjs` au besoin (2026-11-02)
-- [ ] Brancher `FORM_ENDPOINT` (Formspree ou fonction Vercel) avant d'imprimer le dépliant radon : sans lui, chaque demande ouvre le logiciel de courriel du visiteur et une partie des demandes se perd (2026-11-02)
+- [ ] Faire un vrai envoi de test sur chacun des cinq formulaires (contact, rendez-vous, guides, radon, évaluation) et confirmer la réception dans Formspree et par courriel (2026-11-02)
+- [ ] Surveiller le quota Formspree : forfait gratuit à 50 envois par mois, passer au payant avant la distribution du dépliant radon (2026-11-02)
 - [ ] Landing radon : remplacer l'illustration du détecteur (`photos/radon/detecteur.svg`, dessin original sans marque) par une photo des vrais détecteurs prise par l'équipe, sur fond pâle (2026-11-02)
 - [ ] Dépliants radon : pour chaque envoi (mars, août…), ajouter une variante dans `LANDINGS` (`build.mjs`) et imprimer son adresse, puis comparer les `generate_lead` par `page_path` dans GA4 (2026-11-02)
 
@@ -91,6 +92,9 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
+- [2026-11-02] Formspree branché sur les cinq formulaires (`FORM_ENDPOINT` = https://formspree.io/f/mkjjpqeo). L'évaluation gratuite, qui n'envoyait rien du tout depuis la mise en ligne, envoie maintenant l'adresse, la propriété et les coordonnées. La fenêtre des guides ne promet plus un envoi automatique du PDF : quelqu'un doit l'envoyer à la main.
+- [2026-11-02] Style des formulaires de contact et de rendez-vous rétabli (effacé par erreur dans `dda363e` le 2026-09-03) et feuille de style versionnée (`site.css?v=`) pour contourner le cache d'un an.
+- [2026-11-02] Landing radon : lien Poumon Québec, retrait de la liste des villes et du bloc « Offert par », champ Ville en texte libre (corrections d'Alexandre).
 
 - [2026-11-02] Bouton Photos / Carte des fiches : il disparaissait au clic sur « Carte », les calques Leaflet (z-index 400) passaient par-dessus la barre (z-index 4). `.prop-media__pane` a maintenant son propre contexte d'empilement.
 - [2026-11-02] Landing `/test-radon-gratuit/` créée dans `build.mjs` (gabarit `LANDINGS`) : formulaire court (téléphone ou courriel), consentement Loi 25, événement GA4 `generate_lead`, FAQ en JSON-LD, page au sitemap.
