@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import crypto from 'node:crypto';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -870,6 +871,11 @@ const NAV = [
   { label: "L'équipe", href: '/a-propos/' }
 ];
 
+// /assets/ est servi en cache « immutable » pour un an (vercel.json) : sans
+// version dans l'URL, un visiteur déjà passé garde l'ancienne feuille.
+let cssV;
+const cssVersion = () => cssV ??= crypto.createHash('sha1').update(CSS).digest('hex').slice(0, 8);
+
 function layout({ title, description, canonical, body, extraHead='', extraBody='', bodyClass='', jsonld='' }) {
   const curPath = (canonical || '').replace(/^https?:\/\/[^/]+/, '');
   const seg = s => (s || '').split('/').filter(Boolean)[0] || '';
@@ -935,7 +941,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <link rel="apple-touch-icon" href="/brand_assets/jr-favicon-192.png">
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
 <link href="https://fonts.bunny.net/css?family=montserrat:300,400,400i,500,600,700,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/site.css?v=${cssVersion()}">
 ${extraHead}
 ${jsonld ? `<script type="application/ld+json">${jsonld}</script>` : ''}
 </head>
