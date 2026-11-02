@@ -43,11 +43,6 @@
 .rd-hero__side{ grid-area: side; display: grid; gap: var(--space-4); padding-block-end: .4rem; }
 .rd-hero__side .lead{ color: var(--stone); font-size: var(--text-lg); line-height: 1.55; max-inline-size: 38ch; }
 .rd-hero__actions{ display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
-.rd-team{ display: flex; align-items: center; gap: .75rem; font-size: var(--text-sm); color: var(--stone); line-height: 1.4; }
-.rd-team__faces{ display: flex; }
-.rd-team__faces img{ inline-size: 44px; block-size: 44px; border-radius: 999px; border: 2px solid var(--cream); object-fit: cover; }
-.rd-team__faces img + img{ margin-inline-start: -12px; }
-.rd-team strong{ color: var(--ink); font-weight: 600; }
 .rd-photo-wrap{ position: relative; margin-block-start: var(--space-12); }
 /* Carte du détecteur : chevauche le bord haut de la photo, côté droit. */
 .rd-det{ position: absolute; z-index: 2; inset-block-start: -3rem; inset-inline-end: clamp(1rem, 5vw, 4.5rem); inline-size: clamp(170px, 19vw, 250px); background: var(--vellum); border: 1px solid var(--hairline); border-radius: var(--radius-lg); padding: 1rem 1rem 1.1rem; box-shadow: var(--shadow-card-hover); }
@@ -113,7 +108,6 @@
 .rd-faq details[open] summary::after{ transform: rotate(45deg); }
 .rd-faq summary h3{ font-size: 1.02rem; font-weight: 600; letter-spacing: 0; margin: 0; }
 .rd-faq details p{ color: var(--stone); font-size: var(--text-sm); padding-block-end: 1.1rem; }
-.rd-villes{ color: var(--stone); font-size: .8rem; margin-block-start: var(--space-4); }
 
 .rd-sticky{ display: none; }
 @media (max-width: 960px){
@@ -184,7 +178,6 @@
     <div class="rd-hero__side">
       <p class="lead">Le radon ne se voit pas et ne se sent pas. On vous offre le détecteur et l'analyse en laboratoire, sans frais et sans engagement.</p>
       <div class="rd-hero__actions"><a class="btn-primary" href="#formulaire">Recevoir mon test gratuit &rarr;</a></div>
-      <div class="rd-team"><span class="rd-team__faces"><img src="/photos/radon/avatar-marilyn.webp" alt="" width="44" height="44"><img src="/photos/radon/avatar-alexandre.webp" alt="" width="44" height="44"></span><span>Offert par <strong>Marilyn Jacques et Alexandre Roussel</strong><br>courtiers immobiliers, RE/MAX CRYSTAL</span></div>
     </div>
   </div>
   <div class="rd-photo-wrap">
@@ -207,7 +200,7 @@
     <div>
       <h2 id="rd-facts-h">Le radon est la 2<sup>e</sup> cause du cancer du poumon au Canada.</h2>
       <p>C'est un gaz radioactif naturel qui monte du sol et s'accumule dans les sous-sols. Deux maisons voisines peuvent avoir des niveaux très différents : seul un test chez vous donne la réponse.</p>
-      <p class="rd-facts__src">Source : <a href="https://www.canada.ca/fr/sante-canada/services/radiation-environnement/radon.html" rel="noopener" target="_blank">Santé Canada</a></p>
+      <p class="rd-facts__src">Source : <a href="https://poumonquebec.ca/sante-pulmonaire/environnement/radon/" rel="noopener" target="_blank">Poumon Québec</a></p>
     </div>
   </div>
 </section>
@@ -270,7 +263,6 @@
     </div>
     <div>
       <div class="rd-faq"><details open><summary><h3>Le test de radon est-il vraiment gratuit ?</h3></summary><p>Oui. Le détecteur et l'analyse en laboratoire sont offerts par l'Équipe Jacques-Roussel. Vous n'avez rien à payer et rien à signer.</p></details><details><summary><h3>Est-ce que ça m'engage à vendre ou à acheter avec vous ?</h3></summary><p>Non. Le test est offert aux propriétaires de la Rive-Nord, sans condition. On vous transmet le résultat, et c'est tout, à moins que vous ayez des questions sur votre propriété.</p></details><details><summary><h3>Combien de temps dure un test de radon ?</h3></summary><p>Santé Canada recommande un test d'au moins trois mois. La concentration de radon varie d'un jour à l'autre et d'une saison à l'autre : un test court donne une image partielle.</p></details><details><summary><h3>Quel est le meilleur moment pour tester ?</h3></summary><p>Entre octobre et avril. Les fenêtres restent fermées et la maison aspire davantage d'air du sol, ce qui donne la mesure la plus représentative de l'année.</p></details><details><summary><h3>Où placer le détecteur dans la maison ?</h3></summary><p>Au niveau habité le plus bas, celui où vous passez au moins quatre heures par jour : souvent le sous-sol aménagé ou le rez-de-chaussée. Loin des fenêtres, des portes et du drain de plancher, à environ un mètre du sol.</p></details><details><summary><h3>Quel niveau de radon est trop élevé ?</h3></summary><p>La ligne directrice canadienne est de 200 becquerels par mètre cube (Bq/m³). Au-delà, Santé Canada recommande de corriger la situation, d'autant plus rapidement que le niveau est élevé. Le travail se confie à un professionnel certifié par le Programme national de compétence sur le radon (C-NRPP).</p></details><details><summary><h3>Le radon est-il un problème sur la Rive-Nord ?</h3></summary><p>Le radon vient du sol et se trouve partout au Québec, à des niveaux qui varient d'une maison à l'autre, même entre deux voisines. Seul un test dans votre maison vous dit où vous en êtes.</p></details></div>
-      <p class="rd-villes">Offert aux propriétaires de Saint-Eustache, Deux-Montagnes, Sainte-Marthe-sur-le-Lac, Boisbriand, Mirabel, Sainte-Thérèse, Blainville, Rosemère et Lorraine.</p>
     </div>
   </div>
 </section>

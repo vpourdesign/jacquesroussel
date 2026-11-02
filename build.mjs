@@ -7285,11 +7285,6 @@ const radonCss = `<style>
 .rd-hero__side{ grid-area: side; display: grid; gap: var(--space-4); padding-block-end: .4rem; }
 .rd-hero__side .lead{ color: var(--stone); font-size: var(--text-lg); line-height: 1.55; max-inline-size: 38ch; }
 .rd-hero__actions{ display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
-.rd-team{ display: flex; align-items: center; gap: .75rem; font-size: var(--text-sm); color: var(--stone); line-height: 1.4; }
-.rd-team__faces{ display: flex; }
-.rd-team__faces img{ inline-size: 44px; block-size: 44px; border-radius: 999px; border: 2px solid var(--cream); object-fit: cover; }
-.rd-team__faces img + img{ margin-inline-start: -12px; }
-.rd-team strong{ color: var(--ink); font-weight: 600; }
 .rd-photo-wrap{ position: relative; margin-block-start: var(--space-12); }
 /* Carte du détecteur : chevauche le bord haut de la photo, côté droit. */
 .rd-det{ position: absolute; z-index: 2; inset-block-start: -3rem; inset-inline-end: clamp(1rem, 5vw, 4.5rem); inline-size: clamp(170px, 19vw, 250px); background: var(--vellum); border: 1px solid var(--hairline); border-radius: var(--radius-lg); padding: 1rem 1rem 1.1rem; box-shadow: var(--shadow-card-hover); }
@@ -7355,7 +7350,6 @@ const radonCss = `<style>
 .rd-faq details[open] summary::after{ transform: rotate(45deg); }
 .rd-faq summary h3{ font-size: 1.02rem; font-weight: 600; letter-spacing: 0; margin: 0; }
 .rd-faq details p{ color: var(--stone); font-size: var(--text-sm); padding-block-end: 1.1rem; }
-.rd-villes{ color: var(--stone); font-size: .8rem; margin-block-start: var(--space-4); }
 
 .rd-sticky{ display: none; }
 @media (max-width: 960px){
@@ -7388,7 +7382,6 @@ function radonLanding({ slug: lslug, source, index }) {
   const url = `https://jacquesroussel.com/${lslug}/`;
   const villesOpts = RADON.villes.map(v => `<option>${v}</option>`).join('') + '<option>Autre ville</option>';
   const faqHtml = RADON.faq.map(([q,a], i) => `<details${i === 0 ? ' open' : ''}><summary><h3>${q}</h3></summary><p>${a}</p></details>`).join('');
-  const faces = `<span class="rd-team__faces"><img src="/photos/radon/avatar-marilyn.webp" alt="" width="44" height="44"><img src="/photos/radon/avatar-alexandre.webp" alt="" width="44" height="44"></span>`;
   const body = `
 <section class="rd-hero container">
   <div class="rd-hero__top">
@@ -7399,7 +7392,6 @@ function radonLanding({ slug: lslug, source, index }) {
     <div class="rd-hero__side">
       <p class="lead">Le radon ne se voit pas et ne se sent pas. On vous offre le détecteur et l'analyse en laboratoire, sans frais et sans engagement.</p>
       <div class="rd-hero__actions"><a class="btn-primary" href="#formulaire">Recevoir mon test gratuit &rarr;</a></div>
-      <div class="rd-team">${faces}<span>Offert par <strong>Marilyn Jacques et Alexandre Roussel</strong><br>courtiers immobiliers, RE/MAX CRYSTAL</span></div>
     </div>
   </div>
   <div class="rd-photo-wrap">
@@ -7422,7 +7414,7 @@ function radonLanding({ slug: lslug, source, index }) {
     <div>
       <h2 id="rd-facts-h">Le radon est la 2<sup>e</sup> cause du cancer du poumon au Canada.</h2>
       <p>C'est un gaz radioactif naturel qui monte du sol et s'accumule dans les sous-sols. Deux maisons voisines peuvent avoir des niveaux très différents : seul un test chez vous donne la réponse.</p>
-      <p class="rd-facts__src">Source : <a href="https://www.canada.ca/fr/sante-canada/services/radiation-environnement/radon.html" rel="noopener" target="_blank">Santé Canada</a></p>
+      <p class="rd-facts__src">Source : <a href="https://poumonquebec.ca/sante-pulmonaire/environnement/radon/" rel="noopener" target="_blank">Poumon Québec</a></p>
     </div>
   </div>
 </section>
@@ -7485,7 +7477,6 @@ function radonLanding({ slug: lslug, source, index }) {
     </div>
     <div>
       <div class="rd-faq">${faqHtml}</div>
-      <p class="rd-villes">Offert aux propriétaires de ${RADON.villes.slice(0,-1).join(', ')} et ${RADON.villes.at(-1)}.</p>
     </div>
   </div>
 </section>
