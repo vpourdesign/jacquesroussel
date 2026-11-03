@@ -158,7 +158,6 @@
           <div class="eval-options" data-group="type">
             <button type="button" class="eval-option" data-val="unifamiliale"><span class="ico">🏡</span>Unifamiliale</button>
             <button type="button" class="eval-option" data-val="condo"><span class="ico">🏢</span>Condo</button>
-            <button type="button" class="eval-option" data-val="maison-ville"><span class="ico">🏘️</span>Maison de ville</button>
             <button type="button" class="eval-option" data-val="plex"><span class="ico">🏬</span>Plex</button>
           </div>
         </div>
@@ -166,9 +165,8 @@
           <label>Nombre d'étages</label>
           <div class="eval-options" data-group="etages">
             <button type="button" class="eval-option" data-val="1">1 étage</button>
-            <button type="button" class="eval-option" data-val="1.5">1½</button>
             <button type="button" class="eval-option" data-val="2">2 étages</button>
-            <button type="button" class="eval-option" data-val="3+">3+</button>
+            <button type="button" class="eval-option" data-val="3+">3 ou plus</button>
           </div>
         </div>
         <div class="eval-field">
@@ -188,8 +186,19 @@
         <h2>Combien de pièces ?</h2>
         <p class="sub">Critère majeur dans la comparaison avec les ventes récentes du secteur.</p>
         <div class="eval-field">
-          <label>Chambres à coucher</label>
+          <label>Chambres à coucher hors sol</label>
           <div class="eval-options" data-group="chambres">
+            <button type="button" class="eval-option" data-val="1">1</button>
+            <button type="button" class="eval-option" data-val="2">2</button>
+            <button type="button" class="eval-option" data-val="3">3</button>
+            <button type="button" class="eval-option" data-val="4">4</button>
+            <button type="button" class="eval-option" data-val="5+">5 +</button>
+          </div>
+        </div>
+        <div class="eval-field">
+          <label>Chambres à coucher au sous-sol</label>
+          <div class="eval-options" data-group="chambres_ss">
+            <button type="button" class="eval-option" data-val="0">Aucune</button>
             <button type="button" class="eval-option" data-val="1">1</button>
             <button type="button" class="eval-option" data-val="2">2</button>
             <button type="button" class="eval-option" data-val="3">3</button>
@@ -202,8 +211,16 @@
           <div class="eval-options" data-group="sdb">
             <button type="button" class="eval-option" data-val="1">1</button>
             <button type="button" class="eval-option" data-val="2">2</button>
-            <button type="button" class="eval-option" data-val="3">3</button>
-            <button type="button" class="eval-option" data-val="4+">4 +</button>
+            <button type="button" class="eval-option" data-val="3+">3 +</button>
+          </div>
+        </div>
+        <div class="eval-field">
+          <label>Salles d'eau</label>
+          <div class="eval-options" data-group="sde">
+            <button type="button" class="eval-option" data-val="0">Aucune</button>
+            <button type="button" class="eval-option" data-val="1">1</button>
+            <button type="button" class="eval-option" data-val="2">2</button>
+            <button type="button" class="eval-option" data-val="3+">3 +</button>
           </div>
         </div>
       </div>
@@ -271,7 +288,7 @@
 (function(){
   const TOTAL=5;
   let current=1;
-  const answers={type:null,etages:null,soussol:null,chambres:null,sdb:null,renos:null,address:'',name:'',email:'',phone:''};
+  const answers={type:null,etages:null,soussol:null,chambres:null,chambres_ss:null,sdb:null,sde:null,renos:null,address:'',name:'',email:'',phone:''};
   const $=s=>document.querySelector(s);
   const $$=s=>document.querySelectorAll(s);
   const stepEl=n=>$('.eval-step[data-step="'+n+'"]');
@@ -304,7 +321,7 @@
   function isValid(step){
     if(step===1)return answers.address.trim().length>=8;
     if(step===2)return answers.type&&answers.etages&&answers.soussol;
-    if(step===3)return answers.chambres&&answers.sdb;
+    if(step===3)return answers.chambres&&answers.chambres_ss&&answers.sdb&&answers.sde;
     if(step===4)return answers.renos;
     if(step===5)return answers.name.trim().length>=2 && /\S+@\S+\.\S+/.test(answers.email);
     return false;
@@ -342,22 +359,23 @@
     const ENDPOINT="https://formspree.io/f/mkjjpqeo";
     const FALLBACK="alexRcourtier@gmail.com";
     const labels={
-      type:{unifamiliale:'Unifamiliale',condo:'Condo','maison-ville':'Maison de ville',plex:'Plex'},
-      etages:{'1':'1 étage','1.5':'1½','2':'2 étages','3+':'3+ étages'},
+      type:{unifamiliale:'Unifamiliale',condo:'Condo',plex:'Plex'},
+      etages:{'1':'1 étage','2':'2 étages','3+':'3 étages ou plus'},
       soussol:{fini:'fini',semi:'semi-fini','non-fini':'non fini',aucun:'aucun sous-sol'},
       renos:{'-5':'récentes (< 5 ans)','5-10':'5 à 10 ans','10-25':'10 à 25 ans','25+':'plus de 25 ans',aucune:'aucune'}
     };
     const recap='<strong>Récapitulatif</strong><br>'+
       '📍 '+answers.address+'<br>'+
       '🏡 '+(labels.type[answers.type]||answers.type)+' · '+(labels.etages[answers.etages]||answers.etages)+' · sous-sol '+(labels.soussol[answers.soussol]||answers.soussol)+'<br>'+
-      '🛏️ '+answers.chambres+' chambre(s) · '+answers.sdb+' salle(s) de bain<br>'+
+      '🛏️ '+answers.chambres+' chambre(s) hors sol · '+answers.chambres_ss+' au sous-sol<br>'+
+      '🛁 '+answers.sdb+' salle(s) de bain · '+answers.sde+' salle(s) d’eau<br>'+
       '🔧 Rénovations : '+(labels.renos[answers.renos]||answers.renos);
     const lab=(k)=>labels[k]?.[answers[k]]||answers[k]||'';
     const payload={
       _subject:'Site web — Évaluation gratuite — '+answers.name,
       name:answers.name,email:answers.email,phone:answers.phone,
       adresse:answers.address,type:lab('type'),etages:lab('etages'),soussol:lab('soussol'),
-      chambres:answers.chambres,salles_de_bain:answers.sdb,renovations:lab('renos')
+      chambres_hors_sol:answers.chambres,chambres_sous_sol:answers.chambres_ss,salles_de_bain:answers.sdb,salles_d_eau:answers.sde,renovations:lab('renos')
     };
     const next=$('#eval-next');
     if(ENDPOINT){
