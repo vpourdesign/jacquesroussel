@@ -34,7 +34,7 @@
 <link rel="apple-touch-icon" href="/brand_assets/jr-favicon-192.png">
 <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
 <link href="https://fonts.bunny.net/css?family=montserrat:300,400,400i,500,600,700,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=62be61ad">
+<link rel="stylesheet" href="/assets/site.css?v=a0813602">
 <style>
 .rd-hero{ padding-block: var(--space-8) var(--space-6); }
 .rd-hero__top{ display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); grid-template-areas: "title side"; gap: clamp(1.5rem,4vw,4rem); align-items: end; }
@@ -96,7 +96,7 @@
 .rd-form__fine{ font-size: .74rem; color: var(--stone); margin-block-start: .8rem; line-height: 1.5; }
 .rd-form .f-ok{ padding-block: var(--space-8); }
 .rd-form .f-ok h3{ margin-block: var(--space-3) var(--space-2); font-size: 1.6rem; }
-.rd-form .f-ok-icon{ inline-size: 52px; block-size: 52px; border-radius: 999px; display: grid; place-items: center; background: var(--teal); color: var(--cream); font-weight: 700; font-size: 1.3rem; }
+
 
 .rd-faq-wrap{ display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: clamp(2rem,5vw,4.5rem); align-items: start; }
 .rd-faq-wrap h2{ margin-block-start: var(--space-2); max-inline-size: 14ch; }
@@ -341,8 +341,18 @@
           var pp = ok.querySelector('p');
           if (pp) pp.textContent = message;
         }
+        // Le check prend la place exacte du formulaire (même hauteur) et revient
+        // à l'écran : sur un long formulaire, la confirmation ne doit pas se
+        // retrouver hors de vue (retour d'Alexandre, 2026-11-03).
+        if (ok && fields) ok.style.minHeight = fields.offsetHeight + 'px';
         if (fields) fields.hidden = true;
-        if (ok) ok.hidden = false;
+        if (ok){
+          ok.hidden = false;
+          ok.setAttribute('tabindex', '-1');
+          var r = ok.getBoundingClientRect();
+          if (r.top < 0 || r.bottom > window.innerHeight) ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          ok.focus({ preventScroll: true });
+        }
       }
 
       var sujet = 'Site web — ' + (d.subject || 'Message') + (d.name ? ' — ' + d.name : '');

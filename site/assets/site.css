@@ -1469,8 +1469,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .f-submit:not(.btn-primary){margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
 .f-submit:not(.btn-primary):hover{background:var(--blue);transform:translateY(-2px)}
 .f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
-.f-ok{text-align:center;padding:2rem 1rem}
-.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
+.f-ok{text-align:center;padding:2rem 1rem;display:grid;align-content:center;justify-items:center}
+.f-ok[hidden],.f-fields[hidden]{display:none}
+.f-ok:focus{outline:0}
+.f-ok-icon{width:96px;height:96px;border-radius:999px;background:var(--blue);color:var(--cream);display:grid;place-items:center;font-size:2.8rem;font-weight:700;margin:0 auto 1.2rem}
 .f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
 .f-ok p{color:var(--ink-2)}
 .prop-similar-grid{

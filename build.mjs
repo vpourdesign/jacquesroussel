@@ -157,8 +157,18 @@ const leadFormScript = `
           var pp = ok.querySelector('p');
           if (pp) pp.textContent = message;
         }
+        // Le check prend la place exacte du formulaire (même hauteur) et revient
+        // à l'écran : sur un long formulaire, la confirmation ne doit pas se
+        // retrouver hors de vue (retour d'Alexandre, 2026-11-03).
+        if (ok && fields) ok.style.minHeight = fields.offsetHeight + 'px';
         if (fields) fields.hidden = true;
-        if (ok) ok.hidden = false;
+        if (ok){
+          ok.hidden = false;
+          ok.setAttribute('tabindex', '-1');
+          var r = ok.getBoundingClientRect();
+          if (r.top < 0 || r.bottom > window.innerHeight) ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          ok.focus({ preventScroll: true });
+        }
       }
 
       var sujet = 'Site web — ' + (d.subject || 'Message') + (d.name ? ' — ' + d.name : '');
@@ -2517,8 +2527,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
 .f-submit:not(.btn-primary){margin-top:.4rem;justify-self:start;background:var(--ink);color:#fff;padding:1.1rem 1.8rem;border:0;border-radius:999px;font-family:inherit;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .3s var(--ease),background .3s var(--ease)}
 .f-submit:not(.btn-primary):hover{background:var(--blue);transform:translateY(-2px)}
 .f-note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.5}
-.f-ok{text-align:center;padding:2rem 1rem}
-.f-ok-icon{width:64px;height:64px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1.2rem}
+.f-ok{text-align:center;padding:2rem 1rem;display:grid;align-content:center;justify-items:center}
+.f-ok[hidden],.f-fields[hidden]{display:none}
+.f-ok:focus{outline:0}
+.f-ok-icon{width:96px;height:96px;border-radius:999px;background:var(--blue);color:var(--cream);display:grid;place-items:center;font-size:2.8rem;font-weight:700;margin:0 auto 1.2rem}
 .f-ok h3{font-size:1.4rem;margin-bottom:.6rem}
 .f-ok p{color:var(--ink-2)}
 .prop-similar-grid{
@@ -7391,7 +7403,7 @@ const radonCss = `<style>
 .rd-form__fine{ font-size: .74rem; color: var(--stone); margin-block-start: .8rem; line-height: 1.5; }
 .rd-form .f-ok{ padding-block: var(--space-8); }
 .rd-form .f-ok h3{ margin-block: var(--space-3) var(--space-2); font-size: 1.6rem; }
-.rd-form .f-ok-icon{ inline-size: 52px; block-size: 52px; border-radius: 999px; display: grid; place-items: center; background: var(--teal); color: var(--cream); font-weight: 700; font-size: 1.3rem; }
+
 
 .rd-faq-wrap{ display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: clamp(2rem,5vw,4.5rem); align-items: start; }
 .rd-faq-wrap h2{ margin-block-start: var(--space-2); max-inline-size: 14ch; }
