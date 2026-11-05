@@ -661,8 +661,26 @@ function ingestFromCentris(membres) {
   console.log(`  appartenant à l'équipe            : ${myListings.length}`);
 
   // Ce que les filtres écartent, avec le motif
-  const ecartees = { location: [], peuDePhotos: [] };
+  const ecartees = { location: [], peuDePhotos: [], statut: [] };
+  // Col. 115 = statut de l'inscription. « EV » = en vigueur. Centris garde les
+  // propriétés vendues dans l'export avec « VE » (vérifié le 2026-11-05 sur
+  // 412 Laplante, rue Schulz, 3465 Émile et 38 Mallette) : sans ce filtre,
+  // elles restaient en ligne indéfiniment. Tout statut autre que EV (ou vide)
+  // est écarté et journalisé avec son code.
+  const statutOf = r => (r[115] || '').trim().toUpperCase();
   for (const r of myListings) {
+    const st = statutOf(r);
+    if (st && st !== 'EV') {
+      const adresse = [(r[25] || '').trim(), (r[27] || '').trim()].filter(Boolean).join(' ');
+      ecartees.statut.push(`${r[0]} ${adresse} (statut ${st})`);
+    }
+  }
+  if (ecartees.statut.length) {
+    console.log(`  ↳ écartées, statut non actif      : ${ecartees.statut.length}  (col. 115 : VE = vendue)`);
+    ecartees.statut.forEach(x => console.log(`       ${x}`));
+  }
+  for (const r of myListings) {
+    if (statutOf(r) && statutOf(r) !== 'EV') continue;
     const nbPhotos = (photosByMls[r[0]] || []).length;
     const adresse = [(r[25] || '').trim(), (r[27] || '').trim()].filter(Boolean).join(' ');
     if (!(parseFloat(r[6]) > 0)) ecartees.location.push(`${r[0]} ${adresse}${r[9] ? ` (loyer ${r[9]} $)` : ''}`);
@@ -677,7 +695,7 @@ function ingestFromCentris(membres) {
     ecartees.peuDePhotos.forEach(x => console.log(`       ${x}`));
   }
 
-  let properties = myListings.map(r => {
+  let properties = myListings.filter(r => !statutOf(r) || statutOf(r) === 'EV').map(r => {
     const mls = r[0], price = parseFloat(r[6])||0;
     // r[25] = NO_CIVIQUE (vérifié contre ADDENDA), r[26] = parfois suffixe ou unité
     // r[27] = NOM_RUE, r[28] = unité/apt secondaire

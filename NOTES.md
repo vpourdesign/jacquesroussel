@@ -8,6 +8,7 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
+- [ ] Pousser le filtre statut Centris (col. 115) et relancer le workflow : vérifier que les 4 fiches vendues disparaissent, puis répondre au client (2026-11-05)
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
 - [ ] Trancher la crème du site : `site.css` déclare `#F7F5EE` (RE/MAX) mais le bloc `oklch` affiche l'ancienne crème maison partout (2026-10-27)
 - [ ] Landing radon (`/test-radon-gratuit/`) : confirmer l'offre avec Alexandre avant de la diffuser. La page promet un détecteur à long terme, l'analyse en laboratoire incluse, un résultat par courriel et un contact sous 48 h ouvrables. Qui fournit les détecteurs, combien, et comment on les remet ? Ajuster `RADON` dans `build.mjs` au besoin (2026-11-02)
@@ -18,7 +19,7 @@
 
 ### Fiches de propriété — décisions restées ouvertes (2026-09-03)
 
-- **⚠️ Le 3465 Rue Émile (MLS 15522328) est vendu mais toujours en ligne — pour Vincent.** Ce n'est pas le mécanisme de retrait qui est en cause : `pruneStaleListings()` fonctionne, cinq inscriptions ont bien quitté le site depuis août (15426301 le 11, 9030072 le 16, 28741070 le 18, 18350240 le 19, 10207368 le 27). Le cron a tourné le 2 septembre et cette inscription est **encore dans l'export Centris**, ajoutée le 9 août et jamais retirée depuis. Deux hypothèses : soit le zip DriveHQ contient les inscriptions vendues avec un statut dans une colonne qu'on n'ingère pas — le build n'en lit que quinze sur environ cent cinquante —, soit la vente est conditionnelle et Centris continue légitimement de l'exporter. **Pour trancher :** lancer le workflow « Daily Centris ingest » à la main (onglet Actions → Run workflow) en mettant `15522328` dans le champ *debug_mls*. Le journal affiche alors toutes les colonnes non vides de la ligne brute. S'il en existe une qui porte le statut, on l'ajoute au filtre de `ingestFromCentris()` et le problème est réglé pour de bon ; s'il n'y en a pas, c'est à Centris que ça se règle.
+- **Propriétés vendues encore en ligne : cause trouvée (2026-11-05).** Diagnostic `debug_mls` lancé sur les quatre fiches signalées par le client (412 Laplante, rue Schulz, 3465 Émile, 38 Mallette) : Centris les garde dans l'export avec le statut `VE` (vendue) en colonne 115, alors que les fiches actives portent `EV`. Le build ne lisait pas cette colonne. Filtre ajouté dans `ingestFromCentris()` (`build.mjs`) : tout statut autre que `EV` est écarté et journalisé.
 
 - **Le dictionnaire de caractéristiques Centris n'est plus affiché nulle part.** `decodeFeature()` et son dictionnaire `FEATURES` (haut de `build.mjs`) ne sont plus appelés depuis le retrait de la liste de codes. Ils restent en place : c'est un travail de décodage qui servira si on veut un jour une vraie section « détails complets », lisible cette fois. Le dictionnaire est incomplet — il ne couvre ni ASP, ni BALC, ni CREU, ni INTG, ni CEGP, ce qui est précisément ce qui rendait la liste illisible. **À supprimer ou à compléter, pas à laisser tel quel indéfiniment.**
 
