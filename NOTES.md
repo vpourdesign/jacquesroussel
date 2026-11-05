@@ -8,7 +8,7 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
-- [ ] Pousser le filtre statut Centris (col. 115) et relancer le workflow : vérifier que les 4 fiches vendues disparaissent, puis répondre au client (2026-11-05)
+- [ ] Répondre au client : les 4 propriétés vendues sont retirées du site (2026-11-05)
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
 - [ ] Trancher la crème du site : `site.css` déclare `#F7F5EE` (RE/MAX) mais le bloc `oklch` affiche l'ancienne crème maison partout (2026-10-27)
 - [ ] Landing radon (`/test-radon-gratuit/`) : confirmer l'offre avec Alexandre avant de la diffuser. La page promet un détecteur à long terme, l'analyse en laboratoire incluse, un résultat par courriel et un contact sous 48 h ouvrables. Qui fournit les détecteurs, combien, et comment on les remet ? Ajuster `RADON` dans `build.mjs` au besoin (2026-11-02)
@@ -93,6 +93,7 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
+- [2026-11-05] Filtre statut Centris (col. 115) poussé : 412 Laplante, rue Schulz, 3465 Émile et 38 Mallette retirés du site (9 fiches actives)
 - [2026-11-02] Formspree branché sur les cinq formulaires (`FORM_ENDPOINT` = https://formspree.io/f/mkjjpqeo). L'évaluation gratuite, qui n'envoyait rien du tout depuis la mise en ligne, envoie maintenant l'adresse, la propriété et les coordonnées. La fenêtre des guides ne promet plus un envoi automatique du PDF : quelqu'un doit l'envoyer à la main.
 - [2026-11-02] Style des formulaires de contact et de rendez-vous rétabli (effacé par erreur dans `dda363e` le 2026-09-03) et feuille de style versionnée (`site.css?v=`) pour contourner le cache d'un an.
 - [2026-11-02] Landing radon : lien Poumon Québec, retrait de la liste des villes et du bloc « Offert par », champ Ville en texte libre (corrections d'Alexandre).
