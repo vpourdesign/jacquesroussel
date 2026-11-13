@@ -93,6 +93,7 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
+- [2026-11-13] Article « Où acheter à Saint-Eustache : le guide des secteurs » ajouté au blogue
 - [2026-11-05] Filtre statut Centris (col. 115) poussé : 412 Laplante, rue Schulz, 3465 Émile et 38 Mallette retirés du site (9 fiches actives)
 - [2026-11-02] Formspree branché sur les cinq formulaires (`FORM_ENDPOINT` = https://formspree.io/f/mkjjpqeo). L'évaluation gratuite, qui n'envoyait rien du tout depuis la mise en ligne, envoie maintenant l'adresse, la propriété et les coordonnées. La fenêtre des guides ne promet plus un envoi automatique du PDF : quelqu'un doit l'envoyer à la main.
 - [2026-11-02] Style des formulaires de contact et de rendez-vous rétabli (effacé par erreur dans `dda363e` le 2026-09-03) et feuille de style versionnée (`site.css?v=`) pour contourner le cache d'un an.

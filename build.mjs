@@ -863,7 +863,8 @@ const NAV = [
       { title: 'Financement', links: [
         ['Financement hypothécaire','/acheter/financement-hypothecaire/'],
         ['Calculatrices','/acheter/calculatrices/'],
-        ['Quel revenu faut-il&nbsp;?','/blog/premier-acheteur-saint-eustache-revenu/']
+        ['Quel revenu faut-il&nbsp;?','/blog/premier-acheteur-saint-eustache-revenu/'],
+        ['Où acheter à Saint-Eustache','/blog/ou-acheter-saint-eustache-secteurs/']
       ]}
     ],
     feature: { eyebrow:'Guide gratuit', title:"Guide de l'acheteur", text:'Financement, inspection, promesse d\'achat : ce qu\'il faut savoir avant de signer.', href:'/guides/', cta:'Recevoir le guide' }
@@ -3094,6 +3095,9 @@ body.header-overlay .site-footer{ margin-block-start: 0; border-block-start: 1px
   border-radius:var(--radius); font-size:.95rem;
 }
 .prose .note p:last-child{ margin-block-end:0; }
+.prose figure{ margin-block:1rem 1.4rem; }
+.prose figure img{ display:block; inline-size:100%; block-size:auto; border-radius:var(--radius); border:1px solid var(--line); }
+.prose figcaption{ margin-block-start:.5rem; font-size:.82rem; color:var(--muted); }
 .prose a{ color:var(--bronze); text-decoration:underline; text-underline-offset:3px; }
 .blue-block{ background:var(--teal); color:var(--cream); border-radius:var(--radius-lg); padding:clamp(1.75rem,3vw,2.5rem); }
 .blue-block.soft{ background:var(--blue-soft); color:var(--ink); }
@@ -4945,6 +4949,7 @@ ${cityBlock}
       <h2>Le marché immobilier à ${cityName}</h2>
       <p>${cityName} fait partie des territoires recherchés de la Rive-Nord : tissu familial stable, accès à Montréal et offre de services solide nourrissent une demande constante.</p>
       <p>La lecture fine du marché de ${cityName} demande cependant de la précision : chaque quartier a son propre cycle, sa propre courbe de prix, ses propres typologies acheteurs. C'est cette lecture qu'on pratique pour chaque client, avec les données Centris à jour.</p>
+      ${slugC === 'saint-eustache' ? `<p>Secteur par secteur, du Vieux aux rangs de La Fresnière&nbsp;: <a href="/blog/ou-acheter-saint-eustache-secteurs/">Où acheter à Saint-Eustache</a>.</p>` : ''}
       <h2>Pourquoi choisir Équipe Jacques-Roussel à ${cityName}</h2>
       <ul>
         <li>Connaissance rue par rue du territoire</li>
@@ -6672,7 +6677,29 @@ const joursUni = c => mkt(c, 'unifamiliale', 'joursSurLeMarche');
 const prixCopro = c => mkt(c, 'copropriete', 'prixMedian');
 const ventes   = c => mkt(c, 'total', 'ventes');
 const inscrits = c => mkt(c, 'total', 'inscriptionsActives');
+const varInscrits = c => mkt(c, 'total', 'inscriptionsActives', 'variation');
+const inscritsCopro    = c => mkt(c, 'copropriete', 'inscriptionsActives');
+const varInscritsCopro = c => mkt(c, 'copropriete', 'inscriptionsActives', 'variation');
+// Cumul depuis janvier. Centris laisse souvent la médiane trimestrielle des
+// copropriétés vide (trop peu de ventes) : le cumul prend le relais.
+const mktCumul = (citySlug, section, row, champ = 'value') =>
+  marketFor(citySlug)?.sections?.[section]?.rows?.[row]?.cumul?.[champ] || null;
+const prixCoproCumul  = c => mktCumul(c, 'copropriete', 'prixMedian');
+const joursCoproCumul = c => mktCumul(c, 'copropriete', 'joursSurLeMarche');
 const trim = marketPeriod ? marketPeriod.toLowerCase() : 'dernier trimestre publié';
+// « 3e trimestre », sans l'année, pour les phrases qui ne la répètent pas.
+const trimCourt = trim.replace(/\s+\d{4}$/, '');
+// FAQ d'article : le HTML sert au corps, la version texte au JSON-LD FAQPage.
+const faqHtml = faq => `<h2>Questions fréquentes</h2>\n${faq.map(f => `<h3>${f.q}</h3>\n<p>${f.a}</p>`).join('\n')}`;
+const faqTexte = h => h.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ');
+const FAQ_SECTEURS_SE = [
+  { q: 'Quel est le prix médian d\'une maison à Saint-Eustache&nbsp;?',
+    a: `Au ${trim}, une unifamiliale s'est vendue ${prixUni('saint-eustache') || '598 250 $'} en valeur médiane, en hausse de ${varUni('saint-eustache') || '5 %'} sur un an, selon Centris. Le condo s'établit à ${prixCoproCumul('saint-eustache') || '366 250 $'} en médiane depuis le début de l'année.` },
+  { q: 'Quel secteur de Saint-Eustache est le plus abordable&nbsp;?',
+    a: `Le centre, autour des boulevards Arthur-Sauvé et Pie-XII, en copropriété. C'est aussi le segment où l'offre a le plus augmenté cette année, ce qui donne de la marge aux acheteurs.` },
+  { q: 'Comment savoir si une maison est en zone inondable&nbsp;?',
+    a: `Le gouvernement du Québec propose <a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/eau/zones-inondables-mobilite-rives-littoral/verifier-propriete" target="_blank" rel="noopener">un outil de vérification par adresse sur Québec.ca</a>. Complétez avec la Ville de Saint-Eustache, l'historique des sinistres du vendeur et une soumission d'assurance avant de lever vos conditions.` }
+];
 // Valeurs calculées à partir des mêmes chiffres que les tableaux : elles ne
 // peuvent pas se contredire quand Centris publie un nouveau trimestre.
 const nb = v => { const n = numFrom(v); return n === null ? null : n; };
@@ -6997,6 +7024,99 @@ ${srcCentris('Sainte-Marthe-sur-le-Lac')}`
 <p>Une fois la propriété ciblée, là on regarde les vraies ventes comparables de la rue et des rues avoisinantes. C'est le seul niveau de détail qui vaut quelque chose, et il n'existe dans aucune statistique publique.</p>
 <p><a href="/nos-proprietes/?city=boisbriand">Voir nos inscriptions à Boisbriand</a>, consulter les <a href="/marche-immobilier/boisbriand/">statistiques Centris de la ville</a>, ou <a href="/rendez-vous/">nous parler de votre projet</a>.</p>
 ${srcCentris('Boisbriand')}`
+  },
+
+  {
+    slug: 'ou-acheter-saint-eustache-secteurs',
+    title: 'Où acheter à Saint-Eustache : le guide des secteurs',
+    metaTitle: 'Où acheter à Saint-Eustache ? Le guide des secteurs | Équipe Jacques-Roussel',
+    metaDesc: 'Vieux-Saint-Eustache, quartier des Îles, Nord-Est, La Fresnière : le portrait de chaque secteur, les points à vérifier avant l\'offre et les chiffres Centris.',
+    city: 'saint-eustache',
+    teaser: 'Du Vieux-Saint-Eustache aux rangs de La Fresnière, six secteurs, six façons d\'habiter la ville. Ce que chacun offre, ce qu\'il faut vérifier avant l\'offre.',
+    image: '/photos/stock/saint-eustache-vue-aerienne.jpg',
+    date: '2026-11-13',
+    faq: FAQ_SECTEURS_SE,
+    body: `
+<p>Saint-Eustache compte près de 45 000 habitants, et ils vivent dans des villes très différentes sans changer de code postal. Il y a le noyau villageois du XVIIIe siècle au bord de l'eau, les rues de bungalows des années 1970, les projets récents au nord de la 640 et les rangs agricoles où les voisins se comptent sur une main.</p>
+<p>Au ${trim}, une unifamiliale s'y vendait ${prixUni('saint-eustache') || '598 250 $'} en valeur médiane selon Centris. Ce chiffre résume toute la ville. Pour choisir où acheter, il faut descendre d'un étage, au niveau du secteur. C'est ce qu'on fait ici.</p>
+
+<h2>Le marché en ce moment</h2>
+<p>Trois chiffres pour situer la suite.</p>
+<ul>
+  <li><strong>Unifamiliale</strong>&nbsp;: médiane de ${prixUni('saint-eustache') || '598 250 $'}, en hausse de ${varUni('saint-eustache') || '5 %'} sur un an. Les maisons partent en ${joursUni('saint-eustache') || '23'} jours en moyenne.</li>
+  <li><strong>Copropriété</strong>&nbsp;: ${inscritsCopro('saint-eustache') || '51'} condos à vendre au ${trimCourt}, soit ${varInscritsCopro('saint-eustache') || '121 %'} de plus qu'il y a un an. La médiane depuis janvier s'établit à ${prixCoproCumul('saint-eustache') || '366 250 $'}, avec ${joursCoproCumul('saint-eustache') || '39'} jours en moyenne avant la vente.</li>
+  <li><strong>Ensemble du marché</strong>&nbsp;: ${inscrits('saint-eustache') || '142'} propriétés en vigueur, ${varInscrits('saint-eustache') || '26 %'} de plus qu'à pareille date l'an dernier.</li>
+</ul>
+<p>Pour un acheteur, la lecture est simple. La maison unifamiliale reste disputée et demande d'être prêt à faire une offre rapidement. Le condo, lui, offre du choix et du temps pour négocier, une situation rare sur la Rive-Nord depuis quelques années.</p>
+
+<h2>Comment la ville se découpe</h2>
+<p>Sur Centris, Saint-Eustache est divisée en six zones&nbsp;: Centre-Est, Centre-Ouest, Est, Nord-Est, Nord-Ouest et Ouest. Elles servent à filtrer une recherche. Les gens d'ici, eux, parlent du Vieux, des Îles, de La Fresnière. On suit leur découpage, avec un repère simple&nbsp;: la rivière du Chêne traverse la ville du nord-ouest au sud-est, et l'autoroute 640 la coupe d'est en ouest.</p>
+
+<h2>Le Vieux-Saint-Eustache</h2>
+<p>C'est le cœur historique, là où la rivière du Chêne rejoint la rivière des Mille Îles. L'église, construite de 1780 à 1783, porte encore la mémoire de la bataille de 1837. À quelques pas, le moulin Légaré tourne depuis 1762, et on le présente comme le plus vieux moulin à eau en activité continue en Amérique du Nord. Le manoir Globensky et la maison Chénier-Sauvé complètent le décor, le tout dans un rayon d'un kilomètre.</p>
+<p>Côté habitation, on trouve surtout des unifamiliales isolées sous de grands arbres, quelques plex et des maisons anciennes le long de la rue Saint-Eustache et du chemin d'Oka.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> ceux qui veulent marcher jusqu'au café, à la rivière et aux fêtes du Vieux, et qui aiment une maison avec une histoire.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> l'âge réel des composantes. Fondations, plomberie, entrée électrique et isolation ont chacune leur propre âge, souvent bien différent de celui de la façade. Renseignez-vous aussi auprès de la Ville sur les règles qui encadrent les travaux extérieurs dans le secteur patrimonial, avant de prévoir de changer portes, fenêtres ou revêtement. Et pour toute propriété près de l'eau, consultez la cote de crue.</p>
+
+<h2>Le quartier des Îles</h2>
+<p>À l'est du centre-ville, en bordure de la rivière des Mille Îles, le quartier des Îles s'organise autour du parc Mathers. Les rues résidentielles y sont calmes, et les commerces du quotidien (épiceries, cinéma, SAQ) restent à quelques minutes.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> les familles qui veulent un quartier établi, un parc au bout de la rue et la rivière tout près.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> la proximité de l'eau a un prix, et il se joue parfois dans le contrat d'assurance. Le gouvernement du Québec déploie une nouvelle cartographie des zones inondables, et elle peut changer la situation d'une adresse. Vérifiez la propriété sur <a href="https://www.quebec.ca/agriculture-environnement-et-ressources-naturelles/eau/zones-inondables-mobilite-rives-littoral/verifier-propriete" target="_blank" rel="noopener">l'outil de Québec.ca</a>, demandez au vendeur l'historique des sinistres et obtenez une soumission d'assurance avant de lever vos conditions.</p>
+
+<h2>Le centre&nbsp;: Arthur-Sauvé, Pie-XII et la 640</h2>
+<figure>
+  <img src="/photos/stock/immeuble-logements.jpg" alt="Immeuble de condos" width="2400" height="1800" loading="lazy" decoding="async">
+  <figcaption>Photo d'illustration</figcaption>
+</figure>
+<p>C'est le secteur le plus dense de la ville. Les immeubles à logements et les complexes de condos s'alignent le long du boulevard Pie-XII, on trouve des jumelés autour de la rue Beauséjour, et le boulevard Arthur-Sauvé concentre les commerces et les services. La Place Saint-Eustache est à côté, l'hôpital aussi, et l'autoroute 640 se prend en deux minutes.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> le premier acheteur, la personne seule, le couple qui veut tout faire à pied, le retraité qui troque la maison pour un condo. C'est aussi ici que l'inventaire de copropriétés a le plus gonflé, donc là où l'acheteur a le plus de marge en ce moment.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> en copropriété, le prix d'achat raconte la moitié de l'histoire. Demandez l'étude du fonds de prévoyance, les procès-verbaux des deux ou trois dernières assemblées, le carnet d'entretien et le budget du syndicat. Un fonds bien garni et des travaux déjà planifiés, c'est souvent le meilleur rabais de la transaction.</p>
+
+<h2>Le Sud-Est</h2>
+<p>Arbres matures, terrains généreux, bungalows et maisons à paliers&nbsp;: le Sud-Est s'est surtout bâti entre 1960 et 1980. L'autoroute 13, la 640 et le boulevard Arthur-Sauvé sont tout près, ce qui en fait l'un des secteurs les plus pratiques pour se rendre à Laval ou à Montréal.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> la famille qui veut un vrai terrain et accepte une mise à jour. Une maison de cette époque, bien entretenue, se rénove au rythme de son budget.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> c'est le secteur où l'inspection préachat rapporte le plus. Drain français, toiture, fenêtres, entrée électrique, présence d'un ancien réservoir à mazout enfoui. Avec un sous-sol aménagé, un test de radon vaut aussi la peine.</p>
+
+<h2>Le Nord et le Nord-Est</h2>
+<figure>
+  <img src="/photos/stock/quartier-rues.jpg" alt="Vue aérienne d'un quartier résidentiel récent" width="2400" height="1350" loading="lazy" decoding="async">
+  <figcaption>Photo d'illustration</figcaption>
+</figure>
+<p>Au nord, la ville est plus jeune. Le Nord-Est regroupe les développements les plus récents, condos et maisons haut de gamme, aux abords du Parc Nature Saint-Eustache, plus de 65 hectares de sentiers qui se font en ski de fond et en raquette l'hiver. Plus à l'ouest, le secteur nord réunit écoles primaires, École secondaire des Patriotes et grandes surfaces.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> la famille qui veut du récent, une cour clôturée et l'école à distance de vélo.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> si la maison a moins de cinq ans, demandez le certificat de garantie de construction et ce qui reste couvert à la revente. Lisez aussi les servitudes au certificat de localisation, fréquentes dans les projets récents (passage de services, clôtures, aménagement des façades).</p>
+
+<h2>La Fresnière et les rangs</h2>
+<p>À l'ouest et au nord, la ville s'ouvre sur la campagne. Le long du chemin Fresnière et des chemins de la Rivière Nord et de la Rivière Sud, les terrains s'étirent, les maisons de campagne côtoient les érablières, les vergers et un vignoble. L'autoroute 640 reste à une dizaine de minutes.</p>
+<p><strong>À qui ça convient&nbsp;:</strong> ceux qui veulent de l'espace, un garage double ou un atelier, et la noirceur la nuit.</p>
+<p><strong>Ce qu'il faut vérifier&nbsp;:</strong> une bonne partie du secteur est en zone agricole. Agrandir, construire un bâtiment ou séparer le terrain demande alors une autorisation de la CPTAQ, à valider avant l'offre si vous avez un projet en tête. Sur une propriété desservie par un puits et une fosse septique, exigez une analyse d'eau et la preuve de conformité de l'installation. Et testez la connexion internet sur place&nbsp;: la fibre arrive inégalement dans les rangs.</p>
+
+<h2>Le bon secteur selon votre projet</h2>
+<div class="tbl"><table>
+  <thead><tr><th>Votre projet</th><th>Les secteurs à regarder</th></tr></thead>
+  <tbody>
+    <tr><td>Premier achat, budget serré</td><td>Le centre, en condo ou en jumelé</td></tr>
+    <tr><td>Famille, terrain, rénovations acceptées</td><td>Le Sud-Est</td></tr>
+    <tr><td>Famille, construction récente</td><td>Le Nord et le Nord-Est</td></tr>
+    <tr><td>Cachet, rivière, vie de quartier</td><td>Le Vieux-Saint-Eustache, le quartier des Îles</td></tr>
+    <tr><td>Espace, atelier, nature</td><td>La Fresnière et les rangs</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Et ensuite, la rue</h2>
+<p>Une fois le secteur choisi, la recherche se joue à l'échelle de la rue. Les statistiques publiques s'arrêtent à la ville entière, alors on sort les ventes comparables des derniers mois autour de l'adresse qui vous intéresse. C'est ce portrait-là qui permet de faire une offre juste.</p>
+<p>Pour préparer la suite&nbsp;:</p>
+<ul>
+  <li><a href="/nos-proprietes/?city=saint-eustache">Voir nos propriétés à vendre à Saint-Eustache</a></li>
+  <li><a href="/marche-immobilier/saint-eustache/">Consulter les statistiques Centris de Saint-Eustache</a></li>
+  <li><a href="/blog/premier-acheteur-saint-eustache-revenu/">Premier acheteur&nbsp;: quel revenu faut-il&nbsp;?</a></li>
+  <li><a href="/blog/acheter-deux-montagnes-ou-saint-eustache/">Saint-Eustache ou Deux-Montagnes&nbsp;?</a></li>
+  <li><a href="/rendez-vous/">Nous parler de votre projet</a></li>
+</ul>
+
+${faqHtml(FAQ_SECTEURS_SE)}
+<p class="note"><strong>Photo.</strong> Vue aérienne du centre de Saint-Eustache, par <a href="https://commons.wikimedia.org/wiki/User:Gacard" target="_blank" rel="noopener">Gacard</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC BY-SA 4.0</a>, via Wikimedia Commons. Image recadrée.</p>
+${srcCentris('Saint-Eustache')}`
   }
 ];
 writePage('blog/index.html', layout({
@@ -7051,20 +7171,31 @@ for (const post of BLOG_POSTS) {
     h1: post.title,
     lead: post.teaser,
     image: post.image,
-    title: `${post.title} | Équipe Jacques-Roussel`,
-    desc: post.teaser,
+    title: post.metaTitle || `${post.title} | Équipe Jacques-Roussel`,
+    desc: post.metaDesc || post.teaser,
     canonical: `https://jacquesroussel.com/blog/${post.slug}/`,
-    jsonld: JSON.stringify({
-      "@context":"https://schema.org","@type":"Article",
-      "headline": post.title,
-      "description": post.teaser,
-      "author":{"@type":"Organization","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
-      "image":`https://jacquesroussel.com${post.image}`,
-      "datePublished": post.date,
-      "dateModified": market.fetchedAt || post.date,
-      "publisher":{"@type":"Organization","name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL"},
-      "mainEntityOfPage":`https://jacquesroussel.com/blog/${post.slug}/`
-    }),
+    jsonld: (() => {
+      const article = {
+        "@context":"https://schema.org","@type":"Article",
+        "headline": post.title,
+        "description": post.teaser,
+        "author":{"@type":"Organization","name":"Équipe Jacques-Roussel","url":"https://jacquesroussel.com/a-propos/"},
+        "image":`https://jacquesroussel.com${post.image}`,
+        "datePublished": post.date,
+        "dateModified": market.fetchedAt || post.date,
+        "publisher":{"@type":"Organization","name":"Équipe Jacques-Roussel · RE/MAX CRYSTAL"},
+        "mainEntityOfPage":`https://jacquesroussel.com/blog/${post.slug}/`
+      };
+      // FAQ optionnelle : un FAQPage s'ajoute seulement aux articles qui en ont une.
+      if (!post.faq) return JSON.stringify(article);
+      return JSON.stringify([article, {
+        "@context":"https://schema.org","@type":"FAQPage",
+        "mainEntity": post.faq.map(f => ({
+          "@type":"Question","name": faqTexte(f.q),
+          "acceptedAnswer":{"@type":"Answer","text": faqTexte(f.a)}
+        }))
+      }]);
+    })(),
     body: post.body,
     afterProse: marketHighlightsHtml(post.city)
   }));
