@@ -6507,7 +6507,7 @@ writePage(`blog/${featuredArticle.slug}/index.html`, layout({
     </div>
 
     <figure class="a-figure">
-      <img src="/photos/stock/maison-blanche-arbres.jpg" alt="Maison unifamiliale entourée d'arbres" loading="lazy">
+      <img src="/photos/stock/quartier-rues.jpg" alt="Vue aérienne de rues résidentielles" loading="lazy">
       <figcaption>Une médiane municipale ne remplace jamais une comparaison de rue à rue.</figcaption>
     </figure>
 
@@ -6724,7 +6724,7 @@ const BLOG_POSTS = [
     title: 'Combien vaut ma maison à Saint-Eustache ?',
     city: 'saint-eustache',
     teaser: 'La médiane municipale, ce qu\'elle vaut et ce qu\'elle ne dit pas de votre rue.',
-    image: '/photos/stock/maison-blanche-arbres.jpg',
+    image: '/photos/stock/saint-eustache-vue-aerienne.jpg',
     date: '2026-08-13',
     body: `
 <p>C'est la question qu'on nous pose le plus souvent, et la réponse honnête tient en une phrase : le prix médian de Saint-Eustache ne vous apprend à peu près rien sur votre propriété. Il sert à mesurer le marché, pas une maison.</p>
@@ -6764,6 +6764,7 @@ const BLOG_POSTS = [
 <p>Une analyse comparative sérieuse demande une visite. On regarde la propriété, on note ce qui la distingue des comparables, on sort les ventes du secteur et on vous remet un rapport écrit avec la fourchette et le raisonnement derrière. Vous voyez les propriétés qu'on a retenues et pourquoi.</p>
 <p>C'est gratuit et ça n'engage à rien. Beaucoup de gens le demandent deux ou trois ans avant de vendre, simplement pour savoir où ils en sont. C'est une très bonne façon de l'utiliser.</p>
 <p><a href="/vendre/evaluation-gratuite/">Demander une évaluation gratuite</a> ou <a href="/marche-immobilier/saint-eustache/">consulter les statistiques détaillées de Saint-Eustache</a>.</p>
+<p class="note"><strong>Photo.</strong> Vue aérienne du centre de Saint-Eustache, par <a href="https://commons.wikimedia.org/wiki/User:Gacard" target="_blank" rel="noopener">Gacard</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.fr" target="_blank" rel="noopener">CC BY-SA 4.0</a>, via Wikimedia Commons. Image recadrée.</p>
 ${srcCentris('Saint-Eustache')}`
   },
 

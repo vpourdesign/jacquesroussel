@@ -8,6 +8,7 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
+- [ ] Remplacer les photos de stock trompeuses : en-tête de « Les 7 étapes pour vendre » (`maison-contemporaine.jpg`, banlieue avec montagnes), pages Condo (`immeuble-condos.jpg`, tours de style Düsseldorf) et Terrain (`terrain-boise.jpg`, champ boueux) (2026-11-13)
 - [ ] Répondre au client : les 4 propriétés vendues sont retirées du site (2026-11-05)
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
 - [ ] Trancher la crème du site : `site.css` déclare `#F7F5EE` (RE/MAX) mais le bloc `oklch` affiche l'ancienne crème maison partout (2026-10-27)
