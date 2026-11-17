@@ -1,9 +1,9 @@
 {
-  "total": 9,
-  "avgPrice": 1402567,
-  "totalValue": 12623100,
+  "total": 8,
+  "avgPrice": 1536638,
+  "totalValue": 12293100,
   "byCity": {
-    "Saint-Jérôme": 4,
+    "Saint-Jérôme": 3,
     "Laval": 3,
     "Terrebonne": 1,
     "Sainte-Julienne": 1
@@ -12,11 +12,11 @@
     "Terrain": 4,
     "Unifamiliale": 2,
     "Multilogements": 1,
-    "Condo": 2
+    "Condo": 1
   },
   "priceRanges": {
     "<300k": 3,
-    "300-500k": 1,
+    "300-500k": 0,
     "500-800k": 3,
     "800k-1.5M": 0,
     ">1.5M": 2
