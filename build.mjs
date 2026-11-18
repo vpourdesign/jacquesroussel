@@ -420,16 +420,30 @@ let properties, stats;
 // suivre la liste réellement publiée. En mode B, ceux du cache avaient été
 // calculés avant le dédoublonnage : le filtre annonçait « Laval (3) » et ne
 // montrait que 2 fiches.
+// Une location n'a pas de prix de vente, seulement un loyer (voir l'ingestion).
+// Fonction déclarée, pas une constante : l'ingestion s'exécute plus haut dans
+// le fichier que sa position.
+function estLocation(p) {
+  return !(p.price > 0) && Boolean(p.rent && p.rent.amount > 0);
+}
+
+// Les moyennes et les fourchettes de prix ne portent que sur les prix de
+// vente : un loyer de 18 $/pi²/an n'a rien à faire dans un prix moyen.
+// Le total, les villes et les types comptent toutes les inscriptions, parce
+// que les filtres de /nos-proprietes/ les affichent toutes.
 function calculerStats(properties) {
+  const ventes = properties.filter(p => p.price > 0);
   return {
     total: properties.length,
-    avgPrice: Math.round(properties.reduce((s,p)=>s+p.price,0) / Math.max(1,properties.length)),
-    totalValue: properties.reduce((s,p)=>s+p.price,0),
+    forSale: ventes.length,
+    forRent: properties.filter(estLocation).length,
+    avgPrice: Math.round(ventes.reduce((s,p)=>s+p.price,0) / Math.max(1,ventes.length)),
+    totalValue: ventes.reduce((s,p)=>s+p.price,0),
     byCity: properties.reduce((a,p)=>{a[p.city]=(a[p.city]||0)+1;return a;},{}),
     byType: properties.reduce((a,p)=>{a[p.typeLabel]=(a[p.typeLabel]||0)+1;return a;},{}),
     priceRanges: (() => {
       const ranges = {'<300k':0,'300-500k':0,'500-800k':0,'800k-1.5M':0,'>1.5M':0};
-      for (const p of properties) {
+      for (const p of ventes) {
         if (p.price<300000) ranges['<300k']++;
         else if (p.price<500000) ranges['300-500k']++;
         else if (p.price<800000) ranges['500-800k']++;
@@ -478,9 +492,14 @@ function affinerType(p) {
 // deux catégories contradictoires. On garde l'inscription la mieux documentée.
 function dedupliquer(liste, journal = []) {
   const vus = new Map(), index = new Map();
+  // Le prix fait partie de la clé ; pour une location, c'est le loyer avec son
+  // unité : deux locaux voisins à 3 $/pi²/an et à 500 $/mois ne se confondent pas.
+  const prixCle = p => estLocation(p)
+    ? `L${p.rent.amount}/${p.rent.unit}/${p.rent.per}`
+    : p.price;
   for (const p of liste) {
-    const cles = [`a|${norm(p.street)}|${p.price}`];
-    if (p.lat && p.lon) cles.push(`g|${p.lat.toFixed(3)},${p.lon.toFixed(3)}|${p.price}`);
+    const cles = [`a|${norm(p.street)}|${prixCle(p)}`];
+    if (p.lat && p.lon) cles.push(`g|${p.lat.toFixed(3)},${p.lon.toFixed(3)}|${prixCle(p)}`);
     const cleExistante = cles.map(c => index.get(c)).find(Boolean);
     if (!cleExistante) {
       const canon = cles[0];
@@ -515,7 +534,10 @@ function normaliser(liste) {
     console.log(`  ↳ écartées, doublons Centris      : ${journal.length}`);
     journal.forEach(d => console.log(`       ${d}`));
   }
-  return sansDoublons;
+  // Les propriétés à vendre d'abord, les locations ensuite (tri stable) : le
+  // rail de l'accueil prend les six premières et reste une vitrine de ventes
+  // tant qu'il y en a assez.
+  return sansDoublons.sort((a, b) => Number(estLocation(a)) - Number(estLocation(b)));
 }
 
 // L'ingestion du zip écrase site/data/*.json. C'est destructif : un zip local
@@ -679,15 +701,19 @@ function ingestFromCentris(membres) {
     console.log(`  ↳ écartées, statut non actif      : ${ecartees.statut.length}  (col. 115 : VE = vendue)`);
     ecartees.statut.forEach(x => console.log(`       ${x}`));
   }
+  // Les locations n'ont pas de prix de vente : leur loyer est en col. 9. Elles
+  // étaient écartées ici jusqu'au 2026-11-18, et le client voyait 15
+  // inscriptions sur Centris contre 9 sur le site. Seule une inscription sans
+  // prix de vente NI loyer est encore écartée.
   for (const r of myListings) {
     if (statutOf(r) && statutOf(r) !== 'EV') continue;
     const nbPhotos = (photosByMls[r[0]] || []).length;
     const adresse = [(r[25] || '').trim(), (r[27] || '').trim()].filter(Boolean).join(' ');
-    if (!(parseFloat(r[6]) > 0)) ecartees.location.push(`${r[0]} ${adresse}${r[9] ? ` (loyer ${r[9]} $)` : ''}`);
+    if (!(parseFloat(r[6]) > 0) && !(parseFloat(r[9]) > 0)) ecartees.location.push(`${r[0]} ${adresse}`);
     else if (nbPhotos < MIN_PHOTOS) ecartees.peuDePhotos.push(`${r[0]} ${adresse} (${nbPhotos} photo${nbPhotos > 1 ? 's' : ''})`);
   }
   if (ecartees.location.length) {
-    console.log(`  ↳ écartées, sans prix de vente    : ${ecartees.location.length}  (locations : le loyer est en col. 9)`);
+    console.log(`  ↳ écartées, ni prix ni loyer      : ${ecartees.location.length}`);
     ecartees.location.forEach(x => console.log(`       ${x}`));
   }
   if (ecartees.peuDePhotos.length) {
@@ -708,14 +734,18 @@ function ingestFromCentris(membres) {
     const civicEnd = stripZ((r[26]||'').trim());
     const streetName = (r[27]||'').trim();
     const unit = (r[28]||'').trim();
+    // Une unité résidentielle est un appartement ; ailleurs, c'est un local
+    // (« 3472 Ch. d'Oka, local D », comme sur Centris).
+    const catBrute = (r[53] || '').trim().toUpperCase();
+    const unitLabel = (catBrute === 'R' || catBrute === 'M' || !catBrute) ? 'app.' : 'local';
     const civicFull = (!civicEnd || civicEnd === civic) ? civic
       : /^\d/.test(civicEnd) ? `${civic}-${civicEnd}`   // deux civiques : « 163-163A »
       : civic + civicEnd;                                // simple lettre : « 17A »
     // Si streetName contient déjà le civic au début (ex: "17A Rue Labonté"), on l'utilise tel quel
     const streetStartsWithCivic = civic && new RegExp('^' + civic + '\\b').test(streetName);
     const street = streetStartsWithCivic
-      ? streetName + (unit ? `, app. ${unit}` : '')
-      : [civicFull, streetName].filter(Boolean).join(' ') + (unit ? `, app. ${unit}` : '');
+      ? streetName + (unit ? `, ${unitLabel} ${unit}` : '')
+      : [civicFull, streetName].filter(Boolean).join(' ') + (unit ? `, ${unitLabel} ${unit}` : '');
     // Type de propriété — r[53] catégorie et r[54] genre, les vrais codes
     // Centris. La description ne sert plus que de filet quand ils manquent.
     const centrisCat = (r[53] || '').trim();
@@ -724,8 +754,32 @@ function ingestFromCentris(membres) {
     const cp = r[29] || '';
     const munCode = (r[22] || '').trim();
     const city = villeDepuisCentris(munCode, cp, mls);
-    const yearBuilt = r[59] && /^\d{4}$/.test(r[59]) ? r[59] : (r[68] && /^\d{4}$/.test(r[68]) ? r[68] : '');
+    // Col. 68 porte une année quand col. 69 est vide, et la superficie du
+    // bâtiment quand col. 69 donne une unité (PC, MC) : un local de 2000 pi²
+    // ne doit pas devenir « Construite en 2000 ».
+    const uniteBatiment = (r[69] || '').trim().toUpperCase();
+    const yearBuilt = r[59] && /^\d{4}$/.test(r[59]) ? r[59]
+      : (!uniteBatiment && r[68] && /^\d{4}$/.test(r[68]) ? r[68] : '');
+    const areaBatiment = (uniteBatiment === 'PC' || uniteBatiment === 'MC') && parseFloat(r[68]) > 0
+      ? `${r[68]} ${uniteBatiment}` : '';
     const areaTerrain = r[75] ? `${r[75]} ${r[76]||''}`.trim() : '';
+    // Loyer (locations) : col. 9 = montant, col. 10 = unité de surface (PC au
+    // pi², MC au m², vide = pour l'ensemble), col. 114 = période (M mois, A an).
+    // Vérifié le 2026-11-18 sur l'export : 1450 / vide / M = 1 450 $/mois,
+    // 1.95 / PC / A = 1,95 $/pi²/an, ce que Centris affiche aussi.
+    const loyer = parseFloat(r[9]) || 0;
+    const rent = !(price > 0) && loyer > 0 ? {
+      amount: loyer,
+      unit: { PC: 'pi²', MC: 'm²' }[(r[10] || '').trim().toUpperCase()] || '',
+      per: (r[114] || '').trim().toUpperCase() === 'A' ? 'an' : 'mois'
+    } : null;
+    // « + TPS/TVQ » : col. 13 vaut « AI » sur les prix de vente sans taxes et
+    // reste vide quand Centris ajoute « + TPS/TVQ » (Curé-Labelle, terrains
+    // commerciaux). Pour un loyer, la col. 12 joue le même rôle ; un loyer
+    // résidentiel n'est jamais taxable, d'où l'exclusion de la catégorie R.
+    const taxes = rent
+      ? !(r[12] || '').trim() && catBrute !== 'R'
+      : !(r[13] || '').trim();
     const lat = parseFloat(r[144])||null, lon = parseFloat(r[145])||null;
     const desc = addMap[mls+'|F'] || '';
     const rem = remMap[mls+'|F'] || '';
@@ -733,6 +787,8 @@ function ingestFromCentris(membres) {
     return {
       mls,
       price,
+      rent,
+      taxes,
       typeCode,
       typeLabel: typeFromCentris(centrisCat, centrisGenre) || inferTypeFromDesc(desc),
       street,
@@ -740,6 +796,7 @@ function ingestFromCentris(membres) {
       munCode,
       postalCode: cp,
       yearBuilt,
+      areaBatiment,
       areaTerrain,
       lat, lon,
       descFr: desc, remFr: rem,
@@ -752,11 +809,12 @@ function ingestFromCentris(membres) {
       isCoBroker: !isOurs(r[2]),
       slug: `${mls}-${slug(street)}-${slug(city)}`
     };
-  }).filter(p => p.price > 0 && p.photos.length >= MIN_PHOTOS);
+  }).filter(p => (p.price > 0 || p.rent) && p.photos.length >= MIN_PHOTOS);
 
   properties = normaliser(properties);
 
-  console.log(`  → publiées sur le site            : ${properties.length}`);
+  const nbLoc = properties.filter(estLocation).length;
+  console.log(`  → publiées sur le site            : ${properties.length}  (${properties.length - nbLoc} à vendre, ${nbLoc} à louer)`);
   console.log(`──────────────────────────\n`);
 
   const stats = calculerStats(properties);
@@ -1820,8 +1878,19 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: opacity 420ms var(--ease-out);
 }
 .prop-card:hover .prop-card__media::after{ opacity: 0.88; }
-.prop-card__badge{
+.prop-card__badges{
   position: absolute; top: 14px; inset-inline-start: 14px;
+  z-index: 3;
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.prop-card__tax{
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--sand);
+  white-space: nowrap;
+}
+.prop-card__badge{
   background: var(--remax-red);
   color: #fff;
   font-family: 'Montserrat', sans-serif;
@@ -1831,8 +1900,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   text-transform: uppercase;
   padding: 6px 12px;
   border-radius: 999px;
-  z-index: 3;
 }
+/* « À louer » : crème sur photo, pour ne pas se confondre avec la pastille
+   rouge « Nouveau » quand les deux s'affichent ensemble. */
+.prop-card__badge.prop-card__badge--rent{ background: var(--cream); color: var(--ink); }
 /* Bloc d'information posé sur la photo */
 .prop-card__body{
   position: absolute; inset-inline: 0; bottom: 0;
@@ -2512,6 +2583,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   color: var(--bronze);
   line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+/* Un loyer porte son unité (« 34,75 $/pi²/an ») : plus long qu'un prix, il
+   descend d'un cran pour tenir sur une ligne à 375 px. */
+.prop-price-band__val--loyer{ font-size: clamp(1.75rem, 3.4vw, 2.75rem); }
+.prop-price-band__tax{
+  display: inline-block;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  vertical-align: middle;
 }
 .prop-price-band__cta{
   margin-inline-start: auto;
@@ -3840,7 +3922,8 @@ const JS = `
         let shown = 0;
         cards.forEach((card) => {
           const [kind, key] = value.split(':');
-          const match = value === 'all' || card.dataset[kind === 'type' ? 'type' : 'city'] === key;
+          const champ = kind === 'type' || kind === 'deal' ? kind : 'city';
+          const match = value === 'all' || card.dataset[champ] === key;
           card.hidden = !match;
           if (match) shown++;
         });
@@ -3864,14 +3947,15 @@ const JS = `
         // Garder l'URL partageable : /nos-proprietes/?type=condo
         const [kind, key] = btn.dataset.filter.split(':');
         const url = new URL(location.href);
-        url.searchParams.delete('type'); url.searchParams.delete('city');
+        url.searchParams.delete('type'); url.searchParams.delete('city'); url.searchParams.delete('deal');
         if (key) url.searchParams.set(kind, key);
         history.replaceState(null, '', url);
       });
 
       // Filtre initial depuis l'URL (les fiches lient vers ?city=…)
       const params = new URLSearchParams(location.search);
-      const initial = params.get('type') ? 'type:' + params.get('type')
+      const initial = params.get('deal') ? 'deal:' + params.get('deal')
+        : params.get('type') ? 'type:' + params.get('type')
         : params.get('city') ? 'city:' + slugify(params.get('city'))
         : null;
       if (initial) {
@@ -4028,6 +4112,26 @@ const USED_VIDEOS = [HERO_VIDEO];
 
 // --- Utility formatters ---
 const fmtPrice = p => p ? `${p.toLocaleString('fr-CA')} $` : 'Prix sur demande';
+// Loyer dans l'unité de Centris : « 1 300 $/mois », « 34,75 $/pi²/an ».
+// Un loyer mensuel et un loyer au pied carré annuel ne se comparent pas : on
+// ne convertit jamais, on affiche ce que le courtier a saisi.
+const fmtLoyer = r => {
+  const n = r.amount;
+  const txt = n.toLocaleString('fr-CA', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 });
+  // Espace insécable avant le $ : le montant ne se sépare jamais de son unité.
+  return `${txt} $/${r.unit ? r.unit + '/' : ''}${r.per}`;
+};
+// Prix affiché d'une inscription, vente ou location, sans la mention de taxes.
+const fmtPrix = p => estLocation(p) ? fmtLoyer(p.rent) : fmtPrice(p.price);
+const TAXES_TXT = '+ TPS/TVQ';
+// Version texte complète, pour les attributs, les titres et le partage.
+const fmtPrixTexte = p => fmtPrix(p) + (p.taxes ? ` ${TAXES_TXT}` : '');
+const dealTxt = p => estLocation(p) ? 'à louer' : 'à vendre';
+// Pour un titre de liste : « à vendre », « à louer » ou « à vendre et à louer ».
+const dealGroupe = liste => {
+  const loc = liste.some(estLocation), vente = liste.some(p => !estLocation(p));
+  return loc && vente ? 'à vendre et à louer' : loc ? 'à louer' : 'à vendre';
+};
 // Échappement pour une valeur placée entre guillemets dans un attribut HTML.
 const attrEsc = v => String(v ?? '')
   .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -4259,23 +4363,30 @@ function propertyCard(p) {
   const beds = (p.rooms || []).filter(r => ['CAC','CCP','CC2'].includes(r.code)).length;
   const baths = (p.rooms || []).filter(r => r.code === 'SDB' || r.code === 'SDE').length;
   const isNew = isRecentListing(p);
+  const loc = estLocation(p);
   // Un local commercial ou un terrain n'a ni chambre ni salle de bain : les
   // tirets faisaient croire à une fiche incomplète. On ne montre que ce qui existe.
+  // Pour une location, la surface utile est celle du local, pas du terrain.
+  const surface = (loc && fmtArea(p.areaBatiment)) || fmtArea(p.areaTerrain);
   const metaParts = [
     beds ? `<span>${beds} ch.</span>` : '',
     baths ? `<span>${baths} sdb.</span>` : '',
-    fmtArea(p.areaTerrain) ? `<span>${fmtArea(p.areaTerrain)}</span>` : ''
+    surface ? `<span>${surface}</span>` : ''
   ].filter(Boolean);
   const metaHtml = metaParts.length ? `<div class="prop-card__meta">${metaParts.join('')}</div>` : '';
-  return `<article class="prop-card" data-type="${CATEGORY_SLUG[p.typeLabel] || slug(p.typeLabel)}" data-city="${slug(p.city)}">
-    <a href="/nos-proprietes/${p.slug}/" aria-label="${p.street}, ${p.city} · ${fmtPrice(p.price)}">
+  const badges = [
+    loc ? '<span class="prop-card__badge prop-card__badge--rent">À louer</span>' : '',
+    isNew ? '<span class="prop-card__badge">Nouveau</span>' : ''
+  ].filter(Boolean).join('');
+  return `<article class="prop-card" data-type="${CATEGORY_SLUG[p.typeLabel] || slug(p.typeLabel)}" data-city="${slug(p.city)}" data-deal="${loc ? 'location' : 'vente'}">
+    <a href="/nos-proprietes/${p.slug}/" aria-label="${attrEsc(`${p.street}, ${p.city} · ${loc ? 'À louer · ' : ''}${fmtPrixTexte(p)}`)}">
       <div class="prop-card__media">
-        ${isNew ? '<span class="prop-card__badge">Nouveau</span>' : ''}
+        ${badges ? `<div class="prop-card__badges">${badges}</div>` : ''}
         <img loading="lazy" src="${ph}" alt="${p.street}, ${p.city}">
       </div>
       <div class="prop-card__body">
         <span class="prop-card__city">${p.city}</span>
-        <div class="prop-card__price">${fmtPrice(p.price)}</div>
+        <div class="prop-card__price">${fmtPrix(p)}${p.taxes ? ` <span class="prop-card__tax">${TAXES_TXT}</span>` : ''}</div>
         <div class="prop-card__addr">${p.street}</div>
         ${metaHtml}
       </div>
@@ -4298,15 +4409,26 @@ writePage('index.html', layout({
 }));
 
 // --- PROPERTIES LIST ---
+// Les locations sont mêlées aux ventes (décision de Vincent, 2026-11-18), avec
+// un filtre « À vendre » / « À louer » qui n'apparaît que s'il y a des deux.
+const nbVente = properties.filter(p => !estLocation(p)).length;
+const nbLocation = properties.length - nbVente;
+const listTitre = nbLocation && nbVente ? 'Nos propriétés à vendre et à louer'
+  : nbLocation ? 'Nos propriétés à louer' : 'Nos propriétés à vendre';
+const listCompte = nbLocation && nbVente
+  ? `${nbVente} à vendre et ${nbLocation} à louer`
+  : `${properties.length} propriété${properties.length > 1 ? 's' : ''} active${properties.length > 1 ? 's' : ''}`;
 const listBody = `
 <section class="page-head container">
   <div class="eyebrow">Centris · Mis à jour quotidiennement</div>
-  <h1>Nos propriétés à vendre</h1>
-  <p class="lead">${properties.length} propriétés actives · Rive-Nord et Laurentides. Filtrez par type ou ville pour affiner votre recherche.</p>
+  <h1>${listTitre}</h1>
+  <p class="lead">${listCompte} · Rive-Nord et Laurentides. Filtrez par type ou ville pour affiner votre recherche.</p>
 </section>
 <section class="container">
   <div class="filters">
     <button type="button" data-filter="all" class="active">Toutes (${properties.length})</button>
+    ${nbLocation && nbVente ? `<button type="button" data-filter="deal:vente">À vendre (${nbVente})</button>
+    <button type="button" data-filter="deal:location">À louer (${nbLocation})</button>` : ''}
     ${PROPERTY_CATEGORIES
       .map(([catSlug, label]) => [catSlug, label, properties.filter(p => p.typeLabel === label).length])
       .filter(([, , n]) => n > 0)
@@ -4321,8 +4443,8 @@ const listBody = `
 </section>
 `;
 writePage('nos-proprietes/index.html', layout({
-  title: `Nos propriétés à vendre | Équipe Jacques-Roussel · Rive-Nord`,
-  description: `${properties.length} propriétés Centris mises à jour quotidiennement à Sainte-Thérèse, Blainville et Rive-Nord. Filtrez par ville ou type et consultez les fiches complètes.`,
+  title: `${listTitre} | Équipe Jacques-Roussel · Rive-Nord`,
+  description: `${listCompte}, inscriptions Centris mises à jour quotidiennement à Saint-Eustache, Sainte-Thérèse, Blainville et Rive-Nord. Filtrez par ville ou type et consultez les fiches complètes.`,
   canonical: 'https://jacquesroussel.com/nos-proprietes/',
   body: listBody
 }));
@@ -4354,15 +4476,23 @@ function distanceKm(a, b) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
+// Valeur comparable : le prix de vente, ou le loyer pour une location. Une
+// vente ne se compare qu'à une vente, et un loyer qu'à un loyer de même base
+// (1 300 $/mois et 18 $/pi²/an ne se mesurent pas l'un à l'autre).
+const valeurComparable = p => estLocation(p) ? p.rent.amount : p.price;
+const memeBase = (a, b) => estLocation(a) === estLocation(b)
+  && (!estLocation(a) || (a.rent.unit === b.rent.unit && a.rent.per === b.rent.per));
+
 function similarProperties(p) {
-  if (!p.price) return [];
-  // Filtre absolu : même type de propriété, point.
+  const v = valeurComparable(p);
+  if (!(v > 0)) return [];
+  // Filtre absolu : même type de propriété et même base de prix, point.
   const bassin = properties.filter(x =>
-    x.mls !== p.mls && x.price > 0 && x.typeLabel === p.typeLabel);
+    x.mls !== p.mls && valeurComparable(x) > 0 && x.typeLabel === p.typeLabel && memeBase(x, p));
 
   const trier = (ecartMax, rayonMax) => bassin
     .map(x => {
-      const ecart = Math.abs(x.price - p.price) / p.price;
+      const ecart = Math.abs(valeurComparable(x) - v) / v;
       if (ecart > ecartMax) return null;
       const km = distanceKm(p, x);
       if (rayonMax !== null) {
@@ -4629,8 +4759,9 @@ function detailPage(p) {
   const sim = similarProperties(p);
 
   const ficheUrl = `https://jacquesroussel.com/nos-proprietes/${p.slug}/`;
-  const partageTitre = `${p.typeLabel} à vendre — ${p.street}, ${p.city}`;
-  const partageTexte = `${p.typeLabel} à vendre au ${p.street}, ${p.city} — ${fmtPrice(p.price)}. MLS ${p.mls}.`;
+  const loc = estLocation(p);
+  const partageTitre = `${p.typeLabel} ${dealTxt(p)}, ${p.street}, ${p.city}`;
+  const partageTexte = `${p.typeLabel} ${dealTxt(p)} au ${p.street}, ${p.city} : ${fmtPrixTexte(p)}. MLS ${p.mls}.`;
   // Options de partage sur ordinateur, où la feuille système n'existe pas.
   // Sur téléphone, navigator.share les remplace toutes par la feuille native.
   const partageMailto = `mailto:?subject=${encodeURIComponent(partageTitre)}&body=${encodeURIComponent(`${partageTexte}\r\n\r\n${ficheUrl}`)}`;
@@ -4657,10 +4788,16 @@ function detailPage(p) {
 
   const jsonld = JSON.stringify({
     "@context":"https://schema.org","@type":"RealEstateListing",
-    "name":`${p.typeLabel} à vendre, ${p.street}, ${p.city}`,
+    "name":`${p.typeLabel} ${dealTxt(p)}, ${p.street}, ${p.city}`,
     "url":`https://jacquesroussel.com/nos-proprietes/${p.slug}/`,
     "image":photoUrls.slice(0, 6),
-    "offers":{"@type":"Offer","price":p.price,"priceCurrency":"CAD"},
+    // Location : offre de type LeaseOut, loyer et unité dans unitText. Le
+    // prix n'est jamais converti d'une unité à l'autre.
+    "offers": loc
+      ? {"@type":"Offer","businessFunction":"http://purl.org/goodrelations/v1#LeaseOut",
+         "priceSpecification":{"@type":"UnitPriceSpecification","price":p.rent.amount,"priceCurrency":"CAD",
+           "unitText":`$/${p.rent.unit ? p.rent.unit + '/' : ''}${p.rent.per}`,"valueAddedTaxIncluded":!p.taxes}}
+      : {"@type":"Offer","price":p.price,"priceCurrency":"CAD"},
     "address":{"@type":"PostalAddress","streetAddress":p.street,"addressLocality":p.city,"postalCode":p.postalCode,"addressCountry":"CA"}
   });
 
@@ -4736,8 +4873,8 @@ function detailPage(p) {
 
     <div class="prop-price-band">
       <div class="prop-price-band__main">
-        <div class="prop-price-band__eye">Prix demandé</div>
-        <div class="prop-price-band__val">${fmtPrice(p.price)}</div>
+        <div class="prop-price-band__eye">${loc ? 'À louer · Loyer demandé' : 'Prix demandé'}</div>
+        <div class="prop-price-band__val${loc ? ' prop-price-band__val--loyer' : ''}">${fmtPrix(p)}${p.taxes ? ` <span class="prop-price-band__tax">${TAXES_TXT}</span>` : ''}</div>
       </div>
       <a class="prop-price-band__cta" href="${visiteMailto}">Visiter cette propriété</a>
     </div>
@@ -4831,8 +4968,8 @@ ${hasGeo ? `
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>`;
 
   return layout({
-    title: `${p.typeLabel} à vendre au ${p.street}, ${p.city} · ${fmtPrice(p.price)} | Équipe Jacques-Roussel`,
-    description: `${p.typeLabel} à vendre au ${p.street}, ${p.city}. ${fmtPrice(p.price)}. MLS ${p.mls}. ${p.photos.length} photos, fiche complète et visite avec Équipe Jacques-Roussel.`,
+    title: `${p.typeLabel} ${dealTxt(p)} au ${p.street}, ${p.city} · ${fmtPrixTexte(p)} | Équipe Jacques-Roussel`,
+    description: `${p.typeLabel} ${dealTxt(p)} au ${p.street}, ${p.city}. ${fmtPrixTexte(p)}. MLS ${p.mls}. ${p.photos.length} photos, fiche complète et visite avec Équipe Jacques-Roussel.`,
     canonical: `https://jacquesroussel.com/nos-proprietes/${p.slug}/`,
     body,
     extraHead,
@@ -4928,7 +5065,13 @@ for (const [slugC, cityName, neighs] of CITIES) {
     <section class="container">
       <div class="city-stats reveal">
         <div class="city-stat"><span class="city-stat__n">${cityProps.length}</span><span class="city-stat__l">Nos inscriptions actives</span></div>
-        <div class="city-stat"><span class="city-stat__n">${fmtPrice(Math.round(cityProps.reduce((s,p)=>s+p.price,0)/cityProps.length))}</span><span class="city-stat__l">Prix moyen de nos inscriptions</span></div>
+        ${(() => {
+          // Prix moyen des ventes seulement : un loyer ne se moyenne pas avec un prix.
+          const ventes = cityProps.filter(p => p.price > 0);
+          return ventes.length
+            ? `<div class="city-stat"><span class="city-stat__n">${fmtPrice(Math.round(ventes.reduce((s,p)=>s+p.price,0)/ventes.length))}</span><span class="city-stat__l">Prix moyen de nos inscriptions à vendre</span></div>`
+            : '';
+        })()}
       </div>
     </section>` : ''}
     ${neighs.length?`
@@ -4940,7 +5083,7 @@ for (const [slugC, cityName, neighs] of CITIES) {
     </section>`:''}
     ${cityProps.length?`
     <section class="container">
-      <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Propriétés à vendre à ${cityName}.</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
+      <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Propriétés ${dealGroupe(cityProps)} à ${cityName}.</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
       <div class="prop-grid">${cityProps.slice(0,6).map(propertyCard).join('')}</div>
     </section>`:''}
   `;
@@ -5097,7 +5240,7 @@ for (const [s, title, lead, bodyCopy] of TYPES) {
   const catProps = properties.filter(p => p.typeLabel === title);
   const listing = catProps.length
     ? `<section class="container">
-  <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Nos ${TYPE_PLURAL[title] || title.toLowerCase()} à vendre</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
+  <div class="sec-head reveal"><div><div class="eye">Inscriptions actives</div><h2>Nos ${TYPE_PLURAL[title] || title.toLowerCase()} ${dealGroupe(catProps.slice(0, 6))}</h2></div><a class="more" href="/nos-proprietes/">Toutes les propriétés →</a></div>
   <div class="prop-grid">${catProps.slice(0, 6).map(propertyCard).join('')}</div>
 </section>`
     : `<section class="container">

@@ -743,8 +743,19 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   transition: opacity 420ms var(--ease-out);
 }
 .prop-card:hover .prop-card__media::after{ opacity: 0.88; }
-.prop-card__badge{
+.prop-card__badges{
   position: absolute; top: 14px; inset-inline-start: 14px;
+  z-index: 3;
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.prop-card__tax{
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--sand);
+  white-space: nowrap;
+}
+.prop-card__badge{
   background: var(--remax-red);
   color: #fff;
   font-family: 'Montserrat', sans-serif;
@@ -754,8 +765,10 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   text-transform: uppercase;
   padding: 6px 12px;
   border-radius: 999px;
-  z-index: 3;
 }
+/* « À louer » : crème sur photo, pour ne pas se confondre avec la pastille
+   rouge « Nouveau » quand les deux s'affichent ensemble. */
+.prop-card__badge.prop-card__badge--rent{ background: var(--cream); color: var(--ink); }
 /* Bloc d'information posé sur la photo */
 .prop-card__body{
   position: absolute; inset-inline: 0; bottom: 0;
@@ -1435,6 +1448,17 @@ body.header-overlay .site-header:has(.has-mega:focus-within) .wordmark__logo--da
   color: var(--bronze);
   line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+/* Un loyer porte son unité (« 34,75 $/pi²/an ») : plus long qu'un prix, il
+   descend d'un cran pour tenir sur une ligne à 375 px. */
+.prop-price-band__val--loyer{ font-size: clamp(1.75rem, 3.4vw, 2.75rem); }
+.prop-price-band__tax{
+  display: inline-block;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  vertical-align: middle;
 }
 .prop-price-band__cta{
   margin-inline-start: auto;
