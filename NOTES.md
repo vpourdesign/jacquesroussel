@@ -8,6 +8,7 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
+- [ ] Mettre en ligne le nouveau vidéo du hero : le remplacement est fait et vérifié en local, mais rien n'est committé. Tant que ce n'est pas fusionné dans `main`, jacquesroussel.com affiche encore l'ancien montage et l'ancienne image d'attente, où l'ancien membre de l'équipe apparaît (2026-11-18)
 - [ ] Remplacer les photos de stock trompeuses : en-tête de « Les 7 étapes pour vendre » (`maison-contemporaine.jpg`, banlieue avec montagnes), pages Condo (`immeuble-condos.jpg`, tours de style Düsseldorf) et Terrain (`terrain-boise.jpg`, champ boueux) (2026-11-13)
 - [ ] Répondre au client : les 4 propriétés vendues sont retirées du site (2026-11-05)
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
@@ -64,6 +65,7 @@
 - Le client bâtit un dashboard sur mesure en parallèle — prévoir l'hébergement du site + dashboard ensemble. (2026-07-03)
 
 ## 🔍 Précisions
+- **Le vidéo du hero est un remontage maison, pas un fichier du vidéaste.** `videos/REMAX_JR_NOV26_HERO.mp4` (4K, 18,9 s, hors git comme tout `videos/`) assemble huit plans des deux montages de septembre 2025 où l'ancien membre de l'équipe n'apparaît pas. Dans l'ordre, en numéros d'image à 23,976 i/s : EDIT1 74-101 (main sur la porte), EDIT2 0-230 (café, bureau, stylo, appels, escalier), EDIT1 297-334 (présentation à l'écran), EDIT1 368-404, EDIT2 289-316, EDIT2 411-426 (tape dans la main), EDIT1 217-264 (tasse), EDIT1 450-483 (magazine). Il ne reste aucun plan extérieur utilisable : il est dans tous. Deux plans sans visage ont été écartés parce qu'une manche beige y passe (téléphone en gros plan dans EDIT2, magazine qu'on feuillette dans EDIT1). L'image d'attente `photos/hero-poster-2026-11.jpg` est l'image 105 du remontage. `/photos/` et `/videos/` sont servis avec un cache d'un an : tout changement exige un nouveau nom de fichier, d'où les constantes `HERO_VIDEO` et `HERO_POSTER` dans `build.mjs`. (2026-11-18)
 - **Google Analytics 4** : compte « Jacques Roussel » (a411408468), propriété « jacquesroussel.com - GA4 » (p558284387), flux Web jacquesroussel.com, ID de mesure `G-4Q06NFYCJC`. Fuseau Toronto, CAD, secteur Immobilier. Balise installée dans le `<head>` de `build.mjs` (toutes les pages). (2026-10-09)
 
 - **Les nouveaux logos J/R sont en place, et le monogramme seul ne l'est plus.** Le lot livré par Alex (2026-09-03) est dans `brand_assets/_logo-jr/` — 51 fichiers, SVG et PNG, avec son LISEZ-MOI. Le souligné du dossier empêche `copyDir` de publier 1,1 Mo de déclinaisons inutiles : seuls les fichiers réellement posés sont copiés à la racine de `brand_assets/`, sous des noms lisibles. L'en-tête portait `equipejrnoir.png`, le monogramme seul ; le LISEZ-MOI le réserve aux emplois « où le nom de l'équipe apparaît déjà à côté » et interdit de s'en servir comme identification principale. C'est donc le verrouillage compact qui est en place, en marine sur l'en-tête clair et en blanc sur l'en-tête transparent de l'accueil. Le pied de page, déjà sur le marine `--teal` (#2c4160, exactement le marine de la charte), reçoit le verrouillage horizontal blanc à la place du nom composé en texte. Favicons remplacés par le jeu complet : `.ico` multi-tailles, SVG pour les écrans denses, PNG 192 pour l'écran d'accueil iOS. Le logo passant de presque carré à 4:1, il est désormais dimensionné par la hauteur (30 à 38 px) et non par la largeur, pour rester calé sur le verrouillage RE/MAX qui l'accompagne. (2026-09-03)
@@ -94,6 +96,7 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
+- [2026-11-18] Hero de l'accueil : vidéo remonté sans l'ancien membre de l'équipe (`REMAX_JR_NOV26_HERO.mp4`, 18,9 s, 5 Mo) et nouvelle image d'attente, branchés dans `build.mjs`. L'ancien vidéo et l'ancienne image sont retirés de `site/`. Fait en local, pas encore en ligne.
 - [2026-11-13] Article « Où acheter à Saint-Eustache : le guide des secteurs » ajouté au blogue
 - [2026-11-13] Corrections client sur « Le marché de Saint-Eustache, chiffres en main » : l'invitation à l'analyse comparative devient une pastille blanche avec bouton sous le calculateur de prix, et « Diffusion large » mentionne maintenant les réseaux sociaux et les autres moyens de visibilité
 - [2026-11-05] Filtre statut Centris (col. 115) poussé : 412 Laplante, rue Schulz, 3465 Émile et 38 Mallette retirés du site (9 fiches actives)

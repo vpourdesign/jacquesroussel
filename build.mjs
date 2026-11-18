@@ -3953,7 +3953,15 @@ copyDir(path.join(ROOT,'brand_assets'), path.join(SITE,'brand_assets'));
 // Vidéos : on ne copie que celles réellement utilisées par le site.
 // Les masters 4K du dossier videos/ pèsent 224 Mo à eux seuls et une seule
 // est appelée par une page — les copier toutes gonflait site/ pour rien.
-const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
+//
+// Le vidéo et l'image d'attente du hero sont servis avec un cache d'un an
+// (vercel.json, « immutable »). Tout changement de contenu exige donc un
+// nouveau nom de fichier, sinon les visiteurs gardent l'ancienne version.
+// Montage de novembre 2026 : plans de SEP25_EDIT1 et EDIT2 où n'apparaissent
+// que les deux courtiers actuels de l'équipe.
+const HERO_VIDEO = 'REMAX_JR_NOV26_HERO.mp4';
+const HERO_POSTER = 'hero-poster-2026-11.jpg';
+const USED_VIDEOS = [HERO_VIDEO];
 (function copyUsedVideos(){
   const from = path.join(ROOT, 'videos'), to = path.join(SITE, 'videos');
   fs.mkdirSync(to, { recursive: true });
@@ -3976,7 +3984,7 @@ const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
 (function pruneStalePhotos(){
   const from = path.join(ROOT, 'photos'), to = path.join(SITE, 'photos');
   if (!fs.existsSync(to)) return;
-  const keep = new Set(['jr-hero-poster.jpg']); // généré par ffmpeg, pas présent dans photos/
+  const keep = new Set([HERO_POSTER]); // régénéré par ffmpeg s'il manque dans photos/
   let removed = 0;
   const walk = (rel) => {
     for (const f of fs.readdirSync(path.join(to, rel))) {
@@ -3997,8 +4005,8 @@ const USED_VIDEOS = ['REMAX_JR_SEP25_EDIT1.mp4'];
 (function optimizeHeroMedia(){
   const hasFFmpeg = (() => { try { execSync('ffmpeg -version', { stdio: 'ignore' }); return true; } catch { return false; } })();
   if (!hasFFmpeg) { console.log('(skip) ffmpeg introuvable — vidéo hero non optimisée'); return; }
-  const video = path.join(SITE, 'videos', 'REMAX_JR_SEP25_EDIT1.mp4');
-  const poster = path.join(SITE, 'photos', 'jr-hero-poster.jpg');
+  const video = path.join(SITE, 'videos', HERO_VIDEO);
+  const poster = path.join(SITE, 'photos', HERO_POSTER);
   if (!fs.existsSync(video)) return;
   try {
     // Only re-encode when the file is still a heavy master (> 15 MB)
@@ -4091,8 +4099,8 @@ const heroCities = [
 const homeBody = `
 <section class="hm-hero" data-hm-hero>
   <div class="hm-hero__media">
-    <video class="hm-hero__video" autoplay muted loop playsinline preload="metadata" poster="/photos/jr-hero-poster.jpg">
-      <source src="/videos/REMAX_JR_SEP25_EDIT1.mp4" type="video/mp4">
+    <video class="hm-hero__video" autoplay muted loop playsinline preload="metadata" poster="/photos/${HERO_POSTER}">
+      <source src="/videos/${HERO_VIDEO}" type="video/mp4">
     </video>
   </div>
   <div class="hm-hero__inner">
