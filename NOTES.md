@@ -8,7 +8,7 @@
 *(vide pour l'instant — ajoute "vendredi il faut envoyer X" et je classe)*
 
 ## ✅ À faire
-- [ ] Mettre en ligne le nouveau vidéo du hero : le remplacement est fait et vérifié en local, mais rien n'est committé. Tant que ce n'est pas fusionné dans `main`, jacquesroussel.com affiche encore l'ancien montage et l'ancienne image d'attente, où l'ancien membre de l'équipe apparaît (2026-11-18)
+- [ ] Après le prochain cron Centris, vérifier sur `/nos-proprietes/` que les 6 locations du client apparaissent (5 fiches, 3474 Ch. d'Oka fusionné) avec les mêmes loyers que Centris, puis répondre au client (2026-11-18)
 - [ ] Remplacer les photos de stock trompeuses : en-tête de « Les 7 étapes pour vendre » (`maison-contemporaine.jpg`, banlieue avec montagnes), pages Condo (`immeuble-condos.jpg`, tours de style Düsseldorf) et Terrain (`terrain-boise.jpg`, champ boueux) (2026-11-13)
 - [ ] Répondre au client : les 4 propriétés vendues sont retirées du site (2026-11-05)
 - [ ] Activer la Search Console du compte (GA4 fait le 2026-10-09) (Plaud 2026-09-08)
@@ -45,7 +45,7 @@
 - **Deux pages guides orphelines.** `GUIDES` liste quatre guides (investisseur plex, déménagement Rive-Nord) qui n'ont ni carte ni contenu — les pages existent et sont dans le sitemap, mais rien n'y mène. À supprimer ou à écrire. (2026-08-13)
 
 - **L'export Centris ne contient qu'une fraction des inscriptions de l'équipe.** Mesuré le 7 août : RE/MAX affiche **48 propriétés à vendre**, l'export DriveHQ n'en contient que **24** pour l'équipe (16 à vendre + 8 locations). **32 inscriptions à vendre n'arrivent jamais**, sous aucun des trois numéros de courtier. Aucune correction de code ne les fera apparaître. Deux pistes à valider auprès de RE/MAX Crystal ou du soutien Centris : (1) l'export ne couvre peut-être que les inscriptions où l'équipe est courtier *inscripteur*, alors que RE/MAX affiche aussi les collaborations ; (2) Vincent Lanni est dans MEMBRES.TXT (no 135334) mais aucune de ses inscriptions ne sort de l'export — l'abonnement d'export est un réglage distinct de son statut de courtier. (2026-08-07)
-- **Les 8 locations sont reçues mais pas affichées.** Leur prix de vente est vide (le loyer est en colonne 9 de INSCRIPTIONS.TXT), donc le filtre `price > 0` les écarte. Décision en attente : les afficher mêlées aux propriétés à vendre, ou dans une section distincte, avec un format « 1 300 $/mois » et un badge « À louer ». (2026-08-07)
+- **Les locations sont affichées depuis le 2026-11-18** (elles étaient écartées par le filtre `price > 0`). Mêlées aux propriétés à vendre sur `/nos-proprietes/`, avec un badge « À louer » et des boutons « À vendre » / « À louer ». Le loyer garde l'unité de Centris : col. 9 montant, col. 10 unité de surface (`PC` au pi², `MC` au m², vide = pour l'ensemble), col. 114 période (`M` mois, `A` an). « + TPS/TVQ » suit col. 13 pour une vente (`AI` = sans taxes) et col. 12 pour un loyer non résidentiel (déduit de l'export, à surveiller). Le dédoublonnage fusionne 3474Z et 3474 Ch. d'Oka (même adresse, même loyer, deux catégories, comme Curé-Labelle) : le site montre 13 inscriptions pour les 15 de Centris.
 - **Brancher le DNS.** `www.jacquesroussel.com` pointe encore sur Wix (`cdn1.wixdns.net`). Le nouveau site n'est visible que sur `jacquesroussel.vercel.app`. (2026-08-07)
 - **Révoquer la clé Google exposée** en session : compte de service `rapportsvpd@site-vpd.iam.gserviceaccount.com`, clé `5150d4e1…`. Console Google Cloud › IAM › Comptes de service › Clés. (2026-08-07)
 
@@ -96,7 +96,9 @@
 - **La photo aérienne de Saint-Eustache est sous CC BY-SA 4.0** (Gacard, Wikimedia Commons), pas sous licence Unsplash. Le crédit est obligatoire : il est en note au bas de `/blog/premier-acheteur-saint-eustache-revenu/`. Si la photo change de page, le crédit suit. (2026-08-24)
 
 ## ✓ Fait
-- [2026-11-18] Hero de l'accueil : vidéo remonté sans l'ancien membre de l'équipe (`REMAX_JR_NOV26_HERO.mp4`, 18,9 s, 5 Mo) et nouvelle image d'attente, branchés dans `build.mjs`. L'ancien vidéo et l'ancienne image sont retirés de `site/`. Fait en local, pas encore en ligne.
+- [2026-11-18] Locations Centris affichées sur le site (branche `fix/locations-centris`) : badge « À louer », loyer avec son unité et « + TPS/TVQ », filtres À vendre / À louer, fiche, propriétés similaires, JSON-LD, pages ville et catégorie. Vérifié en local avec des données de test.
+- [2026-11-18] Hero de l'accueil : vidéo remonté sans l'ancien membre de l'équipe (`REMAX_JR_NOV26_HERO.mp4`, 18,9 s, 5 Mo) et nouvelle image d'attente, branchés dans `build.mjs`. L'ancien vidéo et l'ancienne image sont retirés de `site/`.
+- [2026-11-18] Nouveau vidéo du hero mis en ligne (PR 6 fusionnée dans `main`). Vérifié sur www.jacquesroussel.com : l'accueil sert le nouveau vidéo et la nouvelle image d'attente, les deux anciens fichiers répondent 404.
 - [2026-11-13] Article « Où acheter à Saint-Eustache : le guide des secteurs » ajouté au blogue
 - [2026-11-13] Corrections client sur « Le marché de Saint-Eustache, chiffres en main » : l'invitation à l'analyse comparative devient une pastille blanche avec bouton sous le calculateur de prix, et « Diffusion large » mentionne maintenant les réseaux sociaux et les autres moyens de visibilité
 - [2026-11-05] Filtre statut Centris (col. 115) poussé : 412 Laplante, rue Schulz, 3465 Émile et 38 Mallette retirés du site (9 fiches actives)

@@ -476,7 +476,8 @@
         let shown = 0;
         cards.forEach((card) => {
           const [kind, key] = value.split(':');
-          const match = value === 'all' || card.dataset[kind === 'type' ? 'type' : 'city'] === key;
+          const champ = kind === 'type' || kind === 'deal' ? kind : 'city';
+          const match = value === 'all' || card.dataset[champ] === key;
           card.hidden = !match;
           if (match) shown++;
         });
@@ -500,14 +501,15 @@
         // Garder l'URL partageable : /nos-proprietes/?type=condo
         const [kind, key] = btn.dataset.filter.split(':');
         const url = new URL(location.href);
-        url.searchParams.delete('type'); url.searchParams.delete('city');
+        url.searchParams.delete('type'); url.searchParams.delete('city'); url.searchParams.delete('deal');
         if (key) url.searchParams.set(kind, key);
         history.replaceState(null, '', url);
       });
 
       // Filtre initial depuis l'URL (les fiches lient vers ?city=…)
       const params = new URLSearchParams(location.search);
-      const initial = params.get('type') ? 'type:' + params.get('type')
+      const initial = params.get('deal') ? 'deal:' + params.get('deal')
+        : params.get('type') ? 'type:' + params.get('type')
         : params.get('city') ? 'city:' + slugify(params.get('city'))
         : null;
       if (initial) {
